@@ -94,6 +94,20 @@ class EmailMessage(Email):
 		self.filename = filename
 		self.mail = mail
 
+	def __dict__(self):
+		dict = super().__dict__()
+		dict['path'] = self.path
+		dict['filename'] = self.filename
+		dict['mail'] = self.mail
+		return dict
+
+	@property
+	def filename_with_path(self):
+		path = self.path.replace("/", "", 1)
+		if path != '':
+			path = path + "/"
+		return path.replace("/", "_") + self.filename
+
 	@property
 	def sent(self):
 		return datetime.strptime(re.sub(r' *\([A-Z]+\)', '', str(self.mail['Date'])),
@@ -156,7 +170,7 @@ class EmailMessage(Email):
 		return ''
 
 	@property
-	def body(self):
+	def body(self): # todo html, etc.
 		return self.mail.get_payload()
 
 	@property

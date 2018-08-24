@@ -73,7 +73,7 @@ def get_relative_filename(file):
 	filename = os.path.join(dirname, file)
 	return filename
 
-input_dir = get_relative_filename("testData")
+input_dir = get_relative_filename("testData/testData")
 output_dir = input_dir + "/output"
 
 
@@ -83,11 +83,12 @@ Quagga requires an Iterator over Quagga.Utils.Email.EmailMessage as input
 Quagga requires an output directory where prediction results are stored (api reasons, maybe tmp files)
 """
 
-# read email bodies from text
+
+""""# read email bodies from text
 quagga = Quagga(ListReaderExtractedBodies([example_email_body]), output_dir) # you obviously can't store these mails on disk, they don't have a filename
 
 # read emails from raw text
-quagga = Quagga(ListReaderRawEmailTexts([example_email_raw]), output_dir)
+quagga = Quagga(ListReaderRawEmailTexts([example_email_raw]), output_dir)"""
 
 # read all emails from a directory
 quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)

@@ -92,11 +92,11 @@ class Quagga:
 	# this is optimized so things are loaded only once into memory and not written and read from disk immediately after
 	def store_all(self, foldername):
 		for input in self.emails_input:
-			self._store_email(foldername, input.filename, self._INPUT, input)
+			self._store_email(foldername, input.filename_with_path, self._INPUT, input)
 			predicted = self._predict(input.clean_body)
-			self._store_email(foldername, input.filename, self._PREDICTED, predicted)
+			self._store_email(foldername, input.filename_with_path, self._PREDICTED, predicted)
 			parsed = self._parse(predicted, input)
-			self._store_email(foldername, input.filename, self._PARSED, parsed)
+			self._store_email(foldername, input.filename_with_path, self._PARSED, parsed)
 		print("stored all stages in " + foldername)
 
 	def store_input(self, foldername):
@@ -113,7 +113,7 @@ class Quagga:
 			os.makedirs(foldername)
 
 		for input, email in zip(self.emails_input, emails):
-			self._store_email(foldername, input.filename, stage, email)
+			self._store_email(foldername, input.filename_with_path, stage, email)
 		print("stored " + stage + " in " + foldername)
 
 	def _store_email(self, foldername, filename, stage, email):
