@@ -73,7 +73,7 @@ def get_relative_filename(file):
 	filename = os.path.join(dirname, file)
 	return filename
 
-input_dir = get_relative_filename("testData/testData")
+input_dir = get_relative_filename("testData")
 output_dir = input_dir + "/output"
 
 

@@ -12,7 +12,7 @@ import os.path
 from pkg_resources import resource_filename
 
 
-from Quagga.Utils.Model import Model as QuaggaModel
+from Utils.Model import Model as QuaggaModel
 
 def get_relative_filename(file):
 	dirname = os.path.dirname(__file__)

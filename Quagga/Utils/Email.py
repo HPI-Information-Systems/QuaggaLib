@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 class Email:
 	def __dict__(self):
 		return {
+			'filename_with_path' : self.filename_with_path,
 			'sent': self.sent,
 			'file': self.file,
 			'folder': self.folder,
@@ -22,6 +23,10 @@ class Email:
 			'body': self.body,
 			'clean_body': self.clean_body
 		}
+
+	@property
+	def filename_with_path(self):
+		return ''
 
 	@property
 	def sent(self):
