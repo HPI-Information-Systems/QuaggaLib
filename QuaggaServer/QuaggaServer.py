@@ -2,13 +2,11 @@ from flask import Flask, request
 from flask.json import jsonify
 
 
-
-from Utils.ModelBuilder import ModelBuilder
-from Utils.EmailReader import ListReaderExtractedBodies
-from Quagga import Quagga
+from Quagga import Quagga, ModelBuilder, ListReaderExtractedBodies
 
 
-quagga = Quagga(ListReaderExtractedBodies(''))
+
+quagga = Quagga(ListReaderExtractedBodies(''), '')
 
 
 app = Flask(__name__)

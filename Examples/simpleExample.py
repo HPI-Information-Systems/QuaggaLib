@@ -4,8 +4,9 @@ from pprint import pprint
 
 from Quagga import Quagga
 from Quagga import EmailDirectoryReader, ListReaderRawEmailTexts, ListReaderExtractedBodies, TempQuaggaReader
+from Quagga import ModelBuilder
 
-from Quagga.Utils.ModelBuilder import ModelBuilder
+
 from Quagga.Utils.BlockParser import BlockParser
 
 import os.path
