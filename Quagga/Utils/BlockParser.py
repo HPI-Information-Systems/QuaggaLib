@@ -66,8 +66,12 @@ class BlockParser:
 					grps = re.search(r"-+ Forward(?:ed)? by (.+?) on (.+?)-+", line_prediction['text'],
 					                 flags=re.IGNORECASE)
 					# FIXME: this is not save to use, exceptions expected!
-					curr_block['from'] = grps.group(1)
-					curr_block['sent'] = grps.group(2)
+					try:
+						curr_block['from'] = grps.group(1)
+						curr_block['sent'] = grps.group(2)
+					except AttributeError:
+						print("exception in blockparser curr_block['from'], curr_block['sent'] in " + email_input.filename_with_path)
+
 
 					# take info from previous block
 					curr_block['to'] = blocks[-1]['to']
@@ -102,8 +106,12 @@ class BlockParser:
 						# must then be the second line?
 						grps = re.search(r"(?:on )?(.+?)-+", line_prediction['text'], flags=re.IGNORECASE)
 						# FIXME: this is not save to use, exceptions expected!
-						curr_block['sent'] = ('' if curr_block['sent'] is None else curr_block[
+						try:
+							curr_block['sent'] = ('' if curr_block['sent'] is None else curr_block[
 							'sent']) + grps.group(1)
+						except AttributeError:
+							print("exception in blockparser curr_block['sent'] in " + email_input.filename_with_path)
+
 						mode = 0
 					continue
 

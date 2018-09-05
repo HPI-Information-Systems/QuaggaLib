@@ -7,7 +7,7 @@ class Model:
 		self.num_possible_chars = len(self.char_index())
 
 		self.zones = None
-		self.with_crf = ""
+		self.with_crf = None
 		self.trainset = ""
 
 		self.line_model = None

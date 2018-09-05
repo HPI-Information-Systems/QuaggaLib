@@ -6,7 +6,7 @@ class Email:
 	def __dict__(self):
 		return {
 			'filename_with_path' : self.filename_with_path,
-			'sent': self.sent,
+			'sent': self.sent_string,
 			'file': self.file,
 			'folder': self.folder,
 			'id': self.id,
@@ -30,6 +30,10 @@ class Email:
 
 	@property
 	def sent(self):
+		return None
+
+	@property
+	def sent_string(self):
 		return ''
 
 	@property
@@ -117,6 +121,10 @@ class EmailMessage(Email):
 	def sent(self):
 		return datetime.strptime(re.sub(r' *\([A-Z]+\)', '', str(self.mail['Date'])),
 		                         '%a, %d %b %Y %H:%M:%S %z').astimezone(timezone.utc)
+
+	@property
+	def sent_string(self):
+		return self.sent.strftime('%Y-%m-%d %H:%M:%S %Z')
 
 	@property
 	def file(self):

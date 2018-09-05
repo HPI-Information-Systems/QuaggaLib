@@ -7,13 +7,14 @@ from Quagga.Utils.Email import EmailMessage, EmailBody
 
 class DirectoryIterator:
 	def __init__(self, maildir, limit=None, skip=0, file_func=lambda _: True, reader_func=lambda path, filename, file: (path, filename, file)):
-		self.run = 0
 		self.limit = limit
 		self.skip = skip
 		self.file_func = file_func
 		self.reader_func = reader_func
 
 		self.maildir = maildir
+
+		self.run = 0
 
 		self.os_walker = os.walk(self.maildir)
 		self.current_dirs = []
@@ -88,6 +89,7 @@ class EmailDirectoryReader(DirectoryReader):
 		self.email_parser = ep.Parser()
 		self.file_func = lambda filename: '.quagga.' not in filename
 		self.email_func = lambda path, filename, file: EmailMessage(path, filename, self.email_parser.parsestr(file))
+		self.length = len(os.listdir(self.maildir))
 
 
 class ListReaderIterator:
@@ -122,7 +124,7 @@ class ListReaderRawEmailTexts():
 
 if __name__ == '__main__':
 
-	test_dir = "testData"
+	test_dir = "../Tests/testData/two"
 
 	with open(test_dir + "/bass-e__sent_mail_20.txt", "r", errors='ignore') as f:
 		print("==============================")
