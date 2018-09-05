@@ -89,7 +89,7 @@ class EmailDirectoryReader(DirectoryReader):
 		self.email_parser = ep.Parser()
 		self.file_func = lambda filename: '.quagga.' not in filename
 		self.email_func = lambda path, filename, file: EmailMessage(path, filename, self.email_parser.parsestr(file))
-		self.length = len(os.listdir(self.maildir))
+		self.length = sum([len(files) for r, d, files in os.walk(self.maildir)])
 
 
 class ListReaderIterator:

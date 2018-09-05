@@ -14,6 +14,7 @@ from enum import IntEnum
 import timeit
 
 import os
+import sys
 
 
 class State(IntEnum):
@@ -102,7 +103,8 @@ class Quagga:
 		total_length = self.emails_input.length
 		for count, input in enumerate(self.emails_input):
 			if count % 10 == 0:
-				print(str(count) + " / " + str(total_length))
+				sys.stdout.write('\r')
+				sys.stdout.write(str(count) + " / " + str(total_length) + " ")
 			self._store_email(foldername, input.filename_with_path, self._INPUT(), input)
 			predicted = self._predict(input.clean_body)
 			self._store_email(foldername, input.filename_with_path, self._PREDICTED(), predicted)
