@@ -16,7 +16,9 @@ def get_relative_filename(file):
         return filename
 
 input_dir = get_relative_filename("Tests/testData/enron_tiny")
+# /san2/data/websci/email_datasets/enron_original
 output_dir = get_relative_filename("Tests/testData/output")
+# /san2/data/websci/email_datasets/enron_quagga
 
 
 

@@ -343,7 +343,7 @@ x3-0977 """]
 			                   self.output_filename(email_input) + Quagga.fileending_parsed())
 
 	def test_store_all(self):
-		self.quagga.store_all(self.test_expected_dir)
+		self.quagga.store_all(self.test_output_dir)
 		for email_input in self.quagga.emails_input:
 			assert filecmp.cmp(self.expected_filename(email_input) + Quagga.fileending_input(),
 			                   self.output_filename(email_input) + Quagga.fileending_input())
