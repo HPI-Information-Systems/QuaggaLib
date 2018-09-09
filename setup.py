@@ -17,7 +17,7 @@ setup(
 	install_requires=['absl-py==0.3.0', 'astor==0.7.1', 'autopep8==1.3.5', 'bleach==1.5.0', 'click==6.7',
 	                  'cycler==0.10.0', 'dateparser', 'Flask==1.0.2', 'gast==0.2.0', 'grpcio==1.14.0', 'h5py==2.8.0',
 	                  'html5lib==0.9999999', 'itsdangerous==0.24', 'Jinja2==2.10', 'Keras==2.2.0',
-	                  'kiwisolver==1.0.1', 'Markdown==2.6.11', 'MarkupSafe==1.0', 'matplotlib==2.2.2', 'numpy==1.14.5',
+	                  'kiwisolver==1.0.1', 'Markdown==2.6.11', 'MarkupSafe==1.0', 'matplotlib==2.2.2', 'numpy==1.14.5', 'nose==1.3.7',
 	                  'pandas==0.23.3', 'protobuf==3.6.0', 'pyparsing==2.2.0', 'python-dateutil==2.7.3', 'pytz==2018.5',
 	                  'PyYAML==3.13', 'scikit-learn==0.19.2', 'scipy==1.1.0', 'six==1.11.0',
 	                  'sklearn==0.0', 'tensorflow==1.5', 'termcolor==1.1.0',

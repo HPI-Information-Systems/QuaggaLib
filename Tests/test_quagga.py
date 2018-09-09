@@ -9,9 +9,13 @@ from email import parser as ep
 
 
 class TestQuagga(TestCase):
+	def get_relative_filename(self, file):
+		dirname = os.path.dirname(__file__)
+		filename = os.path.join(dirname, file)
+		return filename
 
 	def setUp(self):
-		self.test_data_dir = 'testData/two'
+		self.test_data_dir = self.get_relative_filename('testData/two')
 		self.test_filename = 'bass-e__sent_mail_20.txt'
 		self.test_raw_mail = """Message-ID: <20646012.1075840326283.JavaMail.evans@thyme>
 Date: Mon, 26 Mar 2001 13:33:00 -0800 (PST)

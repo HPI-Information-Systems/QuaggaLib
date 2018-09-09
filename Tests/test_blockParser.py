@@ -11,8 +11,15 @@ from email import parser as ep
 
 class TestBlockParser(TestCase):
 
+	def get_relative_filename(self, file):
+		dirname = os.path.dirname(__file__)
+		filename = os.path.join(dirname, file)
+		return filename
+
 	def setUp(self):
-		self.test_data_dir = 'testData/two'
+		self.test_data_dir = self.get_relative_filename('testData/two')
+
+
 		self.test_output_dir = self.test_data_dir + '/output'
 		self.test_expected_dir = self.test_data_dir + '/output_expected'
 
