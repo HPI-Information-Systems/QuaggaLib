@@ -1,1 +1,1 @@
-{"quagga.parsed": {"blocks": [{"from": "kontko@home.com", "to": "undisclosed-recipients@enron.com", "cc": "", "sent": "01/01/2000 12:12 PM", "subject": "I'm back!", "type": "root", "raw_header": [], "text": ["Up on the web. New email address: kontko@attbi.com", "", "kari", ""]}]}}
+{"quagga.parsed": {"blocks": [{"from": "kontko@home.com", "to": ["undisclosed-recipients@enron.com"], "cc": "", "sent": "2001-12-13 21:24:32 UTC", "subject": "I'm back!", "type": "root", "raw_header": [], "text": ["Up on the web. New email address: kontko@attbi.com", "", "kari", ""]}]}}

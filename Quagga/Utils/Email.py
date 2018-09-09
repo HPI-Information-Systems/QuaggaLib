@@ -112,7 +112,9 @@ class EmailMessage(Email):
 
 	@property
 	def filename_with_path(self):
-		path = self.path.replace("/", "", 1)
+		path = self.path
+		if path.startswith("/"):
+			path = self.path.replace("/", "", 1)
 		if path != '':
 			path = path + "/"
 		return path.replace("/", "_") + self.filename
