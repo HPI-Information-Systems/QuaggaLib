@@ -54,7 +54,7 @@ PL
 
 
 <Embedded StdOleLink>"""
-		self.test_output_dir = self.test_data_dir + '/output'
+		self.test_output_dir = self.get_relative_filename('testData/output')
 		self.test_expected_dir = self.test_data_dir + '/output_expected'
 		self.quagga = Quagga(EmailDirectoryReader(self.test_data_dir), self.test_output_dir)
 

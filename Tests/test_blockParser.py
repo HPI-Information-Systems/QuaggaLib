@@ -18,11 +18,6 @@ class TestBlockParser(TestCase):
 
 	def setUp(self):
 		self.test_data_dir = self.get_relative_filename('testData/two')
-
-
-		self.test_output_dir = self.test_data_dir + '/output'
-		self.test_expected_dir = self.test_data_dir + '/output_expected'
-
 		self.block_parser = BlockParser()
 
 	def construct_email(self, filename, raw_mail):

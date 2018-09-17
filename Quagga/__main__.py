@@ -81,7 +81,6 @@ class Quagga:
 		                              lambda email_prediction, email_input: self._parse(
 			                              email_prediction, email_input))
 
-	# this is optimized so things are loaded only once into memory and not written and read from disk immediately after
 	#@timemeasure
 	#@profile
 	def store_all(self, foldername):
@@ -90,7 +89,7 @@ class Quagga:
 		print("store all")
 
 		for count, email_input in enumerate(self.emails_input):
-			self.log_progress(count, self.emails_input.length)
+			self._log_progress(count, self.emails_input.length)
 			self._store_all(foldername, email_input)
 
 		print("stored all stages in " + foldername)
@@ -103,10 +102,6 @@ class Quagga:
 		parsed = self._parse(predicted, email_input)
 		self._store_email(foldername, email_input.filename_with_path, self.PARSED_NAME(), parsed)
 
-	def log_progress(self, count, total):
-		if count % 10 == 0:
-			sys.stdout.write('\r')
-			sys.stdout.write(str(count) + " / " + str(total) + " ")
 
 	def store_input(self, foldername):
 		self._store(foldername, self.INPUT_NAME(), self.emails_input)
@@ -117,6 +112,11 @@ class Quagga:
 	def store_parsed(self, foldername, prediction_reader=None):
 		self._store(foldername, self.PARSED_NAME(), self.emails_parsed(prediction_reader))
 
+	def _log_progress(self, count, total):
+		if count % 10 == 0:
+			sys.stdout.write('\r')
+			sys.stdout.write(str(count) + " / " + str(total) + " ")
+
 	@timemeasure
 	def _store(self, foldername, stage, emails):
 		if not os.path.exists(foldername):
@@ -124,7 +124,7 @@ class Quagga:
 		print("storing " + stage)
 
 		for count, (email_input, email) in enumerate(zip(self.emails_input, emails)):
-			self.log_progress(count, self.emails_input.length)
+			self._log_progress(count, self.emails_input.length)
 			self._store_email(foldername, email_input.filename_with_path, stage, email)
 
 		print("stored " + stage + " in " + foldername)
