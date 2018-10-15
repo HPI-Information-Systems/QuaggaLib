@@ -141,8 +141,8 @@ x3-0977 """]
 
 	def test_emails_input(self):
 		for email_input in self.quagga.emails_input:
-			with open(self.expected_filename(email_input) + Quagga.fileending_input(), 'r') as fp:
-				expected_input = json.loads(fp.read())[Quagga.INPUT_NAME()]
+			with open(self.expected_filename(email_input) + self.quagga.fileending_input, 'r') as fp:
+				expected_input = json.loads(fp.read())[Quagga.INPUT_NAME]
 				assert email_input.file == expected_input['file']
 				assert email_input.folder == expected_input['folder']
 				assert email_input.sent_string == expected_input['sent']
@@ -163,8 +163,8 @@ x3-0977 """]
 	def test_store_input(self):
 		self.quagga.store_input(self.test_output_dir)
 		for email_input in self.quagga.emails_input:
-			assert filecmp.cmp(self.expected_filename(email_input) + Quagga.fileending_input(),
-			                   self.output_filename(email_input) + Quagga.fileending_input())
+			assert filecmp.cmp(self.expected_filename(email_input) + self.quagga.fileending_input,
+			                   self.output_filename(email_input) + self.quagga.fileending_input)
 
 	def test__build_model(self):
 		self.quagga.model = None
@@ -185,8 +185,8 @@ x3-0977 """]
 	def test_store_predicted(self):
 		self.quagga.store_predicted(self.test_output_dir)
 		for email_input in self.quagga.emails_input:
-			assert filecmp.cmp(self.expected_filename(email_input) + Quagga.fileending_predicted(),
-			                   self.output_filename(email_input) + Quagga.fileending_predicted())
+			assert filecmp.cmp(self.expected_filename(email_input) + self.quagga.fileending_predicted,
+			                   self.output_filename(email_input) + self.quagga.fileending_predicted)
 
 	"""def test__parse(self):
 		email_input = EmailMessage(self.test_data_dir, self.test_filename, ep.Parser().parsestr(self.test_raw_mail))
@@ -202,14 +202,14 @@ x3-0977 """]
 	def test_store_parsed(self):
 		self.quagga.store_parsed(self.test_output_dir)
 		for email_input in self.quagga.emails_input:
-			assert os.path.isfile(self.output_filename(email_input) + Quagga.fileending_parsed())
+			assert os.path.isfile(self.output_filename(email_input) + self.quagga.fileending_parsed)
 
 	def test_store_all(self):
 		self.quagga.store_all(self.test_output_dir)
 		for email_input in self.quagga.emails_input:
-			assert os.path.isfile(self.output_filename(email_input) + Quagga.fileending_input())
-			assert os.path.isfile(self.output_filename(email_input) + Quagga.fileending_predicted())
-			assert os.path.isfile(self.output_filename(email_input) + Quagga.fileending_parsed())
+			assert os.path.isfile(self.output_filename(email_input) + self.quagga.fileending_input)
+			assert os.path.isfile(self.output_filename(email_input) + self.quagga.fileending_predicted)
+			assert os.path.isfile(self.output_filename(email_input) + self.quagga.fileending_parsed)
 
 	def test_store_many(self):
 		output_dir = 'testData/output'

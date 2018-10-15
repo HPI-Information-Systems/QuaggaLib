@@ -68,15 +68,15 @@ class Quagga:
                               lambda email, _: email.clean_body, self.INPUT_NAME)
 
     @property
-    def fileending_predicted(self):
+    def fileending_predicted(self) -> str:
         return '.' + self.PREDICTED_NAME + '.json'
 
     @property
-    def fileending_parsed(self):
+    def fileending_parsed(self) -> str:
         return '.' + self.PARSED_NAME + '.json'
 
     @property
-    def fileending_input(self):
+    def fileending_input(self) -> str:
         return '.' + self.INPUT_NAME + '.json'
 
     def _emails_processed(self, stage, input_reader, process_input, func):
