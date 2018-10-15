@@ -166,11 +166,17 @@ class Normalizer:
 		string = string.rstrip()
 		return string
 
+	def cleanup_dashes(self, string):
+		dash_regex = r"(^(-+)|(-+)$)"
+		string = re.sub(dash_regex, "", string)
+		return string
+
 	def cleanup_string(self, string):
 		if string is None:
 			return None
 		string = self.cleanup_escapes(string)
 		string = self.cleanup_whitespace(string)
+		string = self.cleanup_dashes(string)
 		return string
 
 

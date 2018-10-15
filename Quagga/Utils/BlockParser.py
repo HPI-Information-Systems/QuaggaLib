@@ -165,13 +165,6 @@ class BlockParser:
 			top_prediction = self._top_prediction(line_prediction['predictions'])
 			line_low = line_prediction['text'].lower()
 
-
-
-			if 'Amy.Jon@enron.com on 11/30/2000 09:37:29 ' in line_prediction['text']:
-				a = 1
-			if 'pvillag@columbiaenergygroup.com on 12/29/99 03:29:10 P' in line_prediction['text']:
-				a = 1
-
 			if top_prediction == 'Header':
 
 				if mode == 0:

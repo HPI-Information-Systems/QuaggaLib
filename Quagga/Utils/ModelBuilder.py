@@ -149,7 +149,7 @@ class ModelBuilder:
 		embedding_func = K.function(model_in + [K.learning_phase()], [model.layers[-2].output])
 
 		def lambdo(x):
-			return embedding_func([x, 0.])[0]
+			return embedding_func([x, 0.])[0] # 0 = test (learning_phase)
 
 		return lambdo
 
@@ -171,7 +171,7 @@ class ModelBuilder:
 	@property
 	def _mail_model_two(self):
 		output_size = 2
-		in_mail = Input(shape=(None, self.line_embedding_size), dtype='float32')
+		in_mail = Input(shape=(None, self.line_embedding_size), dtype='float32') # batches of arbitrary number of vectors with size self.line_embedding_size
 
 		mask = Masking()(in_mail)
 		hidden = Bidirectional(GRU(32 // 2,

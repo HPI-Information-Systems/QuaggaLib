@@ -45,5 +45,5 @@ class Model:
 		if embedding_functions is None:
 			return x
 		x = np.concatenate([embedding_function(x)
-		                    for embedding_function in embedding_functions], axis=1)
+		                    for embedding_function in embedding_functions], axis=1) #perform line model before
 		return x

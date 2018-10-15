@@ -212,6 +212,6 @@ x3-0977 """]
 			assert os.path.isfile(self.output_filename(email_input) + Quagga.fileending_parsed())
 
 	def test_store_many(self):
-		output_dir = 'testData/enron_tiny/output'
+		output_dir = 'testData/output'
 		self.quagga = Quagga(EmailDirectoryReader('testData/enron_tiny'), output_dir)
 		self.quagga.store_all(output_dir)

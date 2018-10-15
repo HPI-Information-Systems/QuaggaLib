@@ -456,8 +456,7 @@ HAPPY NEW YEAR!!!!!!!!!!!!!!!!!!!
 			{'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
 			{'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}}]
 
-		expected = {'blocks': [{'from': 'chris.germany@enron.com', 'to': ['clarissa.garcia@enron.com', 'cindy.vachuska@enron.com', 'pvillag@columbiaenergy.com', 'molly.lafuze@enron.com', 'msharif@columbiaenergygroup.com', 'david.oliver@enron.com', 'victoria.versen@enron.com'], 'cc': ['katherine.kelly@enron.com', 'victor.lamadrid@enron.com', 'chris.germany@enron.com', 'scott.hendrickson@enron.com'], 'sent': '1999-12-30 09:44:00 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'root', 'raw_header': [], 'text': ['CES is buying 2500 dth/day from Equitable in Tenn Z4.  CES is selling 2500 ', 'dth/day to FirstEnergy in Tenn Z4.  Looks like a match to me.  I told Fred ', 'with Equitable the information John Singer gave to Phil below.  For future ', "reference Fred's number is 412-395-3295.  A backup contact at Equitable is ", 'Steve Rafferty, 412-395-3268.', '', 'Per John, FirstEnergy bought the meter (??) from Beldon & Blake effective ', '12/1/99.  On CNG, we are showing a purchase (deal 141688) and a sale (deal ', "141952) for 2500 dth/day with Beldon & Blake.  I don't see a sale anywhere to ", 'FirstEnergy.  ', '', 'Also, I still see an Equitable supply (deal 135956) on CNG for 3226 dth/day.  ', 'I believe this is a duplicate of deal 138741 in Tetco M2.', '', 'Comments?', '']}, {'from': 'Chris Germany/HOU/ECT', 'to': ['clarissa.garcia@enron.com', 'cindy.vachuska@enron.com', 'pvillag@columbiaenergy.com', 'molly.lafuze@enron.com', 'msharif@columbiaenergygroup.com', 'david.oliver@enron.com', 'victoria.versen@enron.com'], 'cc': ['katherine.kelly@enron.com', 'victor.lamadrid@enron.com', 'chris.germany@enron.com', 'scott.hendrickson@enron.com'], 'sent': '1999-12-30 09:23:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Chris Germany/HOU/ECT on 12/30/99 10:23 ', 'AM ---------------------------'], 'text': []}, {'from': 'pvillag@columbiaenergygroup.com on', 'to': ['Chris Germany/HOU/ECT@ECT'], 'cc': '', 'sent': '1999-12-29 14:29:10 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'reply', 'raw_header': ['', '', 'pvillag@columbiaenergygroup.com on 12/29/99 03:29:10 PM', 'To: Chris Germany/HOU/ECT@ECT', 'cc:  ', 'Subject: Jan sale to FirstEnergy @ Carroll Co Meter'], 'text': ['', '', '', 'Chris,', '', 'This has to do with that TENN zone 4 deal that you e-mailed me about this', 'morning. Like I mentioned earlier, we never scheduled this gas, it was handled', 'on a back to back basis.', '', 'Phil', '', '']}, {'from': 'Phil Villagomez/CES/ColumbiaGas', 'to': ['Chris Germany/HOU/ECT@ECT'], 'cc': '', 'sent': '1999-12-28 23:00:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Phil Villagomez/CES/ColumbiaGas on ', '12/29/99'], 'text': []}, {'from': '---------------------------  John Singer', 'to': ['Phil Villagomez/CES/ColumbiaGas@ColumbiaGas'], 'cc': '', 'sent': '1999-12-29 02:05:00 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'reply', 'raw_header': ['03:33 PM ---------------------------', '', 'John Singer', '12/29/99 03:05 PM', '', '', 'To: Phil Villagomez/CES/ColumbiaGas@ColumbiaGas', 'cc:', 'Subject: Jan sale to FirstEnergy @ Carroll Co Meter'], 'text': ['', 'Phil,', 'FirstEnergy called to change the contract number for the sale I made to them', '(originally to Belden & Blake) to be delivered to the Carroll Co Meter.  The', 'new contract number is 32082.', "If you receive this email before you page me, that's what the page is about.", 'Call or email me with any questions.', 'Thanks,', 'John', '', 'HAPPY NEW YEAR!!!!!!!!!!!!!!!!!!!', '', '']}]}
-
+		expected = {'blocks': [{'from': 'chris.germany@enron.com', 'to': ['clarissa.garcia@enron.com', 'cindy.vachuska@enron.com', 'pvillag@columbiaenergy.com', 'molly.lafuze@enron.com', 'msharif@columbiaenergygroup.com', 'david.oliver@enron.com', 'victoria.versen@enron.com'], 'cc': ['katherine.kelly@enron.com', 'victor.lamadrid@enron.com', 'chris.germany@enron.com', 'scott.hendrickson@enron.com'], 'sent': '1999-12-30 09:44:00 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'root', 'raw_header': [], 'text': ['CES is buying 2500 dth/day from Equitable in Tenn Z4.  CES is selling 2500 ', 'dth/day to FirstEnergy in Tenn Z4.  Looks like a match to me.  I told Fred ', 'with Equitable the information John Singer gave to Phil below.  For future ', "reference Fred's number is 412-395-3295.  A backup contact at Equitable is ", 'Steve Rafferty, 412-395-3268.', '', 'Per John, FirstEnergy bought the meter (??) from Beldon & Blake effective ', '12/1/99.  On CNG, we are showing a purchase (deal 141688) and a sale (deal ', "141952) for 2500 dth/day with Beldon & Blake.  I don't see a sale anywhere to ", 'FirstEnergy.  ', '', 'Also, I still see an Equitable supply (deal 135956) on CNG for 3226 dth/day.  ', 'I believe this is a duplicate of deal 138741 in Tetco M2.', '', 'Comments?', '']}, {'from': 'Chris Germany/HOU/ECT', 'to': ['clarissa.garcia@enron.com', 'cindy.vachuska@enron.com', 'pvillag@columbiaenergy.com', 'molly.lafuze@enron.com', 'msharif@columbiaenergygroup.com', 'david.oliver@enron.com', 'victoria.versen@enron.com'], 'cc': ['katherine.kelly@enron.com', 'victor.lamadrid@enron.com', 'chris.germany@enron.com', 'scott.hendrickson@enron.com'], 'sent': '1999-12-30 09:23:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Chris Germany/HOU/ECT on 12/30/99 10:23 ', 'AM ---------------------------'], 'text': []}, {'from': 'pvillag@columbiaenergygroup.com on', 'to': ['Chris Germany/HOU/ECT@ECT'], 'cc': '', 'sent': '1999-12-29 14:29:10 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'reply', 'raw_header': ['', '', 'pvillag@columbiaenergygroup.com on 12/29/99 03:29:10 PM', 'To: Chris Germany/HOU/ECT@ECT', 'cc:  ', 'Subject: Jan sale to FirstEnergy @ Carroll Co Meter'], 'text': ['', '', '', 'Chris,', '', 'This has to do with that TENN zone 4 deal that you e-mailed me about this', 'morning. Like I mentioned earlier, we never scheduled this gas, it was handled', 'on a back to back basis.', '', 'Phil', '', '']}, {'from': 'Phil Villagomez/CES/ColumbiaGas', 'to': ['Chris Germany/HOU/ECT@ECT'], 'cc': '', 'sent': '1999-12-28 23:00:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Phil Villagomez/CES/ColumbiaGas on ', '12/29/99'], 'text': []}, {'from': '  John Singer', 'to': ['Phil Villagomez/CES/ColumbiaGas@ColumbiaGas'], 'cc': '', 'sent': '1999-12-29 02:05:00 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'reply', 'raw_header': ['03:33 PM ---------------------------', '', 'John Singer', '12/29/99 03:05 PM', '', '', 'To: Phil Villagomez/CES/ColumbiaGas@ColumbiaGas', 'cc:', 'Subject: Jan sale to FirstEnergy @ Carroll Co Meter'], 'text': ['', 'Phil,', 'FirstEnergy called to change the contract number for the sale I made to them', '(originally to Belden & Blake) to be delivered to the Carroll Co Meter.  The', 'new contract number is 32082.', "If you receive this email before you page me, that's what the page is about.", 'Call or email me with any questions.', 'Thanks,', 'John', '', 'HAPPY NEW YEAR!!!!!!!!!!!!!!!!!!!', '', '']}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
 		print(parsed)
@@ -951,8 +950,208 @@ Classes of '77 and '81
 			{'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
 			{'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
 			{'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}}]
-		expected = {'blocks': [{'from': 'eric.bass@enron.com', 'to': ['shanna.husser@enron.com'], 'cc': '', 'sent': '2000-11-30 09:50:00 UTC', 'subject': 'Re: aggie/longhorn letter', 'type': 'root', 'raw_header': [], 'text': ["waaaaa! waaaaa! you notice that she didn't mention the corps of cadet members ", 'that tackled and beat on women after texas victory in college station a ', 'couple of year back', '', '']}, {'from': 'Enron North America Corp.    Shanna Husser @ EES', 'to': ['Eric Bass/HOU/ECT@ECT'], 'cc': '', 'sent': '2000-11-30 09:36:00 UTC', 'subject': 'aggie/longhorn letter  Something to get you ALL riled up!!  And you talk about LSU fans being bad-  "Kill him"!!!', 'type': 'reply', 'raw_header': ['   ', '\tEnron North America Corp.', '\t', '\tFrom:  Shanna Husser @ EES                           11/30/2000 10:36 AM', '\t', '', 'To: Eric Bass/HOU/ECT@ECT', 'cc:  ', 'Subject: aggie/longhorn letter', '', 'Something to get you ALL riled up!!  And you talk about LSU fans being bad- ', '"Kill him"!!!'], 'text': []}, {'from': 'Shanna Husser/HOU/EES', 'to': ['Eric Bass/HOU/ECT@ECT'], 'cc': '', 'sent': '2000-11-30 09:35:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Shanna Husser/HOU/EES on 11/30/2000 10:35 ', 'AM ---------------------------'], 'text': []}, {'from': 'Christina Barthel', 'to': ['Shanna Husser/HOU/EES@EES, Kim Chick/HOU/EES@EES, Leon  Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt,  James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith"  <meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>,  "Kelly Kohrman" <pyrowoman@hotmail.com>, "Ashley"  <Ashley.Victorick@coastalcorp.com>, "Jaimie" <Jaimie.Parker@coastalcorp.com>,  "Erin" <elaggie99@hotmail.com>, "Anthony" <urbanaj@texaco.com>, "Jose"  <jose.a.suarez@us.pwcglobal.com>, "Albert" <albert.r.ferrel@exxon.com>,  "Oscar " <oscgarcia@notes.primeco.com>, "Misti" <mkuehn@tcresidential.com>'], 'cc': '', 'sent': '2000-11-30 08:43:00 UTC', 'subject': 'aggie/longhorn letter', 'type': 'reply', 'raw_header': ['', '', 'Christina Barthel', '11/30/2000 09:43 AM', 'To: Shanna Husser/HOU/EES@EES, Kim Chick/HOU/EES@EES, Leon ', 'Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt, ', 'James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith" ', '<meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>, ', '"Kelly Kohrman" <pyrowoman@hotmail.com>, "Ashley" ', '<Ashley.Victorick@coastalcorp.com>, "Jaimie" <Jaimie.Parker@coastalcorp.com>, ', '"Erin" <elaggie99@hotmail.com>, "Anthony" <urbanaj@texaco.com>, "Jose" ', '<jose.a.suarez@us.pwcglobal.com>, "Albert" <albert.r.ferrel@exxon.com>, ', '"Oscar " <oscgarcia@notes.primeco.com>, "Misti" <mkuehn@tcresidential.com>', 'cc:  ', 'Subject: aggie/longhorn letter', '', ''], 'text': []}, {'from': 'Christina Barthel/HOU/EES', 'to': ['Shanna Husser/HOU/EES@EES, Kim Chick/HOU/EES@EES, Leon  Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt,  James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith"  <meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>,  "Kelly Kohrman" <pyrowoman@hotmail.com>, "Ashley"  <Ashley.Victorick@coastalcorp.com>, "Jaimie" <Jaimie.Parker@coastalcorp.com>,  "Erin" <elaggie99@hotmail.com>, "Anthony" <urbanaj@texaco.com>, "Jose"  <jose.a.suarez@us.pwcglobal.com>, "Albert" <albert.r.ferrel@exxon.com>,  "Oscar " <oscgarcia@notes.primeco.com>, "Misti" <mkuehn@tcresidential.com>'], 'cc': '', 'sent': '2000-11-30 08:39:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Christina Barthel/HOU/EES on 11/30/2000 ', '09:39 AM ---------------------------'], 'text': []}, {'from': 'Amy.Jon@enron.com on', 'to': ['Christina.Barthel@enron.com, kchick@enron.com, dflinn@enron.com,  Lynna.Kacal@enron.com, "Leigh Ann Perry" <aotleighann@hotmail.com>,  aramirez@enron.com, "Michelle" <mtram@nccol.com>, "Sponge" <CZachgo@aol.com>'], 'cc': '', 'sent': '2000-11-30 08:37:29 UTC', 'subject': 'FW: Are we surprised to hear this?', 'type': 'reply', 'raw_header': ['', '', 'Amy.Jon@enron.com on 11/30/2000 09:37:29 AM', 'To: Christina.Barthel@enron.com, kchick@enron.com, dflinn@enron.com, ', 'Lynna.Kacal@enron.com, "Leigh Ann Perry" <aotleighann@hotmail.com>, ', 'aramirez@enron.com, "Michelle" <mtram@nccol.com>, "Sponge" <CZachgo@aol.com>', 'cc:  ', 'Subject: FW: Are we surprised to hear this?'], 'text': ['', '', '', '', ' "Conduct of Texas Fans at Friday\'s Football Game Dismays Former Student"', '', ' November 28, 2000', '', ' Dear Battalion and Daily Texan:', '', 'Please help me.  As a product of both Texas A&M and the University of', 'Texas - Austin, I thought I had learned a lot.  But I experienced some new', 'things at the football game this past Friday that my education had not ', 'prepared', 'me for.  No doubt there are Longhorn scholars who can set me straight.  I', 'watched many joyful Texas fans along with a few Aggies tailgating and', 'carousing.  Super.  Fall football rivalry.  Spirits were literally in', 'abundance.  May the better football team win.', '', 'Then I saw things that I cannot really comprehend.  I saw a Longhorn fan', 'with a t-shirt showing a fallen-over Bonfire.  The caption read, "What\'s', 'wrong, Aggies? Can\'t keep it up?"  Can someone explain that to me?  I do', 'not get it.  I assure you, I get the sexual nuance - I just do not understand', 'evil.', '', 'I saw Longhorn fans mocking and taunting the fans from A&M who were in', 'Corps of Cadets uniforms.  "Little Hitlers," they were called.  They were ', 'being', 'spat at.  Help me to understand this Longhorn slant on rivalry.  I', 'thought we were all against Hitler - Longhorns and Aggies.', '', "I saw a Longhorn cheerleader - isn't he supposed to represent UT in the", 'finest possible way?  - run in front of the Aggie Band, turn and face it', 'square on and salute with the clicked heels, arm-above-head, "Heil', 'Hitler" sign. ', '', "What don't I know here?  What didn't I learn in history class?  All these", 'things happened before kickoff.', '', 'Aggies, I respect your presentation of a $50,000 endowed scholarship as a', "thank-you for UT's respect and support shown last year.  That support", 'obviously came from the finer Horns.  I admired the fortitude and', 'restraint exercised by the Corps of Cadets under attack.', '', 'Unfortunately, I learned that hundreds and hundreds of Longhorns have', "More than one way to show the Hook 'em Horns sign.  They prefer to use their", 'middle finger.  Class.  Really intelligent and creative.  That will', 'quickly teach those "littlest" Longhorns how to show spirit.  I just pray they', 'get an honest chance to choose.', '', 'I am learning.  I have attended both schools.  I will choose the higher', 'ground.', '', 'Susan Priest', "Classes of '77 and '81", '>', '>', '', '', '', '', '', '', '', '', '']}]}
+		expected = {'blocks': [{'from': 'eric.bass@enron.com', 'to': ['shanna.husser@enron.com'], 'cc': '',
+		                        'sent': '2000-11-30 09:50:00 UTC', 'subject': 'Re: aggie/longhorn letter',
+		                        'type': 'root', 'raw_header': [], 'text': [
+				"waaaaa! waaaaa! you notice that she didn't mention the corps of cadet members ",
+				'that tackled and beat on women after texas victory in college station a ', 'couple of year back', '',
+				'']}, {'from': 'Enron North America Corp.    Shanna Husser @ EES', 'to': ['Eric Bass/HOU/ECT@ECT'],
+		               'cc': '', 'sent': '2000-11-30 09:36:00 UTC',
+		               'subject': 'aggie/longhorn letter  Something to get you ALL riled up!!  And you talk about LSU fans being bad-  "Kill him"!!!',
+		               'type': 'reply', 'raw_header': ['   ', '\tEnron North America Corp.', '\t',
+		                                               '\tFrom:  Shanna Husser @ EES                           11/30/2000 10:36 AM',
+		                                               '\t', '', 'To: Eric Bass/HOU/ECT@ECT', 'cc:  ',
+		                                               'Subject: aggie/longhorn letter', '',
+		                                               'Something to get you ALL riled up!!  And you talk about LSU fans being bad- ',
+		                                               '"Kill him"!!!'], 'text': []},
+		                       {'from': 'Shanna Husser/HOU/EES', 'to': ['Eric Bass/HOU/ECT@ECT'], 'cc': '',
+		                        'sent': '2000-11-30 09:35:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': [
+			                       '---------------------- Forwarded by Shanna Husser/HOU/EES on 11/30/2000 10:35 ',
+			                       'AM ---------------------------'], 'text': []}, {'from': 'Christina Barthel', 'to': [
+				'Shanna Husser/HOU/EES@EES, Kim Chick/HOU/EES@EES, Leon  Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt,  James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith"  <meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>,  "Kelly Kohrman" <pyrowoman@hotmail.com>, "Ashley"  <Ashley.Victorick@coastalcorp.com>, "Jaimie" <Jaimie.Parker@coastalcorp.com>,  "Erin" <elaggie99@hotmail.com>, "Anthony" <urbanaj@texaco.com>, "Jose"  <jose.a.suarez@us.pwcglobal.com>, "Albert" <albert.r.ferrel@exxon.com>,  "Oscar " <oscgarcia@notes.primeco.com>, "Misti" <mkuehn@tcresidential.com>'],
+		                                                                            'cc': '',
+		                                                                            'sent': '2000-11-30 08:43:00 UTC',
+		                                                                            'subject': 'aggie/longhorn letter',
+		                                                                            'type': 'reply',
+		                                                                            'raw_header': ['', '',
+		                                                                                           'Christina Barthel',
+		                                                                                           '11/30/2000 09:43 AM',
+		                                                                                           'To: Shanna Husser/HOU/EES@EES, Kim Chick/HOU/EES@EES, Leon ',
+		                                                                                           'Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt, ',
+		                                                                                           'James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith" ',
+		                                                                                           '<meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>, ',
+		                                                                                           '"Kelly Kohrman" <pyrowoman@hotmail.com>, "Ashley" ',
+		                                                                                           '<Ashley.Victorick@coastalcorp.com>, "Jaimie" <Jaimie.Parker@coastalcorp.com>, ',
+		                                                                                           '"Erin" <elaggie99@hotmail.com>, "Anthony" <urbanaj@texaco.com>, "Jose" ',
+		                                                                                           '<jose.a.suarez@us.pwcglobal.com>, "Albert" <albert.r.ferrel@exxon.com>, ',
+		                                                                                           '"Oscar " <oscgarcia@notes.primeco.com>, "Misti" <mkuehn@tcresidential.com>',
+		                                                                                           'cc:  ',
+		                                                                                           'Subject: aggie/longhorn letter',
+		                                                                                           '', ''], 'text': []},
+		                       {'from': 'Christina Barthel/HOU/EES', 'to': [
+			                       'Shanna Husser/HOU/EES@EES, Kim Chick/HOU/EES@EES, Leon  Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt,  James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith"  <meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>,  "Kelly Kohrman" <pyrowoman@hotmail.com>, "Ashley"  <Ashley.Victorick@coastalcorp.com>, "Jaimie" <Jaimie.Parker@coastalcorp.com>,  "Erin" <elaggie99@hotmail.com>, "Anthony" <urbanaj@texaco.com>, "Jose"  <jose.a.suarez@us.pwcglobal.com>, "Albert" <albert.r.ferrel@exxon.com>,  "Oscar " <oscgarcia@notes.primeco.com>, "Misti" <mkuehn@tcresidential.com>'],
+		                        'cc': '', 'sent': '2000-11-30 08:39:00 UTC', 'subject': None, 'type': 'forward',
+		                        'raw_header': [
+			                        '---------------------- Forwarded by Christina Barthel/HOU/EES on 11/30/2000 ',
+			                        '09:39 AM ---------------------------'], 'text': []},
+		                       {'from': 'Amy.Jon@enron.com on', 'to': [
+			                       'Christina.Barthel@enron.com, kchick@enron.com, dflinn@enron.com,  Lynna.Kacal@enron.com, "Leigh Ann Perry" <aotleighann@hotmail.com>,  aramirez@enron.com, "Michelle" <mtram@nccol.com>, "Sponge" <CZachgo@aol.com>'],
+		                        'cc': '', 'sent': '2000-11-30 08:37:29 UTC',
+		                        'subject': 'FW: Are we surprised to hear this?', 'type': 'reply',
+		                        'raw_header': ['', '', 'Amy.Jon@enron.com on 11/30/2000 09:37:29 AM',
+		                                       'To: Christina.Barthel@enron.com, kchick@enron.com, dflinn@enron.com, ',
+		                                       'Lynna.Kacal@enron.com, "Leigh Ann Perry" <aotleighann@hotmail.com>, ',
+		                                       'aramirez@enron.com, "Michelle" <mtram@nccol.com>, "Sponge" <CZachgo@aol.com>',
+		                                       'cc:  ', 'Subject: FW: Are we surprised to hear this?'],
+		                        'text': ['', '', '', '',
+		                                 ' "Conduct of Texas Fans at Friday\'s Football Game Dismays Former Student"',
+		                                 '', ' November 28, 2000', '', ' Dear Battalion and Daily Texan:', '',
+		                                 'Please help me.  As a product of both Texas A&M and the University of',
+		                                 'Texas - Austin, I thought I had learned a lot.  But I experienced some new',
+		                                 'things at the football game this past Friday that my education had not ',
+		                                 'prepared',
+		                                 'me for.  No doubt there are Longhorn scholars who can set me straight.  I',
+		                                 'watched many joyful Texas fans along with a few Aggies tailgating and',
+		                                 'carousing.  Super.  Fall football rivalry.  Spirits were literally in',
+		                                 'abundance.  May the better football team win.', '',
+		                                 'Then I saw things that I cannot really comprehend.  I saw a Longhorn fan',
+		                                 'with a t-shirt showing a fallen-over Bonfire.  The caption read, "What\'s',
+		                                 'wrong, Aggies? Can\'t keep it up?"  Can someone explain that to me?  I do',
+		                                 'not get it.  I assure you, I get the sexual nuance - I just do not understand',
+		                                 'evil.', '',
+		                                 'I saw Longhorn fans mocking and taunting the fans from A&M who were in',
+		                                 'Corps of Cadets uniforms.  "Little Hitlers," they were called.  They were ',
+		                                 'being', 'spat at.  Help me to understand this Longhorn slant on rivalry.  I',
+		                                 'thought we were all against Hitler - Longhorns and Aggies.', '',
+		                                 "I saw a Longhorn cheerleader - isn't he supposed to represent UT in the",
+		                                 'finest possible way?  - run in front of the Aggie Band, turn and face it',
+		                                 'square on and salute with the clicked heels, arm-above-head, "Heil',
+		                                 'Hitler" sign. ', '',
+		                                 "What don't I know here?  What didn't I learn in history class?  All these",
+		                                 'things happened before kickoff.', '',
+		                                 'Aggies, I respect your presentation of a $50,000 endowed scholarship as a',
+		                                 "thank-you for UT's respect and support shown last year.  That support",
+		                                 'obviously came from the finer Horns.  I admired the fortitude and',
+		                                 'restraint exercised by the Corps of Cadets under attack.', '',
+		                                 'Unfortunately, I learned that hundreds and hundreds of Longhorns have',
+		                                 "More than one way to show the Hook 'em Horns sign.  They prefer to use their",
+		                                 'middle finger.  Class.  Really intelligent and creative.  That will',
+		                                 'quickly teach those "littlest" Longhorns how to show spirit.  I just pray they',
+		                                 'get an honest chance to choose.', '',
+		                                 'I am learning.  I have attended both schools.  I will choose the higher',
+		                                 'ground.', '', 'Susan Priest', "Classes of '77 and '81", '>', '>', '', '', '',
+		                                 '', '', '', '', '', '']}]}
 
+		parsed = self.block_parser.parse_predictions(predicted, email_input)
+		print(parsed)
+
+		assert parsed == expected
+
+	def test_bass_e_all(self):
+		raw_mail = """Message-ID: <2875299.1075854589524.JavaMail.evans@thyme>
+Date: Wed, 15 Nov 2000 01:32:00 -0800 (PST)
+From: brian.hoskins@enron.com
+To: eric.bass@enron.com, hector.campos@enron.com
+Subject: Another slam on Gore!
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-From: Brian Hoskins
+X-To: Eric Bass, Hector Campos
+X-cc: 
+X-bcc: 
+X-Folder: \Eric_Bass_Dec2000\\Notes Folders\All documents
+X-Origin: Bass-E
+X-FileName: ebass.nsf
+
+
+
+
+Brian T. Hoskins
+Enron Broadband Services
+713-853-0380 (office)
+713-412-3667 (mobile)
+713-646-5745 (fax)
+Brian_Hoskins@enron.net
+
+
+----- Forwarded by Brian Hoskins/Enron Communications on 11/15/00 09:40 AM 
+-----
+
+Kori Loibl@ECT
+11/14/00 04:03 PM
+	 
+	 To: Alicia Perkins/HOU/EES@EES, Purvi Patel/HOU/ECT@ECT, Beau 
+Ratliff/HOU/EES@EES, Lucy Ortiz/HOU/ECT@ECT, Scott Pleus/Enron 
+Communications@Enron Communications, Don Baughman/HOU/ECT@ECT, Brian 
+Hoskins/Enron Communications@Enron Communications, Tobin Carlson/HOU/ECT@ECT
+	 cc: 
+	 Subject: Another slam on Gore!
+
+This is great!
+
+
+
+"""
+		filename = "bass-e_all_documents_515.txt"
+		email_input = self.construct_email(filename, raw_mail)
+		predicted = [{'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': 'Brian T. Hoskins', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': 'Enron Broadband Services', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '713-853-0380 (office)', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '713-412-3667 (mobile)', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '713-646-5745 (fax)', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': 'Brian_Hoskins@enron.net', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '----- Forwarded by Brian Hoskins/Enron Communications on 11/15/00 09:40 AM ',
+		              'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '-----', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'Kori Loibl@ECT', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '11/14/00 04:03 PM', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '\t ', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '\t To: Alicia Perkins/HOU/EES@EES, Purvi Patel/HOU/ECT@ECT, Beau ',
+		              'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'Ratliff/HOU/EES@EES, Lucy Ortiz/HOU/ECT@ECT, Scott Pleus/Enron ',
+		              'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'Communications@Enron Communications, Don Baughman/HOU/ECT@ECT, Brian ',
+		              'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'Hoskins/Enron Communications@Enron Communications, Tobin Carlson/HOU/ECT@ECT',
+		              'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '\t cc: ', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '\t Subject: Another slam on Gore!', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'This is great!', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '', 'predictions': {'Body': 0.0, 'Header': 1.0}}]
+
+		expected = {'blocks': [
+			{'from': 'brian.hoskins@enron.com', 'to': ['eric.bass@enron.com', 'hector.campos@enron.com'], 'cc': '',
+			 'sent': '2000-11-15 08:32:00 UTC', 'subject': 'Another slam on Gore!', 'type': 'root', 'raw_header': [],
+			 'text': ['', '', '', 'Brian T. Hoskins', 'Enron Broadband Services', '713-853-0380 (office)',
+			          '713-412-3667 (mobile)', '713-646-5745 (fax)', 'Brian_Hoskins@enron.net', '', '']},
+			{'from': 'Brian Hoskins/Enron Communications', 'to': ['eric.bass@enron.com', 'hector.campos@enron.com'],
+			 'cc': '', 'sent': '2000-11-15 08:40:00 UTC', 'subject': None, 'type': 'forward',
+			 'raw_header': ['----- Forwarded by Brian Hoskins/Enron Communications on 11/15/00 09:40 AM ', '-----'],
+			 'text': []}, {'from': 'Kori Loibl@ECT',
+			               'to': ['Alicia Perkins/HOU/EES@EES', 'Purvi Patel/HOU/ECT@ECT', 'Beau  Ratliff/HOU/EES@EES',
+			                      'Lucy Ortiz/HOU/ECT@ECT', 'Scott Pleus/Enron  Communications@Enron Communications',
+			                      'Don Baughman/HOU/ECT@ECT',
+			                      'Brian  Hoskins/Enron Communications@Enron Communications',
+			                      'Tobin Carlson/HOU/ECT@ECT'], 'cc': '', 'sent': '2000-11-14 15:03:00 UTC',
+			               'subject': 'Another slam on Gore!  This is great!', 'type': 'reply',
+			               'raw_header': ['', 'Kori Loibl@ECT', '11/14/00 04:03 PM', '\t ',
+			                              '\t To: Alicia Perkins/HOU/EES@EES, Purvi Patel/HOU/ECT@ECT, Beau ',
+			                              'Ratliff/HOU/EES@EES, Lucy Ortiz/HOU/ECT@ECT, Scott Pleus/Enron ',
+			                              'Communications@Enron Communications, Don Baughman/HOU/ECT@ECT, Brian ',
+			                              'Hoskins/Enron Communications@Enron Communications, Tobin Carlson/HOU/ECT@ECT',
+			                              '\t cc: ', '\t Subject: Another slam on Gore!', '', 'This is great!', '', '',
+			                              '', ''], 'text': []}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
 		print(parsed)
