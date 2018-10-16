@@ -14,3 +14,6 @@ install:
 # command to run tests
 script:
   - nosetests --nologcapture -w Tests/
+
+notifications:
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
