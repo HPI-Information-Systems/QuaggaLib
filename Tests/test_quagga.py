@@ -139,26 +139,39 @@ x3-0977 """]
 	def output_filename(self, email_input):
 		return self.test_output_dir + '/' + email_input.filename
 
+	@staticmethod
+	def assertComparisionError(expected, actual):
+		TestQuagga.printComparisionError(expected, actual)
+		assert expected == actual
+
+	@staticmethod
+	def printComparisionError(expected, actual):
+		if expected != actual:
+			print("expected output")
+			print(expected)
+			print("actual parsed output")
+			print(actual)
+
 	def test_emails_input(self):
 		for email_input in self.quagga.emails_input:
 			with open(self.expected_filename(email_input) + self.quagga.fileending_input, 'r') as fp:
 				expected_input = json.loads(fp.read())[Quagga.INPUT_NAME]
-				assert email_input.file == expected_input['file']
-				assert email_input.folder == expected_input['folder']
-				assert email_input.sent_string == expected_input['sent']
-				assert email_input.id == expected_input['id']
-				assert email_input.mailbox == expected_input['mailbox']
-				assert email_input.subject == expected_input['subject']
-				assert email_input.sender == expected_input['sender']
-				assert email_input.xsender == expected_input['xsender']
-				assert email_input.to == expected_input['to']
-				assert email_input.xto == expected_input['xto']
-				assert email_input.cc == expected_input['cc']
-				assert email_input.xcc == expected_input['xcc']
-				assert email_input.bcc == expected_input['bcc']
-				assert email_input.xbcc == expected_input['xbcc']
-				assert email_input.body == expected_input['body']
-				assert email_input.clean_body == expected_input['clean_body']
+				TestQuagga.assertComparisionError(email_input.file, expected_input['file'])
+				TestQuagga.assertComparisionError(email_input.folder, expected_input['folder'])
+				TestQuagga.assertComparisionError(email_input.sent_string, expected_input['sent'])
+				TestQuagga.assertComparisionError(email_input.id, expected_input['id'])
+				TestQuagga.assertComparisionError(email_input.mailbox, expected_input['mailbox'])
+				TestQuagga.assertComparisionError(email_input.subject, expected_input['subject'])
+				TestQuagga.assertComparisionError(email_input.sender, expected_input['sender'])
+				TestQuagga.assertComparisionError(email_input.xsender, expected_input['xsender'])
+				TestQuagga.assertComparisionError(email_input.to, expected_input['to'])
+				TestQuagga.assertComparisionError(email_input.xto, expected_input['xto'])
+				TestQuagga.assertComparisionError(email_input.cc, expected_input['cc'])
+				TestQuagga.assertComparisionError(email_input.xcc, expected_input['xcc'])
+				TestQuagga.assertComparisionError(email_input.bcc, expected_input['bcc'])
+				TestQuagga.assertComparisionError(email_input.xbcc, expected_input['xbcc'])
+				TestQuagga.assertComparisionError(email_input.body, expected_input['body'])
+				TestQuagga.assertComparisionError(email_input.clean_body, expected_input['clean_body'])
 
 	def test_store_input(self):
 		self.quagga.store_input(self.test_output_dir)
@@ -179,8 +192,8 @@ x3-0977 """]
 	def test_emails_predicted(self):
 		for email_predicted, email_expected in zip(self.quagga.emails_predicted(input_reader=self.test_mails),
 		                                           self.test_predict_expected):
+			TestQuagga.printComparisionError(email_expected, email_predicted)
 			assert email_predicted == email_expected
-
 
 	def test_store_predicted(self):
 		self.quagga.store_predicted(self.test_output_dir)

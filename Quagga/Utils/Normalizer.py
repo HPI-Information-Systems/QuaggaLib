@@ -100,7 +100,10 @@ class Normalizer:
 					time = dateparser.parse(sent, languages=['en'])
 
 		if time is not None and time is not '':
-			return pytz.utc.localize(time, is_dst=None).astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
+			string = pytz.utc.localize(time, is_dst=None).astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
+			if string.endswith('+00:00'):
+				string = string[:-6]
+			return string
 		else:
 			return ''
 
