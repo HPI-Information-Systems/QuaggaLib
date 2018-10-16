@@ -7,6 +7,7 @@ python:
 
 # command to install dependencies
 install:
+  - pip install --upgrade pip
   - pip show tensorflow
   - pip uninstall -y numpy
   - python setup.py install
