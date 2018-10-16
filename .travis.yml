@@ -8,8 +8,9 @@ python:
 # command to install dependencies
 install:
   - pip uninstall -y numpy
+  - pip install --upgrade pip
   - python setup.py install
 
 # command to run tests
 script:
-  - nosetests --nologcapture
+  - nosetests --nologcapture -w Tests/
