@@ -4,6 +4,8 @@ import re
 import dateparser
 import dateutil.parser
 from datetime import timezone, datetime
+import pytz
+
 
 class Normalizer:
 	def __init__(self):
@@ -46,17 +48,14 @@ class Normalizer:
 		                                 'location of the classes.', '',
 		                                 'If you have any other questions, please feel free to contact me.', '',
 		                                 '-Brenda', 'x31914', '', '', '']}]"""
-	#@profile
+
+	# @profile
 	def normalize(self, block):
 		block['from'] = self.normalize_from(block['from'])
-		block['to'] = self.normalize_names(block['to']) #todo name, email,
+		block['to'] = self.normalize_names(block['to'])  # todo name, email,
 		block['cc'] = self.normalize_names(block['cc'])
 		block['sent'] = self.normalize_sent(block['sent'])
 		block['subject'] = self.cleanup_string(block['subject'])
-
-
-
-
 
 	def normalize_from(self, sender):
 		if sender is None:
@@ -67,7 +66,7 @@ class Normalizer:
 
 		return sender
 
-	#@profile
+	# @profile
 	def normalize_sent(self, sent):
 		""" this is so nested because i found it as performance critical, dateparser takes somehow 0.5 sec per date.."""
 
@@ -78,7 +77,7 @@ class Normalizer:
 			return ''
 
 		time = None
-		sent = re.sub(r".*(-+)$", "", sent) # often there is a - at the end
+		sent = re.sub(r".*(-+)$", "", sent)  # often there is a - at the end
 
 		try:
 			# without timezone
@@ -100,16 +99,13 @@ class Normalizer:
 				if time == '':
 					time = dateparser.parse(sent, languages=['en'])
 
-
-
-
 		if time is not None and time is not '':
-			return time.astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
+			return pytz.utc.localize(time, is_dst=None).astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
 		else:
 			return ''
 
 	def normalize_names(self, string):
-		#todo pointy brackets, use email when its there?? no, both
+		# todo pointy brackets, use email when its there?? no, both
 		# Buy, Rick
 
 		# Rick Buy, Andrew Miller
@@ -134,6 +130,7 @@ class Normalizer:
 			names = re.split(commas_outside_of_quotations_regex, string + ',')
 
 			not_empty_regex = """[^ ]*"""
+
 			def not_empty(name):
 				if name is None:
 					return False
@@ -178,18 +175,3 @@ class Normalizer:
 		string = self.cleanup_whitespace(string)
 		string = self.cleanup_dashes(string)
 		return string
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
