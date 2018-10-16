@@ -13,4 +13,4 @@ install:
 
 # command to run tests
 script:
-  - nosetests --nologcapture
+  - nosetests --nologcapture -w Tests/
