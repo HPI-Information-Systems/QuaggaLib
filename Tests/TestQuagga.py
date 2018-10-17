@@ -13,6 +13,7 @@ def eq(a, b):
 
 
 class TestQuagga(TestCase):
+	_multiprocess_shared_ = True
 	def get_relative_filename(self, file):
 		dirname = os.path.dirname(__file__)
 		filename = os.path.join(dirname, file)

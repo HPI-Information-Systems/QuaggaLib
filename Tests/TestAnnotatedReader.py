@@ -40,5 +40,5 @@ class TestAnnotatedReader(TestCase):
 
 			denotations = mail.denotations
 
-			print(parsed)
-			print(denotations)
+			#print(parsed)
+			#print(denotations)

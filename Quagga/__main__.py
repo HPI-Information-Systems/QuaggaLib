@@ -120,8 +120,7 @@ class Quagga:
         predicted = self._predict(email_input.clean_body)
         self._store_email(folder_name, email_input.filename_with_path, self.PREDICTED_NAME, predicted)
         parsed = self._parse(predicted, email_input)
-        cleaned = self._clean(parsed) # for now we don't need it separately
-        self._store_email(folder_name, email_input.filename_with_path, self.PARSED_NAME, cleaned)
+        self._store_email(folder_name, email_input.filename_with_path, self.PARSED_NAME, parsed)
 
     def store_input(self, folder_name: str = None):
         if folder_name is None:
