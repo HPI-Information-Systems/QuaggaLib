@@ -1,4 +1,5 @@
 Tests/testData/output/*
+Tests/datasets/*
 
 .idea/*
 *.lprof
