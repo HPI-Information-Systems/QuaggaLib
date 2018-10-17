@@ -62,8 +62,9 @@ PL
 		self.test_expected_dir = self.test_data_dir + '/output_expected'
 		self.quagga = Quagga(EmailDirectoryReader(self.test_data_dir), self.test_output_dir)
 
-		for f in os.listdir(self.test_output_dir):
-			os.remove(os.path.join(self.test_output_dir, f))
+		if os.path.isdir(self.test_output_dir):
+			for f in os.listdir(self.test_output_dir):
+				os.remove(os.path.join(self.test_output_dir, f))
 
 		self.test_mails = ["""That's it.  Thanks to plove I am no longer entering my own deals.
 
