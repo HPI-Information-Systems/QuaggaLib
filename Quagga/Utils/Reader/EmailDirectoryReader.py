@@ -2,7 +2,7 @@ from email import parser as ep
 import os
 import json
 
-from Quagga.Utils.Email import EmailMessage
+from Quagga.Utils.Reader.Email import EmailMessage
 
 
 class DirectoryIterator:

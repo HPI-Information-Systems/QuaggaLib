@@ -1,11 +1,9 @@
 from unittest import TestCase
 
 from Quagga import Quagga, ListReaderExtractedBodies
-from Quagga.Utils.BlockParser import BlockParser
-from Quagga.Utils.Email import EmailMessage
-import json
+from Quagga.Utils.BlockParser.BlockParser import BlockParser
+from Quagga.Utils.Reader.Email import EmailMessage
 import os
-import filecmp
 from email import parser as ep
 
 class TestBlockParser(TestCase):

@@ -1,13 +1,11 @@
 from Quagga.Utils.ModelBuilder import ModelBuilder
-from Quagga.Utils.BlockParser import BlockParser
-from Quagga.Utils.EmailDirectoryReader import DirectoryReader, EmailDirectoryReader, TempQuaggaReader
+from Quagga.Utils.BlockParser.BlockParser import BlockParser
+from Quagga.Utils.Reader.EmailDirectoryReader import EmailDirectoryReader
 
-from Quagga.Utils.EmailListReader import ListReaderRawEmailTexts, ListReaderExtractedBodies
-from Quagga.Utils.Email import Email, serialize_quagga_email
+from Quagga.Utils.Reader.Email import serialize_quagga_email
 from Quagga.Utils.EmailProcessor import EmailProcessor
 
 import tensorflow as tf
-from pprint import pprint
 import json
 import timeit
 
@@ -32,6 +30,7 @@ class Quagga:
 
     def __init__(self, email_reader, output_dir, model_builder=None, model=None,
                  block_parser=BlockParser()):
+
         if model_builder is None:
             model_builder = ModelBuilder()
 

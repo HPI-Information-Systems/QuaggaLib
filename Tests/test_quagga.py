@@ -1,11 +1,9 @@
 from unittest import TestCase
 
 from Quagga import Quagga, EmailDirectoryReader, ModelBuilder
-from Quagga.Utils.Email import EmailMessage
 import json
 import os
 import filecmp
-from email import parser as ep
 
 
 class TestQuagga(TestCase):
@@ -139,7 +137,7 @@ x3-0977 """]
 	def output_filename(self, email_input):
 		return self.test_output_dir + '/' + email_input.filename
 
-	@staticmethod
+	@staticmethod #todo use nose.tools.eq
 	def assertComparisionError(expected, actual):
 		TestQuagga.printComparisionError(expected, actual)
 		assert expected == actual

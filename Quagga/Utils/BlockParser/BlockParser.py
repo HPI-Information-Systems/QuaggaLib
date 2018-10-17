@@ -1,12 +1,14 @@
 import re
 
-from Quagga.Utils.Normalizer import Normalizer
+from Quagga.Utils.BlockParser.Normalizer import Normalizer
+from Quagga.Utils.BlockParser.BlockCleaner import BlockCleaner
 
 
 class BlockParser:
 
-	def __init__(self, normalizer=Normalizer()):
+	def __init__(self, cleaner=BlockCleaner(), normalizer=Normalizer()):
 		self.normalizer = normalizer
+		self.cleaner = cleaner
 
 	def _top_prediction(self, predictions):
 		return sorted(predictions.items(), key=lambda x: x[1], reverse=True)[0][0]
@@ -334,6 +336,7 @@ class BlockParser:
 		blocks.append(curr_block)
 
 		for block in blocks:
+			self.cleaner.clean(block)
 			self.normalizer.normalize(block)
 
 		email_parsed = {

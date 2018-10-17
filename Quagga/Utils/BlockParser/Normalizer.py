@@ -51,30 +51,17 @@ class Normalizer:
 
 	# @profile
 	def normalize(self, block):
-		block['from'] = self.normalize_from(block['from'])
 		block['to'] = self.normalize_names(block['to'])  # todo name, email,
 		block['cc'] = self.normalize_names(block['cc'])
 		block['sent'] = self.normalize_sent(block['sent'])
-		block['subject'] = self.cleanup_string(block['subject'])
 
-	def normalize_from(self, sender):
-		if sender is None:
-			return None
-		sender = self.cleanup_string(sender)
-		if sender == '':
-			return ''
-
-		return sender
 
 	# @profile
 	def normalize_sent(self, sent):
 		""" this is so nested because i found it as performance critical, dateparser takes somehow 0.5 sec per date.."""
 
-		if sent is None:
-			return None
-		sent = self.cleanup_string(sent)
-		if sent == '':
-			return ''
+		if sent is None or sent == '':
+			return sent
 
 		time = None
 		sent = re.sub(r".*(-+)$", "", sent)  # often there is a - at the end
@@ -117,11 +104,8 @@ class Normalizer:
 		# Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt,
 		# James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith"
 		# <meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>,
-		if string is None:
-			return None
-		string = self.cleanup_string(string)
-		if string == '':
-			return ''
+		if string is None or string == '':
+			return string
 
 		names = []
 		if not ';' in string and not ',' in string:
@@ -155,26 +139,7 @@ class Normalizer:
 
 		return names
 
-	def cleanup_escapes(self, string):
-		string = string.replace("\n", "")
-		string = string.replace("\t", "")
-		string = string.replace("\r", "")
-		return string
-
 	def cleanup_whitespace(self, string):
 		string = string.lstrip()
 		string = string.rstrip()
-		return string
-
-	def cleanup_dashes(self, string):
-		dash_regex = r"(^(-+)|(-+)$)"
-		string = re.sub(dash_regex, "", string)
-		return string
-
-	def cleanup_string(self, string):
-		if string is None:
-			return None
-		string = self.cleanup_escapes(string)
-		string = self.cleanup_whitespace(string)
-		string = self.cleanup_dashes(string)
 		return string

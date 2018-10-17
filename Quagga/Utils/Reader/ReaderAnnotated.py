@@ -1,10 +1,8 @@
-from email import parser as ep
-from datetime import datetime, timezone
 import numpy as np
 import os
 import json
 
-from Quagga.Utils.Email import Email
+from Quagga.Utils.Reader.Email import Email
 
 denotation_types = [
 	"Header",
