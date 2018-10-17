@@ -3,6 +3,10 @@ from datetime import datetime, timezone
 
 
 class Email:
+	def __init__(self, path, filename):
+		self.path = path
+		self.filename = filename
+
 	def __dict__(self):
 		return {
 			'filename_with_path' : self.filename_with_path,
@@ -99,8 +103,7 @@ class Email:
 
 class EmailMessage(Email):
 	def __init__(self, path, filename, mail):
-		self.path = path
-		self.filename = filename
+		super().__init__(path, filename)
 		self.mail = mail
 
 	def __dict__(self):
@@ -121,8 +124,12 @@ class EmailMessage(Email):
 
 	@property
 	def sent(self):
-		return datetime.strptime(re.sub(r' *\([A-Z]+\)', '', str(self.mail['Date'])),
+		try:
+			time = datetime.strptime(re.sub(r' *\([A-Z]+\)', '', str(self.mail['Date'])),
 		                         '%a, %d %b %Y %H:%M:%S %z').astimezone(timezone.utc)
+		except ValueError:
+			return ''
+		return time
 
 	@property
 	def sent_string(self):

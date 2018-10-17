@@ -96,8 +96,8 @@ class Quagga:
 
     def emails_parsed(self, prediction_reader=None):
         return self._emails_processed(self.PARSED_NAME, prediction_reader, self.emails_predicted(),
-                                      lambda email_prediction, email_input: self._clean(self._parse(
-                                          email_prediction, email_input)))
+                                      lambda email_prediction, email_input: self._parse(
+                                          email_prediction, email_input))
 
     # @timemeasure
     # @profile
@@ -182,12 +182,13 @@ class Quagga:
             return self._prettify_prediction(*self.model.predict(text_lines))
 
     def _parse(self, email_prediction, email_input):
-        return self.block_parser.parse_predictions(email_prediction, email_input)
+        return self._clean(self.block_parser.parse_predictions(email_prediction, email_input))
 
     def _clean(self, email_parsed):
         for block in email_parsed['blocks']:
             self.cleaner.clean(block)
             self.normalizer.normalize(block)
+        return email_parsed
 
     def _prettify_prediction(self, y, text_lines, label_encoder):
         labels = label_encoder.classes_

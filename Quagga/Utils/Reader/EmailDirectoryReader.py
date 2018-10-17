@@ -86,10 +86,10 @@ class TempQuaggaReader(DirectoryReader):
 
 
 class EmailDirectoryReader(DirectoryReader):
-	def __init__(self, maildir, limit=None, skip=0):
+	def __init__(self, maildir, limit=None, skip=0, file_func=lambda x: True):
 		super().__init__(maildir, limit, skip)
 		self.email_parser = ep.Parser()
-		self.file_func = lambda filename: '.quagga.' not in filename
+		self.file_func = lambda filename: '.quagga.' not in filename and file_func(filename)
 		self.email_func = lambda path, filename, file: EmailMessage(path, filename, self.email_parser.parsestr(file))
 		self.length = sum([len(files) for r, d, files in os.walk(self.maildir)])
 

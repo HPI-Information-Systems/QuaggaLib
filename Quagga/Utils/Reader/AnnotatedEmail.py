@@ -1,4 +1,5 @@
 import json
+import numpy as np
 import os
 
 from Quagga.Utils.Reader.Email import Email
@@ -78,8 +79,11 @@ class AnnotatedEmail(Email):
 		try:
 			f = open(file, 'r')
 			self.annotation = json.load(f)
+			original_email_name = file[:-4]
+			with open(original_email_name, "r") as fp:
+				self.original_email = fp.read()
 			f.close()
-			super().__init__(os.path.dirname(file), os.path.basename(file), self.annotation['meta'].get('header', {}))
+			super().__init__(os.path.dirname(file), os.path.basename(file))
 		except json.decoder.JSONDecodeError:
 			print('Error loading JSON Annotation File: ' + file)
 			raise

@@ -1,4 +1,3 @@
-import numpy as np
 import os
 
 from Quagga.Utils.Reader.AnnotatedEmail import AnnotatedEmail

@@ -17,7 +17,7 @@ class BlockParser:
 		root_message['from'] = email_raw_parser.sender
 		root_message['to'] = email_raw_parser.to
 		root_message['cc'] = email_raw_parser.cc
-		root_message['sent'] = email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S")
+		root_message['sent'] = email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S") if (email_raw_parser.sent is not None and email_raw_parser.sent != '') else ''
 		root_message['subject'] = email_raw_parser.subject
 
 
