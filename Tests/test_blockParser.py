@@ -1,4 +1,5 @@
 from unittest import TestCase
+from nose.tools import eq_
 
 from Quagga import Quagga, ListReaderExtractedBodies
 from Quagga.Utils.BlockParser.BlockParser import BlockParser
@@ -7,14 +8,6 @@ import os
 from email import parser as ep
 
 class TestBlockParser(TestCase):
-
-	@staticmethod
-	def printComparisionError(expected, actual):
-		if expected != actual:
-			print("expected output")
-			print(expected)
-			print("actual parsed output")
-			print(actual)
 
 	def get_relative_filename(self, file):
 		dirname = os.path.dirname(__file__)
@@ -94,13 +87,12 @@ PL
 			{'predictions': {'Body': 1.0, 'Header': 0.0}, 'text': '<Embedded StdOleLink>'}]
 
 		email_input = self.construct_email(filename, raw_mail)
-		assert self.generate_predict(email_input) == predicted
+		eq_(self.generate_predict(email_input), predicted)
 
 		expected = {'blocks': [{'from': 'eric.bass@enron.com', 'to': ['phillip.love@enron.com'], 'cc': ['chance.rabon@enron.com', 'david.baumbach@enron.com', "o'neal.winfree@enron.com"], 'sent': '2001-03-26 21:33:00 UTC', 'subject': 'Re:', 'type': 'root', 'raw_header': [], 'text': ["That's it.  Thanks to plove I am no longer entering my own deals.", '', '', '']}, {'from': 'Phillip M Love', 'to': ['Eric Bass/HOU/ECT@ECT'], 'cc': '', 'sent': '2001-03-26 10:20:00 UTC', 'subject': 'Re:', 'type': 'reply', 'raw_header': ['', 'From:\tPhillip M Love', '03/26/2001 10:20 AM', 'To:\tEric Bass/HOU/ECT@ECT', 'cc:\t ', 'Subject:\tRe:   '], 'text': ['', 'We can always count on you to at least give us one on the error report.', 'PL', '', '', '', '', '', '<Embedded StdOleLink>']}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
-		TestBlockParser.printComparisionError(expected, parsed)
-		assert parsed == expected
+		eq_(parsed, expected)
 
 	def test_from_error_farmer_d(self):
 		raw_mail = """Message-ID: <12955863.1075854025405.JavaMail.evans@thyme>
@@ -226,8 +218,7 @@ x31914
 		expected = {'blocks': [{'from': 'brenda.flores-cuellar@enron.com', 'to': ['edward.gottlob@enron.com', 'lauri.allen@enron.com', 'daren.farmer@enron.com', 'dan.junek@enron.com', 'jared.kaiser@enron.com', 'judy.townsend@enron.com'], 'cc': '', 'sent': '2000-02-24 09:44:00 UTC', 'subject': 'RE: Options Training Classes', 'type': 'root', 'raw_header': [], 'text': ['FYI', '', 'I am currently out of books.  I should be getting some more in today.  As ', 'soon as they come in, I will make sure you get a copy.', '', '-Brenda', '']}, {'from': 'Brenda Flores-Cuellar/HOU/ECT', 'to': ['edward.gottlob@enron.com', 'lauri.allen@enron.com', 'daren.farmer@enron.com', 'dan.junek@enron.com', 'jared.kaiser@enron.com', 'judy.townsend@enron.com'], 'cc': '', 'sent': '2000-02-23 16:26:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Brenda Flores-Cuellar/HOU/ECT on ', '02/23/2000 04:26 PM ---------------------------'], 'text': []}, {'from': None, 'to': ['Phillip K Allen/HOU/ECT@ECT', 'Eric Bass/HOU/ECT@ECT', 'Sandra F  Brawner/HOU/ECT@ECT', 'Mike Grigsby/HOU/ECT@ECT', 'Keith Holst/HOU/ECT@ect', 'Brian  Hoskins/HOU/ECT@ECT', 'Dick Jenkins/HOU/ECT@ECT', 'Peter F Keavey/HOU/ECT@ECT', 'Matthew Lenhart/HOU/ECT@ECT', 'Andrew H Lewis/HOU/ECT@ECT', 'Thomas A  Martin/HOU/ECT@ECT', 'Greg McClendon/HOU/ECT@ECT', 'Brad McKay/HOU/ECT@ECT', 'Carey  M Metz/HOU/ECT@ECT', 'Sarah Mulholland/HOU/ECT@ECT', 'Scott Neal/HOU/ECT@ECT', 'Eva  Pao/HOU/ECT@ECT', 'Jim Schwieger/HOU/ECT@ECT', 'Elizabeth Shim/Corp/Enron@Enron', 'Hunter S Shively/HOU/ECT@ECT', 'Geoff Storey/HOU/ECT@ECT', 'Fletcher J  Sturm/HOU/ECT@ECT', 'Patricia Tlapek/HOU/ECT@ECT'], 'cc': ['Shirley Crenshaw/HOU/ECT@ECT'], 'sent': None, 'subject': 'RE: Options Training Classes', 'type': 'reply', 'raw_header': ['To: Phillip K Allen/HOU/ECT@ECT, Eric Bass/HOU/ECT@ECT, Sandra F ', 'Brawner/HOU/ECT@ECT, Mike Grigsby/HOU/ECT@ECT, Keith Holst/HOU/ECT@ect, Brian ', 'Hoskins/HOU/ECT@ECT, Dick Jenkins/HOU/ECT@ECT, Peter F Keavey/HOU/ECT@ECT, ', 'Matthew Lenhart/HOU/ECT@ECT, Andrew H Lewis/HOU/ECT@ECT, Thomas A ', 'Martin/HOU/ECT@ECT, Greg McClendon/HOU/ECT@ECT, Brad McKay/HOU/ECT@ECT, Carey ', 'M Metz/HOU/ECT@ECT, Sarah Mulholland/HOU/ECT@ECT, Scott Neal/HOU/ECT@ECT, Eva ', 'Pao/HOU/ECT@ECT, Jim Schwieger/HOU/ECT@ECT, Elizabeth Shim/Corp/Enron@Enron, ', 'Hunter S Shively/HOU/ECT@ECT, Geoff Storey/HOU/ECT@ECT, Fletcher J ', 'Sturm/HOU/ECT@ECT, Patricia Tlapek/HOU/ECT@ECT', 'cc: Shirley Crenshaw/HOU/ECT@ECT ', 'Subject: RE: Options Training Classes'], 'text': ['', 'For those of you who did not see the memos from Jeff that went out on ', 'February 17th. & February 22nd. regarding the upcoming Options training ', 'classed, I have attached both memos below:', '', '', '', 'I have the books at my desk for those of you that have not received your ', 'copy.  ', '', 'There will be a third memo in the next couple of days with regards to the ', 'location of the classes.', '', 'If you have any other questions, please feel free to contact me.', '', '-Brenda', 'x31914', '', '', '']}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
-		TestBlockParser.printComparisionError(expected, parsed)
-		assert parsed == expected
+		eq_(parsed, expected)
 
 	def generate_predict(self, mail):
 		quagga = Quagga(ListReaderExtractedBodies(''), '')
@@ -405,8 +396,7 @@ HAPPY NEW YEAR!!!!!!!!!!!!!!!!!!!
 		expected = {'blocks': [{'from': 'chris.germany@enron.com', 'to': ['clarissa.garcia@enron.com', 'cindy.vachuska@enron.com', 'pvillag@columbiaenergy.com', 'molly.lafuze@enron.com', 'msharif@columbiaenergygroup.com', 'david.oliver@enron.com', 'victoria.versen@enron.com'], 'cc': ['katherine.kelly@enron.com', 'victor.lamadrid@enron.com', 'chris.germany@enron.com', 'scott.hendrickson@enron.com'], 'sent': '1999-12-30 10:44:00 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'root', 'raw_header': [], 'text': ['CES is buying 2500 dth/day from Equitable in Tenn Z4.  CES is selling 2500 ', 'dth/day to FirstEnergy in Tenn Z4.  Looks like a match to me.  I told Fred ', 'with Equitable the information John Singer gave to Phil below.  For future ', "reference Fred's number is 412-395-3295.  A backup contact at Equitable is ", 'Steve Rafferty, 412-395-3268.', '', 'Per John, FirstEnergy bought the meter (??) from Beldon & Blake effective ', '12/1/99.  On CNG, we are showing a purchase (deal 141688) and a sale (deal ', "141952) for 2500 dth/day with Beldon & Blake.  I don't see a sale anywhere to ", 'FirstEnergy.  ', '', 'Also, I still see an Equitable supply (deal 135956) on CNG for 3226 dth/day.  ', 'I believe this is a duplicate of deal 138741 in Tetco M2.', '', 'Comments?', '']}, {'from': 'Chris Germany/HOU/ECT', 'to': ['clarissa.garcia@enron.com', 'cindy.vachuska@enron.com', 'pvillag@columbiaenergy.com', 'molly.lafuze@enron.com', 'msharif@columbiaenergygroup.com', 'david.oliver@enron.com', 'victoria.versen@enron.com'], 'cc': ['katherine.kelly@enron.com', 'victor.lamadrid@enron.com', 'chris.germany@enron.com', 'scott.hendrickson@enron.com'], 'sent': '1999-12-30 10:23:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Chris Germany/HOU/ECT on 12/30/99 10:23 ', 'AM ---------------------------'], 'text': []}, {'from': 'pvillag@columbiaenergygroup.com on', 'to': ['Chris Germany/HOU/ECT@ECT'], 'cc': '', 'sent': '1999-12-29 15:29:10 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'reply', 'raw_header': ['', '', 'pvillag@columbiaenergygroup.com on 12/29/99 03:29:10 PM', 'To: Chris Germany/HOU/ECT@ECT', 'cc:  ', 'Subject: Jan sale to FirstEnergy @ Carroll Co Meter'], 'text': ['', '', '', 'Chris,', '', 'This has to do with that TENN zone 4 deal that you e-mailed me about this', 'morning. Like I mentioned earlier, we never scheduled this gas, it was handled', 'on a back to back basis.', '', 'Phil', '', '']}, {'from': 'Phil Villagomez/CES/ColumbiaGas', 'to': ['Chris Germany/HOU/ECT@ECT'], 'cc': '', 'sent': '1999-12-29 00:00:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['---------------------- Forwarded by Phil Villagomez/CES/ColumbiaGas on ', '12/29/99'], 'text': []}, {'from': '  John Singer', 'to': ['Phil Villagomez/CES/ColumbiaGas@ColumbiaGas'], 'cc': '', 'sent': '1999-12-29 03:05:00 UTC', 'subject': 'Jan sale to FirstEnergy @ Carroll Co Meter', 'type': 'reply', 'raw_header': ['03:33 PM ---------------------------', '', 'John Singer', '12/29/99 03:05 PM', '', '', 'To: Phil Villagomez/CES/ColumbiaGas@ColumbiaGas', 'cc:', 'Subject: Jan sale to FirstEnergy @ Carroll Co Meter'], 'text': ['', 'Phil,', 'FirstEnergy called to change the contract number for the sale I made to them', '(originally to Belden & Blake) to be delivered to the Carroll Co Meter.  The', 'new contract number is 32082.', "If you receive this email before you page me, that's what the page is about.", 'Call or email me with any questions.', 'Thanks,', 'John', '', 'HAPPY NEW YEAR!!!!!!!!!!!!!!!!!!!', '', '']}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
-		TestBlockParser.printComparisionError(expected, parsed)
-		assert parsed == expected
+		eq_(parsed, expected)
 
 	def test_giron_d(self):
 		raw_mail = """Message-ID: <13840872.1075852222598.JavaMail.evans@thyme>
@@ -597,9 +587,7 @@ Thanks"""
 		                                 'Thanks']}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
-		TestBlockParser.printComparisionError(expected, parsed)
-
-		assert parsed == expected
+		eq_(parsed, expected)
 
 	def test_bass_e(self):
 		# same in '/dasovich-j_all_documents_8956.txt'
@@ -900,9 +888,7 @@ Classes of '77 and '81
 
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
-		TestBlockParser.printComparisionError(expected, parsed)
-
-		assert parsed == expected
+		eq_(parsed, expected)
 
 	def test_bass_e_all(self):
 		raw_mail = """Message-ID: <2875299.1075854589524.JavaMail.evans@thyme>
@@ -989,8 +975,5 @@ This is great!
 
 		expected = {'blocks': [{'from': 'brian.hoskins@enron.com', 'to': ['eric.bass@enron.com', 'hector.campos@enron.com'], 'cc': '', 'sent': '2000-11-15 09:32:00 UTC', 'subject': 'Another slam on Gore!', 'type': 'root', 'raw_header': [], 'text': ['', '', '', 'Brian T. Hoskins', 'Enron Broadband Services', '713-853-0380 (office)', '713-412-3667 (mobile)', '713-646-5745 (fax)', 'Brian_Hoskins@enron.net', '', '']}, {'from': 'Brian Hoskins/Enron Communications', 'to': ['eric.bass@enron.com', 'hector.campos@enron.com'], 'cc': '', 'sent': '2000-11-15 09:40:00 UTC', 'subject': None, 'type': 'forward', 'raw_header': ['----- Forwarded by Brian Hoskins/Enron Communications on 11/15/00 09:40 AM ', '-----'], 'text': []}, {'from': 'Kori Loibl@ECT', 'to': ['Alicia Perkins/HOU/EES@EES', 'Purvi Patel/HOU/ECT@ECT', 'Beau  Ratliff/HOU/EES@EES', 'Lucy Ortiz/HOU/ECT@ECT', 'Scott Pleus/Enron  Communications@Enron Communications', 'Don Baughman/HOU/ECT@ECT', 'Brian  Hoskins/Enron Communications@Enron Communications', 'Tobin Carlson/HOU/ECT@ECT'], 'cc': '', 'sent': '2000-11-14 16:03:00 UTC', 'subject': 'Another slam on Gore!  This is great!', 'type': 'reply', 'raw_header': ['', 'Kori Loibl@ECT', '11/14/00 04:03 PM', '\t ', '\t To: Alicia Perkins/HOU/EES@EES, Purvi Patel/HOU/ECT@ECT, Beau ', 'Ratliff/HOU/EES@EES, Lucy Ortiz/HOU/ECT@ECT, Scott Pleus/Enron ', 'Communications@Enron Communications, Don Baughman/HOU/ECT@ECT, Brian ', 'Hoskins/Enron Communications@Enron Communications, Tobin Carlson/HOU/ECT@ECT', '\t cc: ', '\t Subject: Another slam on Gore!', '', 'This is great!', '', '', '', ''], 'text': []}]}
 
-
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
-		TestBlockParser.printComparisionError(expected, parsed)
-
-		assert parsed == expected
+		eq_(parsed, expected)

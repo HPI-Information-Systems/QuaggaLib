@@ -35,4 +35,4 @@ quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)
 
 # profile_test(quagga, output_dir)
 
-quagga.store_parsed(output_dir, prediction_reader=TempQuaggaReader(Quagga.PREDICTED_NAME, output_dir))
+quagga.store_parsed(output_dir)

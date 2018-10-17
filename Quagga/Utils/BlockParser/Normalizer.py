@@ -50,7 +50,7 @@ class Normalizer:
 		                                 '-Brenda', 'x31914', '', '', '']}]"""
 
 	# @profile
-	def normalize(self, block):
+	def normalize(self, block): # todo save them in new fields
 		block['to'] = self.normalize_names(block['to'])  # todo name, email,
 		block['cc'] = self.normalize_names(block['cc'])
 		block['sent'] = self.normalize_sent(block['sent'])
@@ -87,7 +87,9 @@ class Normalizer:
 					time = dateparser.parse(sent, languages=['en'])
 
 		if time is not None and time is not '':
-			string = pytz.utc.localize(time, is_dst=None).astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
+			if time.tzinfo is None:
+				time = pytz.utc.localize(time, is_dst=None)
+			string = time.astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
 			if string.endswith('+00:00'):
 				string = string[:-6]
 			return string

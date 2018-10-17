@@ -4,6 +4,7 @@ from Quagga import Quagga, EmailDirectoryReader, ModelBuilder
 import json
 import os
 import filecmp
+from nose.tools import eq_
 
 
 class TestQuagga(TestCase):
@@ -137,39 +138,26 @@ x3-0977 """]
 	def output_filename(self, email_input):
 		return self.test_output_dir + '/' + email_input.filename
 
-	@staticmethod #todo use nose.tools.eq
-	def assertComparisionError(expected, actual):
-		TestQuagga.printComparisionError(expected, actual)
-		assert expected == actual
-
-	@staticmethod
-	def printComparisionError(expected, actual):
-		if expected != actual:
-			print("expected output")
-			print(expected)
-			print("actual parsed output")
-			print(actual)
-
 	def test_emails_input(self):
 		for email_input in self.quagga.emails_input:
 			with open(self.expected_filename(email_input) + self.quagga.fileending_input, 'r') as fp:
 				expected_input = json.loads(fp.read())[Quagga.INPUT_NAME]
-				TestQuagga.assertComparisionError(email_input.file, expected_input['file'])
-				TestQuagga.assertComparisionError(email_input.folder, expected_input['folder'])
-				TestQuagga.assertComparisionError(email_input.sent_string, expected_input['sent'])
-				TestQuagga.assertComparisionError(email_input.id, expected_input['id'])
-				TestQuagga.assertComparisionError(email_input.mailbox, expected_input['mailbox'])
-				TestQuagga.assertComparisionError(email_input.subject, expected_input['subject'])
-				TestQuagga.assertComparisionError(email_input.sender, expected_input['sender'])
-				TestQuagga.assertComparisionError(email_input.xsender, expected_input['xsender'])
-				TestQuagga.assertComparisionError(email_input.to, expected_input['to'])
-				TestQuagga.assertComparisionError(email_input.xto, expected_input['xto'])
-				TestQuagga.assertComparisionError(email_input.cc, expected_input['cc'])
-				TestQuagga.assertComparisionError(email_input.xcc, expected_input['xcc'])
-				TestQuagga.assertComparisionError(email_input.bcc, expected_input['bcc'])
-				TestQuagga.assertComparisionError(email_input.xbcc, expected_input['xbcc'])
-				TestQuagga.assertComparisionError(email_input.body, expected_input['body'])
-				TestQuagga.assertComparisionError(email_input.clean_body, expected_input['clean_body'])
+				eq_(email_input.file, expected_input['file'])
+				eq_(email_input.folder, expected_input['folder'])
+				eq_(email_input.sent_string, expected_input['sent'])
+				eq_(email_input.id, expected_input['id'])
+				eq_(email_input.mailbox, expected_input['mailbox'])
+				eq_(email_input.subject, expected_input['subject'])
+				eq_(email_input.sender, expected_input['sender'])
+				eq_(email_input.xsender, expected_input['xsender'])
+				eq_(email_input.to, expected_input['to'])
+				eq_(email_input.xto, expected_input['xto'])
+				eq_(email_input.cc, expected_input['cc'])
+				eq_(email_input.xcc, expected_input['xcc'])
+				eq_(email_input.bcc, expected_input['bcc'])
+				eq_(email_input.xbcc, expected_input['xbcc'])
+				eq_(email_input.body, expected_input['body'])
+				eq_(email_input.clean_body, expected_input['clean_body'])
 
 	def test_store_input(self):
 		self.quagga.store_input(self.test_output_dir)
@@ -180,18 +168,17 @@ x3-0977 """]
 	def test__build_model(self):
 		self.quagga.model = None
 		self.quagga._build_model(ModelBuilder(with_crf=False, zones=5, trainset='asf'))
-		assert self.quagga.model.with_crf == False
-		assert self.quagga.model.zones == 5
-		assert self.quagga.model.trainset == 'asf'
+		eq_(self.quagga.model.with_crf, False)
+		eq_(self.quagga.model.zones, 5)
+		eq_(self.quagga.model.trainset, 'asf')
 
 	def test__predict(self):
-		assert self.quagga._predict(self.test_mails[0]) == self.test_predict_expected[0]
+		eq_(self.quagga._predict(self.test_mails[0]), self.test_predict_expected[0])
 
 	def test_emails_predicted(self):
 		for email_predicted, email_expected in zip(self.quagga.emails_predicted(input_reader=self.test_mails),
 		                                           self.test_predict_expected):
-			TestQuagga.printComparisionError(email_expected, email_predicted)
-			assert email_predicted == email_expected
+			eq_(email_predicted, email_expected)
 
 	def test_store_predicted(self):
 		self.quagga.store_predicted(self.test_output_dir)
