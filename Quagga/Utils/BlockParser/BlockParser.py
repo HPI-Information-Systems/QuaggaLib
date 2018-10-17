@@ -20,7 +20,6 @@ class BlockParser:
 		root_message['sent'] = email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S")
 		root_message['subject'] = email_raw_parser.subject
 
-	# todo raw_header
 
 	def construct_block(self, from_sender=None, to=None, cc=None, sent=None, subject=None, type=None, raw_header=None,
 	                    text=None):
@@ -334,10 +333,6 @@ class BlockParser:
 
 		# end for line_prediction in email_predicted:
 		blocks.append(curr_block)
-
-		for block in blocks:
-			self.cleaner.clean(block)
-			self.normalizer.normalize(block)
 
 		email_parsed = {
 			'blocks': blocks}

@@ -4,6 +4,8 @@ from Quagga.Utils.Reader.EmailDirectoryReader import EmailDirectoryReader
 
 from Quagga.Utils.Reader.Email import serialize_quagga_email
 from Quagga.Utils.EmailProcessor import EmailProcessor
+from Quagga.Utils.BlockParser.BlockCleaner import BlockCleaner
+from Quagga.Utils.BlockParser.Normalizer import Normalizer
 
 import tensorflow as tf
 import json
@@ -29,7 +31,7 @@ class Quagga:
     PARSED_NAME = 'quagga.parsed'
 
     def __init__(self, email_reader, output_dir, model_builder=None, model=None,
-                 block_parser=BlockParser()):
+                 block_parser=BlockParser(), cleaner=BlockCleaner(), normalizer=Normalizer()):
 
         if model_builder is None:
             model_builder = ModelBuilder()
@@ -60,6 +62,8 @@ class Quagga:
 
         # PARSE
         self.block_parser = block_parser
+        self.cleaner = cleaner
+        self.normalizer = normalizer
 
     @property
     def emails_body(self):
@@ -92,8 +96,8 @@ class Quagga:
 
     def emails_parsed(self, prediction_reader=None):
         return self._emails_processed(self.PARSED_NAME, prediction_reader, self.emails_predicted(),
-                                      lambda email_prediction, email_input: self._parse(
-                                          email_prediction, email_input))
+                                      lambda email_prediction, email_input: self._clean(self._parse(
+                                          email_prediction, email_input)))
 
     # @timemeasure
     # @profile
@@ -116,7 +120,8 @@ class Quagga:
         predicted = self._predict(email_input.clean_body)
         self._store_email(folder_name, email_input.filename_with_path, self.PREDICTED_NAME, predicted)
         parsed = self._parse(predicted, email_input)
-        self._store_email(folder_name, email_input.filename_with_path, self.PARSED_NAME, parsed)
+        cleaned = self._clean(parsed) # for now we don't need it separately
+        self._store_email(folder_name, email_input.filename_with_path, self.PARSED_NAME, cleaned)
 
     def store_input(self, folder_name: str = None):
         if folder_name is None:
@@ -158,14 +163,16 @@ class Quagga:
 
     def _build_model(self, model_builder=ModelBuilder(), model=None):
         with self.graph.as_default():
-            print("building model...")
             self.model_builder = model_builder
             if model is None:
+                print("building model...")
                 self.model_builder = model_builder
                 self.model_builder.build()
                 self.model = model_builder.quagga_model
             else:
+                print("using provided model...")
                 self.model = model
+        return self.model
 
     def _predict(self, mail_text):
         with self.graph.as_default():
@@ -176,6 +183,11 @@ class Quagga:
 
     def _parse(self, email_prediction, email_input):
         return self.block_parser.parse_predictions(email_prediction, email_input)
+
+    def _clean(self, email_parsed):
+        for block in email_parsed['blocks']:
+            self.cleaner.clean(block)
+            self.normalizer.normalize(block)
 
     def _prettify_prediction(self, y, text_lines, label_encoder):
         labels = label_encoder.classes_

@@ -4,7 +4,12 @@ from Quagga import Quagga, EmailDirectoryReader, ModelBuilder
 import json
 import os
 import filecmp
-from nose.tools import eq_
+
+def eq(a, b):
+	if a != b:
+		print(a)
+		print(b)
+	assert a == b
 
 
 class TestQuagga(TestCase):
@@ -142,22 +147,22 @@ x3-0977 """]
 		for email_input in self.quagga.emails_input:
 			with open(self.expected_filename(email_input) + self.quagga.fileending_input, 'r') as fp:
 				expected_input = json.loads(fp.read())[Quagga.INPUT_NAME]
-				eq_(email_input.file, expected_input['file'])
-				eq_(email_input.folder, expected_input['folder'])
-				eq_(email_input.sent_string, expected_input['sent'])
-				eq_(email_input.id, expected_input['id'])
-				eq_(email_input.mailbox, expected_input['mailbox'])
-				eq_(email_input.subject, expected_input['subject'])
-				eq_(email_input.sender, expected_input['sender'])
-				eq_(email_input.xsender, expected_input['xsender'])
-				eq_(email_input.to, expected_input['to'])
-				eq_(email_input.xto, expected_input['xto'])
-				eq_(email_input.cc, expected_input['cc'])
-				eq_(email_input.xcc, expected_input['xcc'])
-				eq_(email_input.bcc, expected_input['bcc'])
-				eq_(email_input.xbcc, expected_input['xbcc'])
-				eq_(email_input.body, expected_input['body'])
-				eq_(email_input.clean_body, expected_input['clean_body'])
+				eq(email_input.file, expected_input['file'])
+				eq(email_input.folder, expected_input['folder'])
+				eq(email_input.sent_string, expected_input['sent'])
+				eq(email_input.id, expected_input['id'])
+				eq(email_input.mailbox, expected_input['mailbox'])
+				eq(email_input.subject, expected_input['subject'])
+				eq(email_input.sender, expected_input['sender'])
+				eq(email_input.xsender, expected_input['xsender'])
+				eq(email_input.to, expected_input['to'])
+				eq(email_input.xto, expected_input['xto'])
+				eq(email_input.cc, expected_input['cc'])
+				eq(email_input.xcc, expected_input['xcc'])
+				eq(email_input.bcc, expected_input['bcc'])
+				eq(email_input.xbcc, expected_input['xbcc'])
+				eq(email_input.body, expected_input['body'])
+				eq(email_input.clean_body, expected_input['clean_body'])
 
 	def test_store_input(self):
 		self.quagga.store_input(self.test_output_dir)
@@ -168,17 +173,17 @@ x3-0977 """]
 	def test__build_model(self):
 		self.quagga.model = None
 		self.quagga._build_model(ModelBuilder(with_crf=False, zones=5, trainset='asf'))
-		eq_(self.quagga.model.with_crf, False)
-		eq_(self.quagga.model.zones, 5)
-		eq_(self.quagga.model.trainset, 'asf')
+		eq(self.quagga.model.with_crf, False)
+		eq(self.quagga.model.zones, 5)
+		eq(self.quagga.model.trainset, 'asf')
 
 	def test__predict(self):
-		eq_(self.quagga._predict(self.test_mails[0]), self.test_predict_expected[0])
+		eq(self.quagga._predict(self.test_mails[0]), self.test_predict_expected[0])
 
 	def test_emails_predicted(self):
 		for email_predicted, email_expected in zip(self.quagga.emails_predicted(input_reader=self.test_mails),
 		                                           self.test_predict_expected):
-			eq_(email_predicted, email_expected)
+			eq(email_predicted, email_expected)
 
 	def test_store_predicted(self):
 		self.quagga.store_predicted(self.test_output_dir)

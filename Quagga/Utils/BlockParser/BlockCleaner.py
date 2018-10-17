@@ -7,7 +7,7 @@ class BlockCleaner:
 
 	def clean(self, block):
 		block['from'] = self.cleanup_string(block['from'])
-		block['to'] = self.cleanup_string(block['to'])  # todo name, email,
+		block['to'] = self.cleanup_string(block['to'])
 		block['cc'] = self.cleanup_string(block['cc'])
 		block['sent'] = self.cleanup_string(block['sent'])
 		block['subject'] = self.cleanup_string(block['subject'])
