@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.com/HPI-Information-Systems/QuaggaLib.svg?branch=master)](https://travis-ci.com/HPI-Information-Systems/QuaggaLib)
-# Quagga
+
+# Quagga [![Build Status](https://travis-ci.com/HPI-Information-Systems/QuaggaLib.svg?branch=master)](https://travis-ci.com/HPI-Information-Systems/QuaggaLib)
 An email segmentation system:
 - reference implementation of ECIR 2018 paper
 
