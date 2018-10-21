@@ -38,7 +38,6 @@ class TestDenotationBlockConverter(TestCase):
 		                'type': 'Body', 'meta': None}]
 
 		blocks = DenotationBlockConverter.convert(denotations)
-		serialized = list(map(lambda x: x.serialize_with_raw(), blocks))
 
 		expected = [
 			{'from': None, 'raw_from': None, 'to': None, 'raw_to': None, 'cc': None, 'raw_cc': None, 'sent': None,
@@ -51,4 +50,4 @@ class TestDenotationBlockConverter(TestCase):
 			 'text': ['', 'We can always count on you to at least give us one on the error report.', 'PL', '', '', '',
 			          '', '', '<Embedded StdOleLink>']}]
 
-		eq(serialized, expected)
+		eq(blocks, expected)
