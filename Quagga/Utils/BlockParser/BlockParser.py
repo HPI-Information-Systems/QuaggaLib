@@ -53,11 +53,13 @@ class BlockParser:
 			                 flags=re.IGNORECASE)
 			# FIXME: this is not save to use, exceptions expected!
 			try:
-				curr_block.set_raw_from(grps.group(1))
+				curr_block.set_raw_sender(grps.group(1))
 				curr_block.set_raw_sent(grps.group(2))
 			except AttributeError:
 				print(
 					"exception in blockparser curr_block['from'], curr_block['sent'] in " + email_input.filename_with_path)
+				f = grps.group(1)
+				s = grps.group(2)
 
 			# take info from previous block
 			curr_block.set_raw_to(blocks[-1].to)

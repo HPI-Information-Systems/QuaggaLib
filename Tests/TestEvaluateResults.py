@@ -2,6 +2,7 @@ from unittest import TestCase
 
 import os
 from email import parser as ep
+import matplotlib.pyplot as plt
 
 from Quagga import Quagga, ListReaderRawEmailTexts
 from Quagga.Utils.Annotation.AnnotatedEmails import AnnotatedEmails
@@ -21,7 +22,7 @@ class TestEvaluateResults(TestCase):
 
 	def setUp(self):
 		self.annotatedDir = self.get_relative_filename('testData/datasets/Enron/annotated_all')
-		self.mails_denotated = AnnotatedEmails(self.annotatedDir, lambda x: x).train_set
+		self.mails_denotated = AnnotatedEmails(self.annotatedDir, lambda x: x).eval_set
 		self.quagga = Quagga(ListReaderRawEmailTexts([""]), "annotatedOutput")
 
 	def test_levenshtein(self):
@@ -135,6 +136,7 @@ class TestEvaluateResults(TestCase):
 			for key in mail_error.keys():
 				mail_error[key] /= len(denotation_blocks['blocks'])
 
+			plt.plot(mail_error.keys(), mail_error.values(), label=mail.filename)
 			for key in mail_error.keys():
 				try:
 					overall_error[key] += mail_error[key]
@@ -145,3 +147,5 @@ class TestEvaluateResults(TestCase):
 			overall_error[key] /= len(self.mails_denotated)
 
 		print(overall_error)
+		#plt.legend()
+		plt.show()
