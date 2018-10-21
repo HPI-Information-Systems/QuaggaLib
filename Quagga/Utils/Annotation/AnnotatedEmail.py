@@ -76,6 +76,8 @@ class AnnotatedEmail(Email):
 	def __init__(self, file, skip_blank=False, perturbation=0.0):
 		self.skip_blank = skip_blank
 		self.perturbation = perturbation
+		super().__init__(os.path.dirname(file), os.path.basename(file)[:-4])
+
 		try:
 			f = open(file, 'r')
 			self.annotation = json.load(f)
@@ -83,7 +85,6 @@ class AnnotatedEmail(Email):
 			with open(original_email_name, "r") as fp:
 				self.original_email = fp.read()
 			f.close()
-			super().__init__(os.path.dirname(file), os.path.basename(file))
 		except json.decoder.JSONDecodeError:
 			print('Error loading JSON Annotation File: ' + file)
 			raise
