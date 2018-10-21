@@ -1,10 +1,11 @@
 from unittest import TestCase
 
-from Quagga import Quagga, EmailDirectoryReader, ListReaderRawEmailTexts
-from Quagga.Utils.Reader.AnnotatedEmails import AnnotatedEmails
+from Quagga import Quagga, ListReaderRawEmailTexts
+from Quagga.Utils.Annotation.AnnotatedEmails import AnnotatedEmails
 import os
 from email import parser as ep
 from Quagga.Utils.Reader.Email import EmailMessage
+from Tests.TestUtils import eq
 
 
 class TestAnnotatedReader(TestCase):
@@ -14,31 +15,47 @@ class TestAnnotatedReader(TestCase):
 		filename = os.path.join(dirname, file)
 		return filename
 
-	def setUp(self):
-		self.annotatedDir = self.get_relative_filename('datasets/Enron/annotated_all')
-		self.mails_denotated = AnnotatedEmails(self.annotatedDir, lambda x: x).train_set
-		self.quagga = Quagga(ListReaderRawEmailTexts([""]), "annotatedOutput")
 
-	def test_denotation_to_blocks(self):
-		blocks = {'blocks': [{'from': 'jennifer.rudolph@enron.com', 'to': ['ca.team@enron.com'], 'cc': '',
-		                      'sent': '2001-04-11 14:30:00 UTC', 'subject': 'NEWS: bill signed?', 'type': 'root',
-		                      'raw_header': [],
-		                      'text': ['*  Heard through sources that SBX 43 (SDG&E rate freeze) was signed by the ',
-		                               'Governor today',
-		                               "*  However, the Legislature's web site still doesn't reflect the signing.",
-		                               '*  Let me know if you hear/see more news', '']}]}
-		denotations = [{'id': 1, 'start': 0, 'end': 206,
-		                'text': "*  Heard through sources that SBX 43 (SDG&E rate freeze) was signed by the \nGovernor today\n*  However, the Legislature's web site still doesn't reflect the signing.\n*  Let me know if you hear/see more news\n",
-		                'type': 'Body', 'meta': None}]
+	def test_format(self):
+		annotatedDir = self.get_relative_filename('testData/datasets/Enron/annotated_all')
+		mails_annotated = AnnotatedEmails(annotatedDir, lambda x: x).train_set
+
+		for mail in mails_annotated:
+			denotations = mail.denotations
+			for denotation in denotations:
+				eq('type' in denotation, True, msg=denotation)
+				eq('id' in denotation, True, msg=denotation)
+				eq('start' in denotation, True, msg=denotation)
+				eq('end' in denotation, True, msg=denotation)
+				eq('type' in denotation, True, msg=denotation)
+				eq('text' in denotation, True, msg=denotation)
+				eq('meta' in denotation, True, msg=denotation)
 
 	def test_reader(self):
-		for mail in self.mails_denotated:
-			raw = mail.original_email
-			m = EmailMessage("", "", ep.Parser().parsestr(raw))
-			predicted = self.quagga._predict(m.clean_body)
-			parsed = self.quagga._parse(predicted, m)
+		annotatedDir = self.get_relative_filename('testData/enron_annotated_all_sample')
+		mails_annotated = AnnotatedEmails(annotatedDir, lambda x: x).eval_set
 
+		for i, mail in enumerate(mails_annotated):
+			assert (i < 1)
 			denotations = mail.denotations
+			expected = [{'id': 1, 'start': 0, 'end': 70,
+			             'text': "That's it.  Thanks to plove I am no longer entering my own deals.\n\n\n\n\n",
+			             'type': 'Body', 'meta': None},
+			            {'id': 2, 'start': 70, 'end': 84, 'text': 'Phillip M Love', 'type': 'Header/Person/From',
+			             'meta': None},
+			            {'id': 3, 'start': 85, 'end': 95, 'text': '03/26/2001', 'type': 'Header/Sent/Date',
+			             'meta': None},
+			            {'id': 4, 'start': 96, 'end': 104, 'text': '10:20 AM', 'type': 'Header/Sent/Time',
+			             'meta': None},
+			            {'id': 5, 'start': 109, 'end': 118, 'text': 'Eric Bass', 'type': 'Header/Person/To',
+			             'meta': None},
+			            {'id': 6, 'start': 146, 'end': 149, 'text': 'Re:', 'type': 'Header/Subject', 'meta': None},
+			            {'id': 7, 'start': 70, 'end': 153,
+			             'text': 'Phillip M Love\n03/26/2001 10:20 AM\nTo:\tEric Bass/HOU/ECT@ECT\ncc:\t \nSubject:\tRe:   \n',
+			             'type': 'Header', 'meta': None},
+			            {'id': 8, 'start': 226, 'end': 228, 'text': 'PL', 'type': 'Body/Outro/Name', 'meta': None},
+			            {'id': 9, 'start': 153, 'end': 255,
+			             'text': '\nWe can always count on you to at least give us one on the error report.\nPL\n\n\n\n\n\n<Embedded StdOleLink>',
+			             'type': 'Body', 'meta': None}]
 
-			#print(parsed)
-			#print(denotations)
+			eq(denotations, expected)

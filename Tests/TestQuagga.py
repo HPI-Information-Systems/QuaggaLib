@@ -5,12 +5,7 @@ import json
 import os
 import filecmp
 
-def eq(a, b):
-	if a != b:
-		print(a)
-		print(b)
-	assert a == b
-
+from Tests.TestUtils import eq
 
 class TestQuagga(TestCase):
 	_multiprocess_shared_ = True

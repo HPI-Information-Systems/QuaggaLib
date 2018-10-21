@@ -1,6 +1,6 @@
 import os
 
-from Quagga.Utils.Reader.AnnotatedEmail import AnnotatedEmail
+from Quagga.Utils.Annotation.AnnotatedEmail import AnnotatedEmail
 
 
 class AnnotatedEmails:
@@ -16,12 +16,14 @@ class AnnotatedEmails:
 			for file in files:
 				if file.endswith('.ann'):
 					fname = os.path.join(root, file)
-					if 'eval' in fname:
+					if root.endswith('eval'):
 						self.emails_eval.append(AnnotatedEmail(fname, skip_blank, perturbation=self.perturbation))
-					elif 'test' in fname:
+					elif root.endswith('test'):
 						self.emails_test.append(AnnotatedEmail(fname, skip_blank, perturbation=self.perturbation))
-					else:
+					elif root.endswith('train'):
 						self.emails_train.append(AnnotatedEmail(fname, skip_blank, perturbation=self.perturbation))
+					else:
+						print("could not determine category")
 		print('train:', len(self.emails_train))
 		print('test', len(self.emails_test))
 		print('eval:', len(self.emails_eval))
