@@ -26,10 +26,10 @@ class DenotationBlockConverter:
 		for i, denotation in enumerate(denotation_blocks):
 
 			if denotation['block']['type'] == 'Header':
-				if i != 0:
-					# append block and parse new header
-					blocks.append(current_block)
-					current_block = Block(type='reply')  # forward header = single reply block
+				# append block and parse new header
+				blocks.append(current_block)
+				current_block = Block(type='reply')  # forward header = single reply block
+
 				cc = []
 				sender = ''
 				to = []
@@ -54,6 +54,7 @@ class DenotationBlockConverter:
 				current_block.set_raw_to(to)
 				current_block.set_raw_sent(sent)
 				current_block.raw_header = denotation['block']['text']
+				current_block.set_raw_subject(subject)
 
 			else:
 				# append info to current block
