@@ -39,15 +39,7 @@ class TestDenotationBlockConverter(TestCase):
 
 		blocks = DenotationBlockConverter.convert(denotations)
 
-		expected = {'blocks': [
-			{'from': None, 'raw_from': None, 'to': None, 'raw_to': None, 'cc': None, 'raw_cc': None, 'sent': None,
-			 'raw_sent': None, 'subject': None, 'raw_subject': None, 'type': 'root', 'raw_header': [],
-			 'text': ["That's it.  Thanks to plove I am no longer entering my own deals.", '', '', '', '', '']},
-			{'from': 'Phillip M Love', 'raw_from': 'Phillip M Love', 'to': ['Eric Bass'], 'raw_to': ['Eric Bass'],
-			 'cc': [], 'raw_cc': [], 'sent': ' 03/26/2001 10:20 AM', 'raw_sent': ' 03/26/2001 10:20 AM',
-			 'subject': None, 'raw_subject': None, 'type': 'reply',
-			 'raw_header': 'Phillip M Love\n03/26/2001 10:20 AM\nTo:\tEric Bass/HOU/ECT@ECT\ncc:\t \nSubject:\tRe:   \n',
-			 'text': ['', 'We can always count on you to at least give us one on the error report.', 'PL', '', '', '',
-			          '', '', '<Embedded StdOleLink>']}]}
+		expected = {'blocks': [{'from': None, 'raw_from': None, 'to': None, 'raw_to': None, 'cc': None, 'raw_cc': None, 'sent': None, 'raw_sent': None, 'subject': None, 'raw_subject': None, 'type': 'root', 'raw_header': [], 'text': ["That's it.  Thanks to plove I am no longer entering my own deals.", '', '', '', '', '']}, {'from': 'Phillip M Love', 'raw_from': 'Phillip M Love', 'to': ['Eric Bass'], 'raw_to': ['Eric Bass'], 'cc': [], 'raw_cc': [], 'sent': ' 03/26/2001 10:20 AM', 'raw_sent': ' 03/26/2001 10:20 AM', 'subject': 'Re:', 'raw_subject': 'Re:', 'type': 'reply', 'raw_header': 'Phillip M Love\n03/26/2001 10:20 AM\nTo:\tEric Bass/HOU/ECT@ECT\ncc:\t \nSubject:\tRe:   \n', 'text': ['', 'We can always count on you to at least give us one on the error report.', 'PL', '', '', '', '', '', '<Embedded StdOleLink>']}]}
+
 
 		eq(blocks, expected)

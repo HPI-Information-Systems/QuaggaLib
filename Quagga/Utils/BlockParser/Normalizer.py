@@ -145,6 +145,7 @@ class Normalizer:
 	def normalize_name(self, name):
 		if name is None or name == '':
 			return ''
+		name = self.cleanup_whitespace(name)
 		name = self.filter_organization(name)
 		name = self.cleanup_whitespace(name)
 		return name
@@ -152,7 +153,7 @@ class Normalizer:
 	def filter_organization(self, name):
 		# for now we assume that names dont cantain slashes and everything after the slash doesnt matter
 		name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
-		email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+		email_regex = r"(^[a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 		addresses = re.findall(email_regex, name)
 		if len(addresses) == 0:
 			name = re.sub("""(@.*)""", '', name, flags=re.IGNORECASE)
