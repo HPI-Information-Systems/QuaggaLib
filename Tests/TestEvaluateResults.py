@@ -50,6 +50,9 @@ class TestEvaluateResults(TestCase):
 		words_split = []
 		for line in lines:
 			words_split.extend(line.split(" "))
+		words_split = [TestEvaluateResults.clean_string(word) for word in words_split]
+		words_split = [word for word in words_split if word != '']
+
 		return words_split
 
 	@staticmethod
@@ -120,7 +123,7 @@ class TestEvaluateResults(TestCase):
 				if i == 0 and parsed_block['type'] == 'root' and annotated_block['type'] == 'root':
 					block_error['text'] = seqratio(parsed_block['text'], annotated_block['text'])
 				else:
-					block_error['from'] = ratio(parsed_block['raw_from'], annotated_block['from'])
+					block_error['from'] = ratio(parsed_block['from'], annotated_block['from'])
 					block_error['to'] = setratio(parsed_block['raw_to'], annotated_block['to'])
 					block_error['cc'] = setratio(parsed_block['cc'], annotated_block['cc'])
 					block_error['sent'] = ratio(parsed_block['raw_sent'], annotated_block['sent'])
@@ -138,17 +141,33 @@ class TestEvaluateResults(TestCase):
 			if parsed['blocks'][0]['subject'] == 'additionaldocument-wsjdocumentsforkenlay':
 				print("kean-s_discussion_threads_3191.txt")
 
-			mail_error = {}
-			for annotated_block in denotation_blocks['blocks']:
-				for key in annotated_block['error'].keys():
+			mail_error = {'from': 0,
+				               'to': 0,
+				               'cc': 0,
+				               'sent': 0,
+				               'subject': 0,
+				               'raw_header': 0,
+				               'type': 0,
+				               'text': 0}
+			for i, annotated_block in enumerate(denotation_blocks['blocks']):
+				if i == 0:
 					try:
-						mail_error[key] += annotated_block['error'][key]
+						mail_error['text'] += annotated_block['error']['text']
 					except KeyError:
-						mail_error[key] = annotated_block['error'][key]
+						mail_error['text'] = annotated_block['error']['text']
+				else:
+					for key in annotated_block['error'].keys():
+						try:
+							mail_error[key] += annotated_block['error'][key]
+						except KeyError:
+							mail_error[key] = annotated_block['error'][key]
 
 
 			for key in mail_error.keys():
-				mail_error[key] /= len(denotation_blocks['blocks'])
+				if key == 'text':
+					mail_error['text'] /= (len(denotation_blocks['blocks']))
+				elif (len(denotation_blocks['blocks']) > 1):
+					mail_error[key] /= (len(denotation_blocks['blocks']) - 1)
 
 			plt.plot(mail_error.keys(), mail_error.values(), label=mail.filename)
 			for key in mail_error.keys():

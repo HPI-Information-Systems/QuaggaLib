@@ -51,6 +51,7 @@ class Normalizer:
 
 	# @profile
 	def normalize(self, block): # todo save them in new fields
+		block['from'] = self.normalize_name(block['from'])
 		block['to'] = self.normalize_names(block['to'])  # todo name, email,
 		block['cc'] = self.normalize_names(block['cc'])
 		block['sent'] = self.normalize_sent(block['sent'])
@@ -137,9 +138,25 @@ class Normalizer:
 						names = [string]
 						return names
 
-		names = [self.cleanup_whitespace(name) for name in names]
+		names = [self.normalize_name(name) for name in names]
 
 		return names
+
+	def normalize_name(self, name):
+		if name is None or name == '':
+			return ''
+		name = self.filter_organization(name)
+		name = self.cleanup_whitespace(name)
+		return name
+
+	def filter_organization(self, name):
+		# for now we assume that names dont cantain slashes and everything after the slash doesnt matter
+		name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
+		email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+		addresses = re.findall(email_regex, name)
+		if len(addresses) == 0:
+			name = re.sub("""(@.*)""", '', name, flags=re.IGNORECASE)
+		return name
 
 	def cleanup_whitespace(self, string):
 		string = string.lstrip()
