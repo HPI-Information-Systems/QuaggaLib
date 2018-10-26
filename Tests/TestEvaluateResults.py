@@ -94,7 +94,7 @@ class TestEvaluateResults(TestCase):
 			block['subject'] = ''
 
 	def test_evaluate(self):
-		overall_error = {}
+		overall_accuracy = {}
 
 		mail_count = 0
 		for mail in self.mails_denotated:
@@ -112,7 +112,7 @@ class TestEvaluateResults(TestCase):
 				self.clean_block(parsed_block)
 				self.clean_block(annotated_block)
 
-				block_error = {'from': 1,
+				block_accuracy = {'from': 1,
 				               'to': 1,
 				               'cc': 1,
 				               'sent': 1,
@@ -121,27 +121,24 @@ class TestEvaluateResults(TestCase):
 				               'type': 1,
 				               'text': 1}
 				if i == 0 and parsed_block['type'] == 'root' and annotated_block['type'] == 'root':
-					block_error['text'] = seqratio(parsed_block['text'], annotated_block['text'])
+					block_accuracy['text'] = seqratio(parsed_block['text'], annotated_block['text'])
 				else:
-					block_error['from'] = ratio(parsed_block['from'], annotated_block['from'])
-					block_error['to'] = setratio(parsed_block['raw_to'], annotated_block['to'])
-					block_error['cc'] = setratio(parsed_block['cc'], annotated_block['cc'])
-					block_error['sent'] = ratio(parsed_block['raw_sent'], annotated_block['sent'])
-					block_error['subject'] = ratio(parsed_block['subject'], annotated_block['subject'])
-					block_error['raw_header'] = seqratio(parsed_block['raw_header'], annotated_block['raw_header'])
-					block_error['type'] = ratio(parsed_block['type'], annotated_block['type'])
-					block_error['text'] = seqratio(parsed_block['text'], annotated_block['text'])
+					block_accuracy['from'] = ratio(parsed_block['from'], annotated_block['from'])
+					block_accuracy['to'] = setratio(parsed_block['raw_to'], annotated_block['to'])
+					block_accuracy['cc'] = setratio(parsed_block['cc'], annotated_block['cc'])
+					block_accuracy['sent'] = ratio(parsed_block['raw_sent'], annotated_block['sent'])
+					block_accuracy['subject'] = ratio(parsed_block['subject'], annotated_block['subject'])
+					block_accuracy['raw_header'] = seqratio(parsed_block['raw_header'], annotated_block['raw_header'])
+					block_accuracy['type'] = ratio(parsed_block['type'], annotated_block['type'])
+					block_accuracy['text'] = seqratio(parsed_block['text'], annotated_block['text'])
 
-				annotated_block['error'] = block_error
+				annotated_block['error'] = block_accuracy
 
 			if len(parsed['blocks']) != len(denotation_blocks['blocks']):
 				print("blocks have different length, skipping")
 				continue
 
-			if parsed['blocks'][0]['subject'] == 'additionaldocument-wsjdocumentsforkenlay':
-				print("kean-s_discussion_threads_3191.txt")
-
-			mail_error = {'from': 0,
+			mail_accuracy = {'from': 0,
 				               'to': 0,
 				               'cc': 0,
 				               'sent': 0,
@@ -151,35 +148,32 @@ class TestEvaluateResults(TestCase):
 				               'text': 0}
 			for i, annotated_block in enumerate(denotation_blocks['blocks']):
 				if i == 0:
-					try:
-						mail_error['text'] += annotated_block['error']['text']
-					except KeyError:
-						mail_error['text'] = annotated_block['error']['text']
+					mail_accuracy['text'] += annotated_block['error']['text']
 				else:
 					for key in annotated_block['error'].keys():
-						try:
-							mail_error[key] += annotated_block['error'][key]
-						except KeyError:
-							mail_error[key] = annotated_block['error'][key]
+						mail_accuracy[key] += annotated_block['error'][key]
 
 
-			for key in mail_error.keys():
+			for key in mail_accuracy.keys():
 				if key == 'text':
-					mail_error['text'] /= (len(denotation_blocks['blocks']))
-				elif (len(denotation_blocks['blocks']) > 1):
-					mail_error[key] /= (len(denotation_blocks['blocks']) - 1)
+					mail_accuracy['text'] /= len(denotation_blocks['blocks'])
+				else:
+					if len(denotation_blocks['blocks']) == 1:
+						mail_accuracy[key] = 1
+					else:
+						mail_accuracy[key] /= len(denotation_blocks['blocks']) - 1
 
-			plt.plot(mail_error.keys(), mail_error.values(), label=mail.filename)
-			for key in mail_error.keys():
+			plt.plot(mail_accuracy.keys(), mail_accuracy.values(), label=mail.filename)
+			for key in mail_accuracy.keys():
 				try:
-					overall_error[key] += mail_error[key]
+					overall_accuracy[key] += mail_accuracy[key]
 				except KeyError:
-					overall_error[key] = mail_error[key]
+					overall_accuracy[key] = mail_accuracy[key]
 			mail_count += 1
 
-		for key in overall_error.keys():
-			overall_error[key] /= mail_count
+		for key in overall_accuracy.keys():
+			overall_accuracy[key] /= mail_count
 
-		print(overall_error)
+		print(overall_accuracy)
 		#plt.legend()
 		plt.show()
