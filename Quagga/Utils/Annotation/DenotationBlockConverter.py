@@ -38,8 +38,9 @@ class DenotationBlockConverter:
 				for detail_denotation in denotation['details']:
 					if detail_denotation['type'] == 'Header/Person/Cc': # todo maybe include bcc here
 						cc.append(detail_denotation['text'])
-					if detail_denotation['type'] == 'Header/Person/From':
-						sender = detail_denotation['text']
+					if detail_denotation['type'] == 'Header/Person/From' or\
+							detail_denotation['type'] == 'Header/Org/From':
+						sender += detail_denotation['text']
 					if detail_denotation['type'] == 'Header/Person/To':
 						to.append(detail_denotation['text'])
 					if detail_denotation['type'] == 'Header/Sent/Date':
