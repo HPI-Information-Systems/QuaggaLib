@@ -8,11 +8,15 @@ from Quagga import Quagga, ListReaderRawEmailTexts
 from Quagga.Utils.Annotation.AnnotatedEmails import AnnotatedEmails
 from Quagga.Utils.Annotation.DenotationBlockConverter import DenotationBlockConverter
 from Quagga.Utils.Reader.Email import EmailMessage
+from Quagga.Utils.BlockParser.Normalizer import Normalizer
 from Tests.TestUtils import eq
 
 from Levenshtein import distance, ratio, setratio, seqratio
 
 
+# this test evalutates the result of the whole pipeline
+# it does not just check whether the blockparser separated the lines correctly
+# but also takes normalizing into account
 class TestEvaluateResults(TestCase):
 
 	def get_relative_filename(self, file):
@@ -23,6 +27,7 @@ class TestEvaluateResults(TestCase):
 	def setUp(self):
 		self.annotatedDir = self.get_relative_filename('testData/datasets/Enron/annotated_all')
 		self.mails_denotated = AnnotatedEmails(self.annotatedDir, lambda x: x).eval_set
+		print("using eval set")
 		self.quagga = Quagga(ListReaderRawEmailTexts([""]), "annotatedOutput")
 
 	def test_levenshtein(self):
@@ -36,7 +41,7 @@ class TestEvaluateResults(TestCase):
 
 		eq(seqratio(['a', 'b'], ['b', 'a']), 0.5)  # in [0, 1]
 		eq(seqratio(['a', 'b'], ['a', 'b']), 1.0)  # in [0, 1]
-
+		eq(seqratio(['a'], ['a', 'b']), 1.0)
 
 	@staticmethod
 	def clean_list(lines):
@@ -74,13 +79,13 @@ class TestEvaluateResults(TestCase):
 	"""
 
 	@staticmethod
-	def clean_block(block):  # todo later differentiate between raw and processed stuff
+	def clean_block(block):
 		block['from'] = TestEvaluateResults.clean_string(block['from'])
 		block['raw_from'] = TestEvaluateResults.clean_string(block['raw_from'])
 		block['to'] = TestEvaluateResults.clean_list(block['to'])
 		block['raw_to'] = TestEvaluateResults.clean_list(block['to'])
 		block['cc'] = TestEvaluateResults.clean_list(block['cc'])
-		block['sent'] = TestEvaluateResults.clean_string(block['sent'])  # todo use normalizer?
+		block['sent'] = TestEvaluateResults.clean_string(block['sent'])
 		block['raw_sent'] = TestEvaluateResults.clean_string((block['raw_sent']))
 		block['subject'] = TestEvaluateResults.clean_string(block['subject'])
 		block['raw_header'] = TestEvaluateResults.clean_list(block['raw_header'])
@@ -106,9 +111,11 @@ class TestEvaluateResults(TestCase):
 			denotations = mail.denotations
 			denotation_blocks = DenotationBlockConverter.convert(denotations)
 
-
 			for i, (parsed_block, annotated_block) in enumerate(zip(parsed['blocks'], denotation_blocks['blocks'])):
 
+				# since some annotations are not consistent (some have day before date)
+				# we normalize the parsed and the annotated stuff, only the outcome matters anyway
+				annotated_block['sent'] = Normalizer.normalize_sent(annotated_block['sent'])
 				self.clean_block(parsed_block)
 				self.clean_block(annotated_block)
 
@@ -126,7 +133,7 @@ class TestEvaluateResults(TestCase):
 					block_accuracy['from'] = ratio(parsed_block['from'], annotated_block['from'])
 					block_accuracy['to'] = setratio(parsed_block['raw_to'], annotated_block['to'])
 					block_accuracy['cc'] = setratio(parsed_block['cc'], annotated_block['cc'])
-					block_accuracy['sent'] = ratio(parsed_block['raw_sent'], annotated_block['sent'])
+					block_accuracy['sent'] = ratio(parsed_block['sent'], annotated_block['sent'])
 					block_accuracy['subject'] = ratio(parsed_block['subject'], annotated_block['subject'])
 					block_accuracy['raw_header'] = seqratio(parsed_block['raw_header'], annotated_block['raw_header'])
 					block_accuracy['type'] = ratio(parsed_block['type'], annotated_block['type'])

@@ -8,8 +8,7 @@ import pytz
 
 
 class Normalizer:
-	def __init__(self):
-		self.email_regex = """(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"""
+	EMAIL_REGEX = """(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"""
 
 	"""
 	[{'from': 'brenda.flores-cuellar@enron.com',
@@ -50,15 +49,17 @@ class Normalizer:
 		                                 '-Brenda', 'x31914', '', '', '']}]"""
 
 	# @profile
-	def normalize(self, block): # todo save them in new fields
-		block['from'] = self.normalize_name(block['from'])
-		block['to'] = self.normalize_names(block['to'])  # todo name, email,
-		block['cc'] = self.normalize_names(block['cc'])
-		block['sent'] = self.normalize_sent(block['sent'])
+	@staticmethod
+	def normalize(block): # todo save them in new fields
+		block['from'] = Normalizer.normalize_name(block['from'])
+		block['to'] = Normalizer.normalize_names(block['to'])  # todo name, email,
+		block['cc'] = Normalizer.normalize_names(block['cc'])
+		block['sent'] = Normalizer.normalize_sent(block['sent'])
 
 
 	# @profile
-	def normalize_sent(self, sent):
+	@staticmethod
+	def normalize_sent(sent):
 		""" this is so nested because i found it as performance critical, dateparser takes somehow 0.5 sec per date.."""
 
 		if sent is None or sent == '':
@@ -97,7 +98,8 @@ class Normalizer:
 		else:
 			return ''
 
-	def normalize_names(self, string):
+	@staticmethod
+	def normalize_names(string):
 		# todo pointy brackets, use email when its there?? no, both
 		# Buy, Rick
 
@@ -132,34 +134,40 @@ class Normalizer:
 			for name in names:
 				whitespace_between_words_regex = """.*\S+ +\S+.*"""
 				if re.match(whitespace_between_words_regex, name) is None:
-					if re.search(self.email_regex, name) is None:
+					if re.search(Normalizer.EMAIL_REGEX, name) is None:
 						# single word and no email@domain
 						# don't split since there are no semicolons
 						names = [string]
 						return names
 
-		names = [self.normalize_name(name) for name in names]
+		names = [Normalizer.normalize_name(name) for name in names]
 
 		return names
 
-	def normalize_name(self, name):
+	@staticmethod
+	def normalize_name(name):
 		if name is None or name == '':
 			return ''
-		name = self.cleanup_whitespace(name)
-		name = self.filter_organization(name)
-		name = self.cleanup_whitespace(name)
+		name = Normalizer.cleanup_whitespace(name)
+		name = Normalizer.filter_organization(name)
+		name = Normalizer.cleanup_whitespace(name)
 		return name
 
-	def filter_organization(self, name):
-		# for now we assume that names dont cantain slashes and everything after the slash doesnt matter
+	@staticmethod
+	def filter_organization(name):
+		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
 		name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
-		email_regex = r"(^[a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+		email_regex = r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
 		addresses = re.findall(email_regex, name)
 		if len(addresses) == 0:
 			name = re.sub("""(@.*)""", '', name, flags=re.IGNORECASE)
+			name = re.sub(r"(enron)", "", name, flags=re.IGNORECASE)
+		elif len(addresses) == 1:
+			name = addresses[0]
 		return name
 
-	def cleanup_whitespace(self, string):
+	@staticmethod
+	def cleanup_whitespace(string):
 		string = string.lstrip()
 		string = string.rstrip()
 		return string
