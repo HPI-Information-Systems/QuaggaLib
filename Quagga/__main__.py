@@ -1,13 +1,13 @@
 from Quagga.Utils.ModelBuilder import ModelBuilder
-from Quagga.Utils.BlockParser import BlockParser
-from Quagga.Utils.EmailDirectoryReader import DirectoryReader, EmailDirectoryReader, TempQuaggaReader
+from Quagga.Utils.BlockParser.BlockParser import BlockParser
+from Quagga.Utils.Reader.EmailDirectoryReader import EmailDirectoryReader
 
-from Quagga.Utils.EmailListReader import ListReaderRawEmailTexts, ListReaderExtractedBodies
-from Quagga.Utils.Email import Email, serialize_quagga_email
+from Quagga.Utils.Reader.Email import serialize_quagga_email
 from Quagga.Utils.EmailProcessor import EmailProcessor
+from Quagga.Utils.BlockParser.BlockCleaner import BlockCleaner
+from Quagga.Utils.BlockParser.Normalizer import Normalizer
 
 import tensorflow as tf
-from pprint import pprint
 import json
 import timeit
 
@@ -31,7 +31,8 @@ class Quagga:
     PARSED_NAME = 'quagga.parsed'
 
     def __init__(self, email_reader, output_dir, model_builder=None, model=None,
-                 block_parser=BlockParser()):
+                 block_parser=BlockParser(), cleaner=BlockCleaner(), normalizer=Normalizer()):
+
         if model_builder is None:
             model_builder = ModelBuilder()
 
@@ -61,6 +62,8 @@ class Quagga:
 
         # PARSE
         self.block_parser = block_parser
+        self.cleaner = cleaner
+        self.normalizer = normalizer
 
     @property
     def emails_body(self):
@@ -159,14 +162,16 @@ class Quagga:
 
     def _build_model(self, model_builder=ModelBuilder(), model=None):
         with self.graph.as_default():
-            print("building model...")
             self.model_builder = model_builder
             if model is None:
+                print("building model...")
                 self.model_builder = model_builder
                 self.model_builder.build()
                 self.model = model_builder.quagga_model
             else:
+                print("using provided model...")
                 self.model = model
+        return self.model
 
     def _predict(self, mail_text):
         with self.graph.as_default():
@@ -176,7 +181,13 @@ class Quagga:
             return self._prettify_prediction(*self.model.predict(text_lines))
 
     def _parse(self, email_prediction, email_input):
-        return self.block_parser.parse_predictions(email_prediction, email_input)
+        return self._clean(self.block_parser.parse_predictions(email_prediction, email_input))
+
+    def _clean(self, email_parsed):
+        for block in email_parsed['blocks']:
+            self.cleaner.clean(block)
+            self.normalizer.normalize(block)
+        return email_parsed
 
     def _prettify_prediction(self, y, text_lines, label_encoder):
         labels = label_encoder.classes_

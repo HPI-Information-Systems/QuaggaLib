@@ -1,4 +1,4 @@
-from Quagga.Utils.Email import EmailMessage, EmailBody
+from Quagga.Utils.Reader.Email import EmailMessage, EmailBody
 from email import parser as ep
 
 class ListReaderIterator:

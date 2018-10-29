@@ -1,5 +1,6 @@
 Tests/testData/output/*
-
+Tests/datasets/*
+Tests/testData/datasets
 .idea/*
 *.lprof
 *.pyc

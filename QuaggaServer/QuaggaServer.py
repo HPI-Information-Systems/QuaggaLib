@@ -7,7 +7,28 @@ from Quagga import Quagga, ModelBuilder, ListReaderExtractedBodies
 
 
 quagga = Quagga(ListReaderExtractedBodies(''), '')
-
+model_cache = {
+    5: {
+        True: {
+            'enron': None,
+            'asf': None
+        },
+        False: {
+            'enron': None,
+            'asf': None
+        }
+    },
+    2: {
+        True: {
+            'enron': None,
+            'asf': None
+        },
+        False: {
+            'enron': None,
+            'asf': None
+        }
+    }
+}
 
 app = Flask(__name__)
 
@@ -16,25 +37,32 @@ app = Flask(__name__)
 def root():
     return app.send_static_file('index.html')
 
+def predict(lines, crf, trainset, text):
+    try:
+        print(model_cache)
+        model = model_cache[lines][crf][trainset]
+        if model is None:
+            raise KeyError
+        quagga._build_model(model=model)
+    except KeyError:
+        model_builder = ModelBuilder(with_crf=crf, zones=5, trainset=trainset)
+        model = quagga._build_model(model_builder)
+        model_cache[5][crf][trainset] = model
+
+
+    return quagga._predict(text)
 
 @app.route('/five', methods=['POST'])
 def five():
     data = request.get_json()
-    model_builder = ModelBuilder(with_crf=(data.get('model', '') == 'crf'), zones=5, trainset=data.get('trainedOn', 'enron'))
-    #quagga = Quagga(ListReaderExtractedBodies(data['rawText']), model_builder=model_builder)
-    quagga._build_model(model_builder)
-    prediction = quagga._predict(data.get('rawText'))
+    prediction = predict(5, data.get('model', '') == 'crf', data.get('trainedOn', 'enron'), data.get('rawText'))
     return jsonify(prediction)
 
 
 @app.route('/two', methods=['POST'])
 def two():
     data = request.get_json()
-    model_builder = ModelBuilder(with_crf=(data.get('model', '') == 'crf'), zones=2, trainset=data.get('trainedOn', 'enron'))
-    #quagga = Quagga(ListReaderExtractedBodies(data['rawText']), model_builder=model_builder)
-    quagga._build_model(model_builder)
-    prediction = quagga._predict(data.get('rawText'))
-
+    prediction = predict(2, data.get('model', '') == 'crf', data.get('trainedOn', 'enron'), data.get('rawText'))
     return jsonify(prediction)
 
 
