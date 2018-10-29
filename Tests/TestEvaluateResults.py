@@ -41,7 +41,7 @@ class TestEvaluateResults(TestCase):
 
 		eq(seqratio(['a', 'b'], ['b', 'a']), 0.5)  # in [0, 1]
 		eq(seqratio(['a', 'b'], ['a', 'b']), 1.0)  # in [0, 1]
-		eq(seqratio(['a'], ['a', 'b']), 1.0)
+		eq(seqratio(['a'], ['a', 'b']), 2/3)
 
 	@staticmethod
 	def clean_list(lines):
