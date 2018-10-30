@@ -252,7 +252,7 @@ Charlotte Hawkins
     }
 
     function getPredictions(text) {
-        var basePath = 'http://localhost:5000/' + ((zonesToPredict === 2) ? 'two' : 'five');
+        var basePath = '/' + ((zonesToPredict === 2) ? 'two' : 'five');
 
         return post(basePath, {'rawText': text, 'model': model, 'trainedOn': trainedOn});
 
