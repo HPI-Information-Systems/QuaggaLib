@@ -14,7 +14,7 @@ setup(
 	url="",
 	packages=['Quagga', 'Quagga.Utils', 'Examples'],
 	package_data={'': ['models/*/*.json', 'models/*/*.hdf5', 'static/index.html']},
-	install_requires=['absl-py==0.3.0', 'astor==0.7.1', 'autopep8==1.3.5', 'bleach==1.5.0', 'click==6.7',
+	install_requires=['absl-py==0.3.0', 'astor==0.7.1', 'bleach==1.5.0', 'click==6.7',
 	                  'cycler==0.10.0', 'dateparser', 'Flask==1.0.2', 'gast==0.2.0', 'grpcio==1.14.0', 'h5py==2.8.0',
 	                  'html5lib==0.9999999', 'itsdangerous==0.24', 'Jinja2==2.10', 'Keras==2.2.0',
 	                  'kiwisolver==1.0.1', 'Markdown==2.6.11', 'MarkupSafe==1.0', 'matplotlib==2.2.2', 'nose==1.3.7', 'numpy==1.15.1',

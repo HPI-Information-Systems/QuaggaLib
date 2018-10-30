@@ -50,12 +50,11 @@ class Normalizer:
 
 	# @profile
 	@staticmethod
-	def normalize(block): # todo save them in new fields
+	def normalize(block):  # todo save them in new fields
 		block['from'] = Normalizer.normalize_name(block['from'])
 		block['to'] = Normalizer.normalize_names(block['to'])  # todo name, email,
 		block['cc'] = Normalizer.normalize_names(block['cc'])
 		block['sent'] = Normalizer.normalize_sent(block['sent'])
-
 
 	# @profile
 	@staticmethod

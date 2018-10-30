@@ -41,7 +41,7 @@ class TestEvaluateResults(TestCase):
 
 		eq(seqratio(['a', 'b'], ['b', 'a']), 0.5)  # in [0, 1]
 		eq(seqratio(['a', 'b'], ['a', 'b']), 1.0)  # in [0, 1]
-		eq(seqratio(['a'], ['a', 'b']), 2/3)
+		eq(seqratio(['a'], ['a', 'b']), 2 / 3)
 
 	@staticmethod
 	def clean_list(lines):
@@ -92,8 +92,8 @@ class TestEvaluateResults(TestCase):
 		block['text'] = TestEvaluateResults.clean_list(block['text'])
 
 		if block['type'] == 'forward':
-			block['type'] = 'reply' # annotated doesnt have forward
-			block['raw_to'] = '' # dont include to and cc from previous block then since we dont have it in annotations
+			block['type'] = 'reply'  # annotated doesnt have forward
+			block['raw_to'] = ''  # dont include to and cc from previous block then since we dont have it in annotations
 			block['to'] = ''
 			block['raw_subject'] = ''
 			block['subject'] = ''
@@ -120,13 +120,13 @@ class TestEvaluateResults(TestCase):
 				self.clean_block(annotated_block)
 
 				block_accuracy = {'from': 1,
-				               'to': 1,
-				               'cc': 1,
-				               'sent': 1,
-				               'subject': 1,
-				               'raw_header': 1,
-				               'type': 1,
-				               'text': 1}
+				                  'to': 1,
+				                  'cc': 1,
+				                  'sent': 1,
+				                  'subject': 1,
+				                  'raw_header': 1,
+				                  'type': 1,
+				                  'text': 1}
 				if i == 0 and parsed_block['type'] == 'root' and annotated_block['type'] == 'root':
 					block_accuracy['text'] = seqratio(parsed_block['text'], annotated_block['text'])
 				else:
@@ -146,20 +146,19 @@ class TestEvaluateResults(TestCase):
 				continue
 
 			mail_accuracy = {'from': 0,
-				               'to': 0,
-				               'cc': 0,
-				               'sent': 0,
-				               'subject': 0,
-				               'raw_header': 0,
-				               'type': 0,
-				               'text': 0}
+			                 'to': 0,
+			                 'cc': 0,
+			                 'sent': 0,
+			                 'subject': 0,
+			                 'raw_header': 0,
+			                 'type': 0,
+			                 'text': 0}
 			for i, annotated_block in enumerate(denotation_blocks['blocks']):
 				if i == 0:
 					mail_accuracy['text'] += annotated_block['error']['text']
 				else:
 					for key in annotated_block['error'].keys():
 						mail_accuracy[key] += annotated_block['error'][key]
-
 
 			for key in mail_accuracy.keys():
 				if key == 'text':
@@ -182,5 +181,5 @@ class TestEvaluateResults(TestCase):
 			overall_accuracy[key] /= mail_count
 
 		print(overall_accuracy)
-		#plt.legend()
+		# plt.legend()
 		plt.show()
