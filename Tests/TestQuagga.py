@@ -7,8 +7,10 @@ import filecmp
 
 from Tests.TestUtils import eq
 
+
 class TestQuagga(TestCase):
 	_multiprocess_shared_ = True
+
 	def get_relative_filename(self, file):
 		dirname = os.path.dirname(__file__)
 		filename = os.path.join(dirname, file)
@@ -81,18 +83,18 @@ PL
 
 
 <Embedded StdOleLink>""",
-       """Jill,
-
-I was wondering if I could get some information on the Costilla deal, 
-specifically the repurchase option.  I need to know the term, locations, 
-volume and strike price of the call.  
-
-
-Thanks,
-
-
-Eric
-x3-0977 """]
+		                   """Jill,
+					
+					I was wondering if I could get some information on the Costilla deal, 
+					specifically the repurchase option.  I need to know the term, locations, 
+					volume and strike price of the call.  
+					
+					
+					Thanks,
+					
+					
+					Eric
+					x3-0977 """]
 		self.test_predict_expected = [
 			[{'predictions': {'Body': 1.0, 'Header': 0.0},
 			  'text': "That's it.  Thanks to plove I am no longer entering my own deals."},
@@ -117,20 +119,39 @@ x3-0977 """]
 			 {'predictions': {'Body': 1.0, 'Header': 0.0}, 'text': ''},
 			 {'predictions': {'Body': 1.0, 'Header': 0.0}, 'text': ''},
 			 {'predictions': {'Body': 1.0, 'Header': 0.0}, 'text': '<Embedded StdOleLink>'}],
-			[{"text": "Jill,", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "I was wondering if I could get some information on the Costilla deal, ", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "specifically the repurchase option.  I need to know the term, locations, ", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "volume and strike price of the call.  ", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "Thanks,", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "Eric", "predictions": {"Body": 1.0, "Header": 0.0 } }, {"text": "x3-0977 ", "predictions": {"Body": 1.0, "Header": 0.0 } } ]]
+			[{"text": "Jill,", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "I was wondering if I could get some information on the Costilla deal, ",
+			  "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "specifically the repurchase option.  I need to know the term, locations, ",
+			  "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "volume and strike price of the call.  ", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "Thanks,", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "Eric", "predictions": {"Body": 1.0, "Header": 0.0}},
+			 {"text": "x3-0977 ", "predictions": {"Body": 1.0, "Header": 0.0}}]]
 		self.test_parse_expected = [{'blocks': [{'from': 'eric.bass@enron.com', 'to': ['phillip.love@enron.com'],
-		                        'cc': ['chance.rabon@enron.com', 'david.baumbach@enron.com',
-		                               "o'neal.winfree@enron.com"], 'sent': '2001-03-26 19:33:00 UTC', 'subject': 'Re:',
-		                        'type': 'root', 'raw_header': [],
-		                        'text': ["That's it.  Thanks to plove I am no longer entering my own deals.", '', '',
-		                                 '']}, {'from': 'Phillip M Love', 'to': ['Eric Bass/HOU/ECT@ECT'], 'cc': '',
-		                                        'sent': '2001-03-26 08:20:00 UTC', 'subject': 'Re:', 'type': 'reply',
-		                                        'raw_header': ['', 'From:\tPhillip M Love', '03/26/2001 10:20 AM',
-		                                                       'To:\tEric Bass/HOU/ECT@ECT', 'cc:\t ',
-		                                                       'Subject:\tRe:   '], 'text': ['',
-		                                                                                     'We can always count on you to at least give us one on the error report.',
-		                                                                                     'PL', '', '', '', '', '',
-		                                                                                     '<Embedded StdOleLink>']}]}, {}]
+		                                         'cc': ['chance.rabon@enron.com', 'david.baumbach@enron.com',
+		                                                "o'neal.winfree@enron.com"], 'sent': '2001-03-26 19:33:00 UTC',
+		                                         'subject': 'Re:',
+		                                         'type': 'root', 'raw_header': [],
+		                                         'text': [
+			                                         "That's it.  Thanks to plove I am no longer entering my own deals.",
+			                                         '', '',
+			                                         '']},
+		                                        {'from': 'Phillip M Love', 'to': ['Eric Bass/HOU/ECT@ECT'], 'cc': '',
+		                                         'sent': '2001-03-26 08:20:00 UTC', 'subject': 'Re:', 'type': 'reply',
+		                                         'raw_header': ['', 'From:\tPhillip M Love', '03/26/2001 10:20 AM',
+		                                                        'To:\tEric Bass/HOU/ECT@ECT', 'cc:\t ',
+		                                                        'Subject:\tRe:   '], 'text': ['',
+		                                                                                      'We can always count on you to at least give us one on the error report.',
+		                                                                                      'PL', '', '', '', '', '',
+		                                                                                      '<Embedded StdOleLink>']}]},
+		                            {}]
+
 	def tearDown(self):
 		pass
 

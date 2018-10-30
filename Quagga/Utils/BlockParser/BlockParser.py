@@ -14,9 +14,9 @@ class BlockParser:
 		root_message.set_raw_sender(email_raw_parser.sender)
 		root_message.set_raw_to(email_raw_parser.to)
 		root_message.set_raw_cc(email_raw_parser.cc)
-		root_message.set_raw_sent(email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S") if (email_raw_parser.sent is not None and email_raw_parser.sent != '') else '')
+		root_message.set_raw_sent(email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S") if (
+				email_raw_parser.sent is not None and email_raw_parser.sent != '') else '')
 		root_message.set_raw_subject(email_raw_parser.subject)
-
 
 	def mode_0(self, curr_block, line_low, blocks):
 
@@ -27,8 +27,6 @@ class BlockParser:
 		mode = next_mode
 
 		return (curr_block, mode, False)
-
-
 
 	def mode_1(self, curr_block, line_low, blocks, line_prediction, email_input, mode, date_cut_off):
 
@@ -78,7 +76,6 @@ class BlockParser:
 		# 01:37 PM ---------------------------
 		# TODO: are there more messed up cases?
 
-
 		curr_block.raw_header.append(line_prediction['text'])
 
 		try:
@@ -115,14 +112,12 @@ class BlockParser:
 
 		return (curr_block, mode, date_cut_off, True)
 
-
-
 	def parse_predictions(self, email_predicted, email_input):
 
 		blocks = []
 		# pre-filled info comes from email protocol header
 		curr_block = Block(sender='dummy@sender.com', to='dummy@to.com', cc='dummy@cc.com',
-		                                  subject='Dummy Subject', type='root')
+		                   subject='Dummy Subject', type='root')
 		self._add_header_info(curr_block, email_input)
 
 		# modes: 0 = eat body, 1 = eat forward, 2 = eat reply,
@@ -150,7 +145,8 @@ class BlockParser:
 						continue
 
 				if mode == 1:
-					(curr_block, mode, date_cut_off, cont) = self.mode_1(curr_block, line_low, blocks, line_prediction, email_input, mode, date_cut_off)
+					(curr_block, mode, date_cut_off, cont) = self.mode_1(curr_block, line_low, blocks, line_prediction,
+					                                                     email_input, mode, date_cut_off)
 					if cont:
 						continue
 
@@ -163,7 +159,9 @@ class BlockParser:
 							continue
 
 					if mode == 1:
-						(curr_block, mode, date_cut_off, cont) = self.mode_1(curr_block, line_low, blocks, line_prediction, email_input, mode, date_cut_off)
+						(curr_block, mode, date_cut_off, cont) = self.mode_1(curr_block, line_low, blocks,
+						                                                     line_prediction, email_input, mode,
+						                                                     date_cut_off)
 						if cont:
 							continue
 
@@ -177,7 +175,6 @@ class BlockParser:
 				# TODO: how to deal with broken layouts?
 
 				curr_block.raw_header.append(line_prediction['text'])
-
 
 				# On Tue, Jan 17, 2017 at 8:14 PM, Deepak Sharma <deepakmca05@gmail.com>
 				# wrote:
@@ -200,7 +197,6 @@ class BlockParser:
 				# pvillag@columbiaenergygroup.com on 12/29/99 03:29:10 pm
 				# on_match = re.search(r"(.*) on (?:[a-z]+, ?)?(\d\d\/\d\d\/\d\d (?:at )?\d\d?:\d\d:?(?:\d\d)? ?(?:am|pm)?)", line_prediction['text'], flags=re.IGNORECASE)
 
-
 				# attempt eating a from line (easy catch)
 				# From: Charlotte Hawkins 03/30/2000 11:33 AM
 				# From:	Michael Brown/ENRON@enronXgate on 04/19/2001 05:54 PM
@@ -222,21 +218,21 @@ class BlockParser:
 					mode = 7
 					line_text = line_text.replace('Subject:', '').replace('subject:', '')
 
-
-
 				if mode != 6:
 					# time/date info often mixed with other stuff, so try to extract it from line
 					# date pattern
 					# '05/30/2001', 'May 29, 2001'
 					date_match = re.search(date_regex, line_low)
 					if date_match:
-						curr_block.set_raw_sent(('' if curr_block.sent is None else curr_block.sent) + ' ' + date_match.group(1))
+						curr_block.set_raw_sent(
+							('' if curr_block.sent is None else curr_block.sent) + ' ' + date_match.group(1))
 
 					# time pattern
 					# '09:43:45 AM',  '7:58 AM', '04:56 PM',
 					time_match = re.search(time_regex, line_low)
 					if time_match:
-						curr_block.set_raw_sent(('' if curr_block.sent is None else curr_block.sent) + ' ' + time_match.group(1))
+						curr_block.set_raw_sent(
+							('' if curr_block.sent is None else curr_block.sent) + ' ' + time_match.group(1))
 
 				if mode > 2:
 					if mode != 6:
@@ -246,7 +242,8 @@ class BlockParser:
 						line_text = re.sub(original_regex_2, "", line_text, flags=re.IGNORECASE)
 
 					if mode == 3:
-						curr_block.set_raw_sender(('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
+						curr_block.set_raw_sender(
+							('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
 					elif mode == 4:
 						curr_block.set_raw_to(
 							('' if curr_block.to is None else curr_block.to) + ' ' + line_text)
@@ -266,13 +263,14 @@ class BlockParser:
 				if len(addresses) == 1:
 					curr_block.set_raw_sender(addresses[0])
 				else:
-					line_text = re.sub(time_regex, "", line_text) # stored this already
+					line_text = re.sub(time_regex, "", line_text)  # stored this already
 					line_text = re.sub(date_regex, "", line_text)
 					line_text = re.sub(original_regex_1, "", line_text, flags=re.IGNORECASE)
 					line_text = re.sub(original_regex_2, "", line_text, flags=re.IGNORECASE)
-					curr_block.set_raw_sender(('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
+					curr_block.set_raw_sender(
+						('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
 
-				# curr_block['from'] = ('' if curr_block['from'] is None else curr_block['from']) + ' ' + line_text
+			# curr_block['from'] = ('' if curr_block['from'] is None else curr_block['from']) + ' ' + line_text
 
 			# Sara Shackleton
 			# 03/01/2000 07:43 AM

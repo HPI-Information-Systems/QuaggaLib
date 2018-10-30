@@ -15,7 +15,6 @@ class TestAnnotatedReader(TestCase):
 		filename = os.path.join(dirname, file)
 		return filename
 
-
 	def test_format(self):
 		annotatedDir = self.get_relative_filename('testData/datasets/Enron/annotated_all')
 		mails_annotated = AnnotatedEmails(annotatedDir, lambda x: x).train_set
