@@ -6,8 +6,7 @@ from Quagga import Quagga
 from Quagga import EmailDirectoryReader, ListReaderRawEmailTexts, ListReaderExtractedBodies, TempQuaggaReader
 from Quagga import ModelBuilder
 
-
-from Quagga.Utils.BlockParser import BlockParser
+from Quagga.Utils.BlockParser.BlockParser import BlockParser
 
 import os.path
 
@@ -69,21 +68,20 @@ PL\n\
 \n\
 <Embedded StdOleLink>"
 
+
 def get_relative_filename(file):
 	dirname = os.path.dirname(__file__)
 	filename = os.path.join(dirname, file)
 	return filename
 
+
 input_dir = get_relative_filename("testData")
 output_dir = input_dir + "/output"
-
-
 
 """
 Quagga requires an Iterator over Quagga.Utils.Email.EmailMessage as input
 Quagga requires an output directory where prediction results are stored (api reasons, maybe tmp files)
 """
-
 
 """"# read email bodies from text
 quagga = Quagga(ListReaderExtractedBodies([example_email_body]), output_dir) # you obviously can't store these mails on disk, they don't have a filename
@@ -94,15 +92,11 @@ quagga = Quagga(ListReaderRawEmailTexts([example_email_raw]), output_dir)"""
 # read all emails from a directory
 quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)
 
-
-
 """
 Quagga can be configured with your own model, model_builder or block_parser.
 """
 quagga = Quagga(EmailDirectoryReader(input_dir), output_dir, model_builder=ModelBuilder(), model=None,
-	             block_parser=BlockParser())
-
-
+                block_parser=BlockParser())
 
 print("========================= input ")
 """Quagga.Utils.Email.EmailMessage. Contains raw email and parsed metadata."""
@@ -124,7 +118,6 @@ print("========================= parsed ")
 for parsed in quagga.emails_parsed():
 	pprint(parsed)
 
-
 """
 Store stuff for each email on disk.
 """
@@ -134,17 +127,15 @@ quagga.store_parsed(output_dir)
 
 quagga.store_all(output_dir)
 
-
 """
 Reuse already done work, don't predict everything again but read from files
 You have to make sure that .input. and .predicted. files are up-to-date.
 """
 print("========================= predictions ")
-for prediction in quagga.emails_predicted(input_reader=TempQuaggaReader('quagga.input', output_dir, output_func=lambda input: input['clean_body'])):
+for prediction in quagga.emails_predicted(
+		input_reader=TempQuaggaReader('quagga.input', output_dir, output_func=lambda input: input['clean_body'])):
 	pprint(prediction)
 
 print("========================= parsed ")
 for parsed in quagga.emails_parsed(prediction_reader=TempQuaggaReader('quagga.predicted', output_dir)):
 	pprint(parsed)
-
-
