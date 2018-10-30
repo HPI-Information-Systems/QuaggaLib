@@ -9,7 +9,7 @@ class Email:
 
 	def __dict__(self):
 		return {
-			'filename_with_path' : self.filename_with_path,
+			'filename_with_path': self.filename_with_path,
 			'sent': self.sent_string,
 			'file': self.file,
 			'folder': self.folder,
@@ -126,7 +126,7 @@ class EmailMessage(Email):
 	def sent(self):
 		try:
 			time = datetime.strptime(re.sub(r' *\([A-Z]+\)', '', str(self.mail['Date'])),
-		                         '%a, %d %b %Y %H:%M:%S %z').astimezone(timezone.utc)
+			                         '%a, %d %b %Y %H:%M:%S %z').astimezone(timezone.utc)
 		except ValueError:
 			return ''
 		return time
@@ -192,7 +192,7 @@ class EmailMessage(Email):
 		return ''
 
 	@property
-	def body(self): # todo html, etc.
+	def body(self):  # todo html, etc.
 		return self.mail.get_payload()
 
 	@property
@@ -227,7 +227,6 @@ class EmailBody(Email):
 	@property
 	def clean_body(self):
 		return self.body_text
-
 
 
 def serialize_quagga_email(obj):

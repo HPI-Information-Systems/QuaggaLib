@@ -1,10 +1,7 @@
-
-
 class Block:
 
 	def __init__(self, sender=None, to=None, cc=None, sent=None, subject=None, type=None, raw_header=None,
-		text=None):
-
+	             text=None):
 		raw_header = [] if raw_header is None else raw_header
 		text = [] if text is None else text
 		type = 'root' if type not in ['root', 'forward', 'reply'] else type
