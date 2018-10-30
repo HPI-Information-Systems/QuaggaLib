@@ -173,6 +173,9 @@ class Quagga:
                 self.model = model
         return self.model
 
+    def set_model(self, model):
+        self._build_model(model=model)
+
     def _predict(self, mail_text):
         with self.graph.as_default():
             text_raw = mail_text
