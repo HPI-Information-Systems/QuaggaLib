@@ -176,12 +176,18 @@ class Quagga:
     def set_model(self, model):
         self._build_model(model=model)
 
+    def build_model_from(self, model_builder):
+        return self._build_model(model_builder=model_builder)
+
     def _predict(self, mail_text):
         with self.graph.as_default():
             text_raw = mail_text
             text_lines = text_raw.split('\n')
 
             return self._prettify_prediction(*self.model.predict(text_lines))
+
+    def predict(self, text):
+        return self._predict(text)
 
     def _parse(self, email_prediction, email_input):
         return self._clean(self.block_parser.parse_predictions(email_prediction, email_input))
