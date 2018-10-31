@@ -116,11 +116,14 @@ class Quagga:
 
 	# @profile
 	def _store_all(self, folder_name, email_input):
-		self._store_email(folder_name, email_input.filename_with_path, self.INPUT_NAME, email_input)
+		for subdir in ['/input', '/predicted', '/parsed']:
+			if not os.path.exists(folder_name + subdir):
+				os.makedirs(folder_name + subdir)
+		self._store_email(folder_name + '/input', email_input.filename_with_path, self.INPUT_NAME, email_input)
 		predicted = self._predict(email_input.clean_body)
-		self._store_email(folder_name, email_input.filename_with_path, self.PREDICTED_NAME, predicted)
+		self._store_email(folder_name + '/predicted', email_input.filename_with_path, self.PREDICTED_NAME, predicted)
 		parsed = self._parse(predicted, email_input)
-		self._store_email(folder_name, email_input.filename_with_path, self.PARSED_NAME, parsed)
+		self._store_email(folder_name + '/parsed', email_input.filename_with_path, self.PARSED_NAME, parsed)
 
 	def store_input(self, folder_name: str = None):
 		if folder_name is None:

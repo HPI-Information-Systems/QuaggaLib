@@ -100,6 +100,14 @@ class Email:
 	def clean_body(self):
 		return ''
 
+	@staticmethod
+	def filename_underscores(path, filename):
+		if path.startswith("/"):
+			path = path.replace("/", "", 1)
+		if path != '':
+			path = path + "/"
+		return path.replace("/", "_") + filename
+
 
 class EmailMessage(Email):
 	def __init__(self, path, filename, mail):
@@ -115,12 +123,8 @@ class EmailMessage(Email):
 
 	@property
 	def filename_with_path(self):
-		path = self.path
-		if path.startswith("/"):
-			path = self.path.replace("/", "", 1)
-		if path != '':
-			path = path + "/"
-		return path.replace("/", "_") + self.filename
+		return Email.filename_underscores(self.path, self.filename)
+
 
 	@property
 	def sent(self):

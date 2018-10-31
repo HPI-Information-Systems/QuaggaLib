@@ -60,7 +60,10 @@ PL
 
 		if os.path.isdir(self.test_output_dir):
 			for f in os.listdir(self.test_output_dir):
-				os.remove(os.path.join(self.test_output_dir, f))
+				folder = os.path.join(self.test_output_dir, f)
+				if os.path.isdir(folder): # todo should use os.walk here
+					for g in os.listdir(folder):
+						os.remove(os.path.join(folder, g))
 
 		self.test_mails = ["""That's it.  Thanks to plove I am no longer entering my own deals.
 
@@ -207,9 +210,9 @@ x3-0977 """]
 	def test_store_all(self):
 		self.quagga.store_all(self.test_output_dir)
 		for email_input in self.quagga.emails_input:
-			assert os.path.isfile(self.output_filename(email_input) + self.quagga.fileending_input)
-			assert os.path.isfile(self.output_filename(email_input) + self.quagga.fileending_predicted)
-			assert os.path.isfile(self.output_filename(email_input) + self.quagga.fileending_parsed)
+			assert os.path.isfile(self.test_output_dir + "/input/" + email_input.filename_with_path + self.quagga.fileending_input)
+			assert os.path.isfile(self.test_output_dir + "/predicted/" + email_input.filename_with_path + self.quagga.fileending_predicted)
+			assert os.path.isfile(self.test_output_dir + "/parsed/" + email_input.filename_with_path + self.quagga.fileending_parsed)
 
 	def test_store_many(self):
 		output_dir = 'testData/output'
