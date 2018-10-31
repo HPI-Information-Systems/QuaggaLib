@@ -56,8 +56,6 @@ class BlockParser:
 			except AttributeError:
 				print(
 					"exception in blockparser curr_block['from'], curr_block['sent'] in " + email_input.filename_with_path)
-				f = grps.group(1)
-				s = grps.group(2)
 
 			# take info from previous block
 			curr_block.set_raw_to(blocks[-1].to)
