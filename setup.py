@@ -12,7 +12,7 @@ setup(
 	author='Tim Repke, Ben Hurdelhey',
 	author_email='tim.repke@hpi.de',
 	url="",
-	packages=['Quagga', 'Quagga.Utils', 'Examples'],
+	packages=['Quagga', 'Quagga.Utils', 'Quagga.Utils.BlockParser', 'Quagga.Utils.Annotation', 'Quagga.Utils.Reader'],
 	package_data={'': ['models/*/*.json', 'models/*/*.hdf5', 'static/index.html']},
 	install_requires=['absl-py==0.3.0', 'astor==0.7.1', 'bleach==1.5.0', 'click==6.7',
 	                  'cycler==0.10.0', 'dateparser@git+https://github.com/scrapinghub/dateparser.git@a01a4d2071a8f1d4b368543e5e09cde5eb880799', 'Flask==1.0.2', 'gast==0.2.0', 'grpcio==1.14.0', 'h5py==2.8.0',
