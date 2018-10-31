@@ -22,11 +22,12 @@ QuaggaLib wraps this model and adds modular processing steps to read *.eml files
 
 ## Usage
 ### Installation
+Note, that QuaggaLib currently only works with Python 3.6 and pip>18.1!
+
 ```bash
 pip install https://github.com/HPI-Information-Systems/QuaggaLib/archive/master.zip
 ```
 
-Note, that QuaggaLib currently only works with Python 3.6!
 
 ### QuaggaServer
 QuaggaServer provides a web interface for easy manual testing.
