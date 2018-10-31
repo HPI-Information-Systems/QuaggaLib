@@ -23,9 +23,7 @@ QuaggaLib wraps this model and adds modular processing steps to read *.eml files
 ## Usage
 ### Installation
 ```bash
-git clone git@github.com:HPI-Information-Systems/QuaggaLib.git
-cd QuaggaLib
-python setup.py install
+pip install https://github.com/HPI-Information-Systems/QuaggaLib/archive/master.zip
 ```
 
 Note, that QuaggaLib currently only works with Python 3.6!
@@ -35,7 +33,8 @@ QuaggaServer provides a web interface for easy manual testing.
 To use the interface, run 
 
 ```bash
-python QuaggaServer/QuaggaServer.py
+export FLASK_APP=QuaggaServer/QuaggaServer.py
+python3 -m flask run
 ```
 
 ... and open https://localhost:5000/index in your favourite browser.
