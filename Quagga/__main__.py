@@ -82,13 +82,14 @@ class Quagga:
 	def fileending_input(self) -> str:
 		return '.' + self.INPUT_NAME + '.json'
 
-	def _emails_processed(self, stage, input_reader, process_input, func):
-		if input_reader is None:
-			input_reader = process_input
-		else:
-			print("reading from .quagga files...")
+	def set_model(self, model):
+		self._build_model(model=model)
 
-		return EmailProcessor(self, self.emails_input, self.output_dir, input_reader, func, stage)
+	def build_model_from(self, model_builder):
+		return self._build_model(model_builder=model_builder)
+
+	def predict(self, text):
+		return self._predict(text)
 
 	def emails_predicted(self, input_reader=None):
 		return self._emails_processed(self.PREDICTED_NAME, input_reader, self.emails_body,
@@ -139,6 +140,14 @@ class Quagga:
 		if folder_name is None:
 			folder_name = self.output_dir
 		self._store(folder_name, self.PARSED_NAME, self.emails_parsed(prediction_reader))
+
+	def _emails_processed(self, stage, input_reader, process_input, func):
+		if input_reader is None:
+			input_reader = process_input
+		else:
+			print("reading from .quagga files...")
+
+		return EmailProcessor(self, self.emails_input, self.output_dir, input_reader, func, stage)
 
 	def _log_progress(self, count, total):
 		if count % 10 == 0:
