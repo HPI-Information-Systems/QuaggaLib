@@ -82,13 +82,14 @@ class Quagga:
 	def fileending_input(self) -> str:
 		return '.' + self.INPUT_NAME + '.json'
 
-	def _emails_processed(self, stage, input_reader, process_input, func):
-		if input_reader is None:
-			input_reader = process_input
-		else:
-			print("reading from .quagga files...")
+	def set_model(self, model):
+		self._build_model(model=model)
 
-		return EmailProcessor(self, self.emails_input, self.output_dir, input_reader, func, stage)
+	def build_model_from(self, model_builder):
+		return self._build_model(model_builder=model_builder)
+
+	def predict(self, text):
+		return self._predict(text)
 
 	def emails_predicted(self, input_reader=None):
 		return self._emails_processed(self.PREDICTED_NAME, input_reader, self.emails_body,
@@ -114,14 +115,6 @@ class Quagga:
 
 		print("stored all stages in " + folder_name)
 
-	# @profile
-	def _store_all(self, folder_name, email_input):
-		self._store_email(folder_name, email_input.filename_with_path, self.INPUT_NAME, email_input)
-		predicted = self._predict(email_input.clean_body)
-		self._store_email(folder_name, email_input.filename_with_path, self.PREDICTED_NAME, predicted)
-		parsed = self._parse(predicted, email_input)
-		self._store_email(folder_name, email_input.filename_with_path, self.PARSED_NAME, parsed)
-
 	def store_input(self, folder_name: str = None):
 		if folder_name is None:
 			folder_name = self.output_dir
@@ -136,6 +129,22 @@ class Quagga:
 		if folder_name is None:
 			folder_name = self.output_dir
 		self._store(folder_name, self.PARSED_NAME, self.emails_parsed(prediction_reader))
+
+	def _emails_processed(self, stage, input_reader, process_input, func):
+		if input_reader is None:
+			input_reader = process_input
+		else:
+			print("reading from .quagga files...")
+
+		return EmailProcessor(self, self.emails_input, self.output_dir, input_reader, func, stage)
+
+	# @profile
+	def _store_all(self, folder_name, email_input):
+		self._store_email(folder_name, email_input.filename_with_path, self.INPUT_NAME, email_input)
+		predicted = self._predict(email_input.clean_body)
+		self._store_email(folder_name, email_input.filename_with_path, self.PREDICTED_NAME, predicted)
+		parsed = self._parse(predicted, email_input)
+		self._store_email(folder_name, email_input.filename_with_path, self.PARSED_NAME, parsed)
 
 	def _log_progress(self, count, total):
 		if count % 10 == 0:
