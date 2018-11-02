@@ -193,7 +193,13 @@ class Quagga:
 			return self._prettify_prediction(*self.model.predict(text_lines))
 
 	def _parse(self, email_prediction, email_input):
-		return self._clean(self.block_parser.parse_predictions(email_prediction, email_input))
+		try:
+			result = self._clean(self.block_parser.parse_predictions(email_prediction, email_input))
+		except BaseException as error:
+			print('An exception occurred: {}'.format(error))
+			print(email_input.filename_with_path)
+			raise
+		return result
 
 	def _clean(self, email_parsed):
 		for block in email_parsed['blocks']:
