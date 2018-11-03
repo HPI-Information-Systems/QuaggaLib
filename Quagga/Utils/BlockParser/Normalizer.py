@@ -64,7 +64,6 @@ class Normalizer:
 		if sent is None or sent == '':
 			return sent
 
-		time = None
 		sent = re.sub(r".*(-+)$", "", sent)  # often there is a - at the end
 
 		try:
@@ -82,10 +81,10 @@ class Normalizer:
 
 				try:
 					time = dateutil.parser.parse(sent, fuzzy=True)
+					if time == '':
+						time = Normalizer.parse_time_dateparser(sent)
 				except ValueError:
-					time = dateparser.parse(sent, languages=['en'])
-				if time == '':
-					time = dateparser.parse(sent, languages=['en'])
+					time = Normalizer.parse_time_dateparser(sent)
 
 		if time is not None and time is not '':
 			if time.tzinfo is None:
@@ -96,6 +95,15 @@ class Normalizer:
 			return string
 		else:
 			return ''
+
+	@staticmethod
+	def parse_time_dateparser(time):
+		try:
+			time = dateparser.parse(time, languages=['en'])
+		except RecursionError:
+			# something went wrong in the blockparser and or time is too long (multiple aggregated)
+			time = ''
+		return time
 
 	@staticmethod
 	def normalize_names(string):
