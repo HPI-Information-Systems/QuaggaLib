@@ -50,11 +50,19 @@ class Normalizer:
 
 	# @profile
 	@staticmethod
-	def normalize(block):  # todo save them in new fields
-		block['from'] = Normalizer.normalize_name(block['from'])
-		block['to'] = Normalizer.normalize_names(block['to'])  # todo name, email,
-		block['cc'] = Normalizer.normalize_names(block['cc'])
-		block['sent'] = Normalizer.normalize_sent(block['sent'])
+	def normalize(block):
+		block['from'] = Normalizer.normalize_name(block['raw_from'])
+		block['to'] = Normalizer.normalize_names(block['raw_to'])
+		block['cc'] = Normalizer.normalize_names(block['raw_cc'])
+		block['sent'] = Normalizer.normalize_sent(block['raw_sent'])
+
+	@staticmethod
+	def construct_name(name, email, raw):
+		return {
+			'name': name,
+			'email': email,
+			'raw_name': raw
+		}
 
 	# @profile
 	@staticmethod
@@ -82,9 +90,9 @@ class Normalizer:
 				try:
 					time = dateutil.parser.parse(sent, fuzzy=True)
 					if time == '':
-						time = Normalizer.parse_time_dateparser(sent)
+						time = Normalizer._parse_time_dateparser(sent)
 				except ValueError:
-					time = Normalizer.parse_time_dateparser(sent)
+					time = Normalizer._parse_time_dateparser(sent)
 
 		if time is not None and time is not '':
 			if time.tzinfo is None:
@@ -97,11 +105,12 @@ class Normalizer:
 			return ''
 
 	@staticmethod
-	def parse_time_dateparser(time):
+	def _parse_time_dateparser(time):
 		try:
 			time = dateparser.parse(time, languages=['en'])
-		except RecursionError:
+		except RecursionError as r:
 			# something went wrong in the blockparser and or time is too long (multiple aggregated)
+			print('An exception occurred: {}'.format(r))
 			time = ''
 		return time
 
@@ -154,27 +163,32 @@ class Normalizer:
 	@staticmethod
 	def normalize_name(name):
 		if name is None or name == '':
-			return ''
-		name = Normalizer.cleanup_whitespace(name)
-		name = Normalizer.filter_organization(name)
-		name = Normalizer.cleanup_whitespace(name)
+			return Normalizer.construct_name('', '', name)
+		name = Normalizer._cleanup_whitespace(name)
+		name = Normalizer._extract_name_fields(name)
 		return name
 
 	@staticmethod
-	def filter_organization(name):
+	def _extract_name_fields(name):
+		# this could be improved a lot, maybe some ner?
 		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
 		name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
+
 		email_regex = r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
 		addresses = re.findall(email_regex, name)
-		if len(addresses) == 0:
-			name = re.sub("""(@.*)""", '', name, flags=re.IGNORECASE)
-			name = re.sub(r"(enron)", "", name, flags=re.IGNORECASE)
-		elif len(addresses) == 1:
-			name = addresses[0]
-		return name
+
+		person_name = re.sub("""(@.*)""", '', name, flags=re.IGNORECASE)
+		person_name = re.sub(r"(enron)", "", person_name, flags=re.IGNORECASE)
+
+		person_email = addresses[0] if len(addresses) > 0 else ""
+
+		person_email = Normalizer._cleanup_whitespace(person_email)
+		person_name = Normalizer._cleanup_whitespace(person_name)
+
+		return Normalizer.construct_name(person_name, person_email, name)
 
 	@staticmethod
-	def cleanup_whitespace(string):
+	def _cleanup_whitespace(string):
 		string = string.lstrip()
 		string = string.rstrip()
 		return string
