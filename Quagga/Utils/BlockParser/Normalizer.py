@@ -51,10 +51,10 @@ class Normalizer:
 	# @profile
 	@staticmethod
 	def normalize(block):
-		block['from'] = Normalizer.normalize_name(block['raw_from'])
-		block['to'] = Normalizer.normalize_names(block['raw_to'])
-		block['cc'] = Normalizer.normalize_names(block['raw_cc'])
-		block['sent'] = Normalizer.normalize_sent(block['raw_sent'])
+		block['from'] = Normalizer.normalize_name(block['from'])
+		block['to'] = Normalizer.normalize_names(block['to'])
+		block['cc'] = Normalizer.normalize_names(block['cc'])
+		block['sent'] = Normalizer.normalize_sent(block['sent'])
 
 	@staticmethod
 	def construct_name(name, email, raw):
@@ -125,10 +125,23 @@ class Normalizer:
 		# Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt,
 		# James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith"
 		# <meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>,
-		if string is None or string == '':
+
+		if string is None:
+			# if its none this is intended
 			return string
+		if string is '':
+			return []
 
 		names = []
+
+		not_empty_regex = """[^ ]*"""
+		def not_empty(name):
+			if name is None:
+				return False
+			if not re.match(not_empty_regex, name) or name == '':
+				return False
+			return True
+
 		if not ';' in string and not ',' in string:
 			names = [string]
 		elif ';' in string:
@@ -136,15 +149,6 @@ class Normalizer:
 		elif ',' in string:
 			commas_outside_of_quotations_regex = """(.*?),(?=(?:[^"]*(")[^(")]*")*[^"]*$)"""
 			names = re.split(commas_outside_of_quotations_regex, string + ',')
-
-			not_empty_regex = """[^ ]*"""
-
-			def not_empty(name):
-				if name is None:
-					return False
-				if not re.match(not_empty_regex, name) or name == '':
-					return False
-				return True
 
 			names = list(filter(not_empty, names))
 			for name in names:
@@ -156,6 +160,8 @@ class Normalizer:
 						names = [string]
 						return names
 
+
+		names = list(filter(not_empty, names))
 		names = [Normalizer.normalize_name(name) for name in names]
 
 		return names
@@ -172,12 +178,12 @@ class Normalizer:
 	def _extract_name_fields(name):
 		# this could be improved a lot, maybe some ner?
 		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
-		name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
+		name_processed = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
 
 		email_regex = r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
-		addresses = re.findall(email_regex, name)
+		addresses = re.findall(email_regex, name_processed)
 
-		person_name = re.sub("""(@.*)""", '', name, flags=re.IGNORECASE)
+		person_name = re.sub("""(@.*)""", '', name_processed, flags=re.IGNORECASE)
 		person_name = re.sub(r"(enron)", "", person_name, flags=re.IGNORECASE)
 
 		person_email = addresses[0] if len(addresses) > 0 else ""

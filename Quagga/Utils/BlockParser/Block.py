@@ -27,7 +27,7 @@ class Block:
 
 		self.text = text
 
-	def set_raw_sender(self, sender):
+	def set_raw_from(self, sender):
 		self.raw_sender = sender
 		self.sender = sender
 

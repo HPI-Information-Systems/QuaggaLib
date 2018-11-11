@@ -6,11 +6,11 @@ class BlockCleaner:
 		pass
 
 	def clean(self, block):
-		block['raw_from'] = self.cleanup_string(block['raw_from'])
-		block['raw_to'] = self.cleanup_string(block['to'])
-		block['raw_cc'] = self.cleanup_string(block['raw_cc'])
-		block['raw_sent'] = self.cleanup_string(block['raw_sent'])
-		block['raw_subject'] = self.cleanup_string(block['raw_subject'])
+		block['from'] = self.cleanup_string(block['raw_from'])
+		block['to'] = self.cleanup_string(block['raw_to'])
+		block['cc'] = self.cleanup_string(block['raw_cc'])
+		block['sent'] = self.cleanup_string(block['raw_sent'])
+		block['subject'] = self.cleanup_string(block['raw_subject'])
 
 	def cleanup_string(self, string):
 		if string is None:
