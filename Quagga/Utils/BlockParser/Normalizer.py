@@ -97,7 +97,7 @@ class Normalizer:
 		if time is not None and time is not '':
 			if time.tzinfo is None:
 				time = pytz.utc.localize(time, is_dst=None)
-			string = time.astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
+			string = time.astimezone(pytz.timezone('US/Pacific')).strftime('%Y-%m-%d %H:%M:%S %Z')
 			if string.endswith('+00:00'):
 				string = string[:-6]
 			return string
@@ -116,7 +116,6 @@ class Normalizer:
 
 	@staticmethod
 	def normalize_names(string):
-		# todo pointy brackets, use email when its there?? no, both
 		# Buy, Rick
 
 		# Rick Buy, Andrew Miller
@@ -157,8 +156,7 @@ class Normalizer:
 					if re.search(Normalizer.EMAIL_REGEX, name) is None:
 						# single word and no email@domain
 						# don't split since there are no semicolons
-						names = [string]
-						return names
+						return [Normalizer.normalize_name(string)]
 
 
 		names = list(filter(not_empty, names))
@@ -178,13 +176,19 @@ class Normalizer:
 	def _extract_name_fields(name):
 		# this could be improved a lot, maybe some ner?
 		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
-		name_processed = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
+
 
 		email_regex = r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
-		addresses = re.findall(email_regex, name_processed)
+		addresses = re.findall(email_regex, name)
 
-		person_name = re.sub("""(@.*)""", '', name_processed, flags=re.IGNORECASE)
-		person_name = re.sub(r"(enron)", "", person_name, flags=re.IGNORECASE)
+		# todo: test, there are cases where this fails (obviously)
+		person_name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
+		person_name = re.sub("""(\[.*\])""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(<.*>)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(@.*)""", '', person_name, flags=re.IGNORECASE)
+
+		for character in ["<", ">", "[", "]", "<", ">", "/", "\\", "\""]:
+			person_name = person_name.replace(character, "")
 
 		person_email = addresses[0] if len(addresses) > 0 else ""
 
