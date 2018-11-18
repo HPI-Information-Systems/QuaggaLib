@@ -126,7 +126,7 @@ class BlockParser:
 
 		original_regex_1 = r"( *-{2,} *original)"
 		forward_regex = r"( *-{2,} *forward)"
-		email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+		email_regex = r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
 		original_regex_2 = r"( *message *-{2,})"
 		date_regex = r"((?:[a-z]+ \d{1,2}, ?\d{2,4})|(?:\d{1,2}/\d{1,2}/\d{2,4}))"
 		time_regex = r"(\d{1,2}:\d\d(?::\d\d)?(?: ?(?:pm|am|PM|AM))?)"
@@ -257,16 +257,13 @@ class BlockParser:
 					continue
 
 				# last resort: might just be a leading from field with no prefix
-				addresses = re.findall(email_regex, line_text)
-				if len(addresses) == 1:
-					curr_block.set_raw_from(addresses[0])
-				else:
-					line_text = re.sub(time_regex, "", line_text)  # stored this already
-					line_text = re.sub(date_regex, "", line_text)
-					line_text = re.sub(original_regex_1, "", line_text, flags=re.IGNORECASE)
-					line_text = re.sub(original_regex_2, "", line_text, flags=re.IGNORECASE)
-					curr_block.set_raw_from(
-						('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
+
+				line_text = re.sub(time_regex, "", line_text)  # stored this already
+				line_text = re.sub(date_regex, "", line_text)
+				line_text = re.sub(original_regex_1, "", line_text, flags=re.IGNORECASE)
+				line_text = re.sub(original_regex_2, "", line_text, flags=re.IGNORECASE)
+				curr_block.set_raw_from(
+					('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
 
 			# curr_block['from'] = ('' if curr_block['from'] is None else curr_block['from']) + ' ' + line_text
 

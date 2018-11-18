@@ -174,7 +174,7 @@ class Normalizer:
 
 	@staticmethod
 	def _extract_name_fields(name):
-		# this could be improved a lot, maybe some ner?
+		# this could be vastly improved, maybe some ner?
 		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
 
 
@@ -182,20 +182,40 @@ class Normalizer:
 		addresses = re.findall(email_regex, name)
 
 		# todo: test, there are cases where this fails (obviously)
-		person_name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
-		person_name = re.sub("""(\[.*\])""", '', person_name, flags=re.IGNORECASE)
-		person_name = re.sub("""(<.*>)""", '', person_name, flags=re.IGNORECASE)
-		person_name = re.sub("""(@.*)""", '', person_name, flags=re.IGNORECASE)
 
-		for character in ["<", ">", "[", "]", "<", ">", "/", "\\", "\""]:
-			person_name = person_name.replace(character, "")
+		person_name = ''
+		if len(addresses) > 0:
+			name_before_mail = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+).*)", "", name, re.IGNORECASE)
+			person_name = Normalizer._extract_person_name(name_before_mail)
+
+		if person_name == '':
+			person_name = Normalizer._extract_person_name(name)
+
 
 		person_email = addresses[0] if len(addresses) > 0 else ""
+		person_email = person_email.lstrip('\'')
+		person_email = person_email.rstrip('\'')
 
 		person_email = Normalizer._cleanup_whitespace(person_email)
 		person_name = Normalizer._cleanup_whitespace(person_name)
 
 		return Normalizer.construct_name(person_name, person_email, name)
+
+	@staticmethod
+	def _extract_person_name(name):
+		person_name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
+		person_name = re.sub("""(\[.*\])""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(<.*>)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(@.*)""", '', person_name, flags=re.IGNORECASE)
+
+		person_name = Normalizer._cleanup_whitespace(person_name)
+
+		for character in ["<", ">", "[", "]", "<", ">", "/", "\\", "\""]:
+			person_name = person_name.replace(character, "")
+		person_name = person_name.lstrip('\'')
+		person_name = person_name.rstrip('\'')
+
+		return person_name
 
 	@staticmethod
 	def _cleanup_whitespace(string):

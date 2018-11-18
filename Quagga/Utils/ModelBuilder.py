@@ -7,21 +7,13 @@ from keras.models import Model as KerasModel
 from keras.layers import Masking, GRU, Input, Bidirectional
 from keras_contrib.layers import CRF
 from sklearn.preprocessing import LabelEncoder
-import tensorflow as tf
 import os.path
 from pkg_resources import resource_filename
 
-
 from Quagga.Utils.Model import Model as QuaggaModel
 
-def get_relative_filename(file):
-	dirname = os.path.dirname(__file__)
-	filename = os.path.join(dirname, file)
-	return filename
 
 def get_resource_string(file):
-
-	#return get_relative_filename(file)
 	return resource_filename(__name__, file)
 
 
@@ -93,7 +85,6 @@ class ModelBuilder:
 		self._build_model()
 		self._build_line_model()
 
-
 	def _build_configs(self):
 		self.quagga_model.zones = self.zones
 		self.quagga_model.with_crf = self.with_crf
@@ -119,6 +110,8 @@ class ModelBuilder:
 			line_model = self._load_keras_model(self.model_paths['line_a_path'])
 			line_a_func = self._get_embedding_function(line_model)
 			line_funcs = [line_a_func, line_b_func]
+		else:
+			raise Exception
 
 		self.quagga_model.line_model = line_model
 		self.quagga_model.line_functions = line_funcs
@@ -149,7 +142,7 @@ class ModelBuilder:
 		embedding_func = K.function(model_in + [K.learning_phase()], [model.layers[-2].output])
 
 		def lambdo(x):
-			return embedding_func([x, 0.])[0] # 0 = test (learning_phase)
+			return embedding_func([x, 0.])[0]  # 0 = test (learning_phase)
 
 		return lambdo
 
@@ -171,7 +164,8 @@ class ModelBuilder:
 	@property
 	def _mail_model_two(self):
 		output_size = 2
-		in_mail = Input(shape=(None, self.line_embedding_size), dtype='float32') # batches of arbitrary number of vectors with size self.line_embedding_size
+		in_mail = Input(shape=(None, self.line_embedding_size),
+		                dtype='float32')  # batches of arbitrary number of vectors with size self.line_embedding_size
 
 		mask = Masking()(in_mail)
 		hidden = Bidirectional(GRU(32 // 2,

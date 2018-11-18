@@ -714,12 +714,13 @@ Thanks"""
 		eq(parsed, expected)
 
 	def template(self):
-		raw_mail = None
+		raw_mail = """"""
 		filename = ""
 		email_input = self.construct_email(filename, raw_mail)
-		predicted = None
+		predicted = self.generate_predict(email_input)
+		print(predicted)
 
-		expected = None
+		expected = """"""
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
 		eq(parsed, expected)
@@ -1298,6 +1299,99 @@ This is great!
 		                                       'Hoskins/Enron Communications@Enron Communications, Tobin Carlson/HOU/ECT@ECT',
 		                                       '\t cc: ', '\t Subject: Another slam on Gore!', '', 'This is great!', '',
 		                                       '', '', ''], 'text': []}]}
+
+		parsed = self.block_parser.parse_predictions(predicted, email_input)
+		eq(parsed, expected)
+
+	def test_on_in_name(self):
+		raw_mail = """Message-ID: <5989943.1075842974320.JavaMail.evans@thyme>
+Date: Mon, 18 Sep 2000 05:28:00 -0700 (PDT)
+From: jeff.dasovich@enron.com
+To: ifsg230@mail.bus.utexas.edu
+Subject: Re: John Waters
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-From: Jeff Dasovich
+X-To: "Joan Wagner" <IFSG230@mail.bus.utexas.edu> @ ENRON
+X-cc: 
+X-bcc: 
+X-Folder: \Jeff_Dasovich_Dec2000\\Notes Folders\All documents
+X-Origin: DASOVICH-J
+X-FileName: jdasovic.nsf
+
+Holy moly and hee haw, how the heck are ya, and what are you up to?
+
+
+
+
+"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM
+To: <Jeff_Dasovich@enron.com>
+cc:  
+Subject: John Waters
+
+
+Your boy had the quote of the day in the NY Times.
+
+"Show me a kid who's not sneaking into R-rated movies and I'll show you
+a failure.  All the future CEO's of this country are sneaking into
+R-rated movies."
+
+Happy Monday,
+ - jdw
+
+"""
+		filename = "dasovich-j_all_documents_1537.txt"
+		email_input = self.construct_email(filename, raw_mail)
+		predicted = [{'text': 'Holy moly and hee haw, how the heck are ya, and what are you up to?',
+		              'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM',
+		              'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'To: <Jeff_Dasovich@enron.com>', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'cc:  ', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': 'Subject: John Waters', 'predictions': {'Body': 0.0, 'Header': 1.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': 'Your boy had the quote of the day in the NY Times.',
+		              'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you',
+		              'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': "a failure.  All the future CEO's of this country are sneaking into",
+		              'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': 'R-rated movies."', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': 'Happy Monday,', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': ' - jdw', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
+		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}}]
+
+		expected = {'blocks': [{'from': 'jeff.dasovich@enron.com', 'raw_from': 'jeff.dasovich@enron.com',
+		                        'to': 'ifsg230@mail.bus.utexas.edu', 'raw_to': 'ifsg230@mail.bus.utexas.edu', 'cc': '',
+		                        'raw_cc': '', 'sent': '2000-09-18 12:28:00', 'raw_sent': '2000-09-18 12:28:00',
+		                        'subject': 'Re: John Waters', 'raw_subject': 'Re: John Waters', 'type': 'root',
+		                        'raw_header': [],
+		                        'text': ['Holy moly and hee haw, how the heck are ya, and what are you up to?', '', '',
+		                                 '', '']}, {'from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ',
+		                                            'raw_from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ',
+		                                            'to': '  <Jeff_Dasovich@enron.com>',
+		                                            'raw_to': '  <Jeff_Dasovich@enron.com>', 'cc': '   ',
+		                                            'raw_cc': '   ', 'sent': ' 09/18/2000 12:21:11 pm',
+		                                            'raw_sent': ' 09/18/2000 12:21:11 pm', 'subject': '  John Waters',
+		                                            'raw_subject': '  John Waters', 'type': 'reply', 'raw_header': [
+				'"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM',
+				'To: <Jeff_Dasovich@enron.com>', 'cc:  ', 'Subject: John Waters'], 'text': ['', '',
+		                                                                                    'Your boy had the quote of the day in the NY Times.',
+		                                                                                    '',
+		                                                                                    '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you',
+		                                                                                    "a failure.  All the future CEO's of this country are sneaking into",
+		                                                                                    'R-rated movies."', '',
+		                                                                                    'Happy Monday,', ' - jdw',
+		                                                                                    '', '']}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
 		eq(parsed, expected)
