@@ -135,6 +135,7 @@ class Normalizer:
 		xnames = []
 
 		not_empty_regex = """[^ ]*"""
+
 		def not_empty(name):
 			if name is None:
 				return False
@@ -169,9 +170,6 @@ class Normalizer:
 
 			xnames = list(filter(not_empty, xnames))
 
-
-
-
 		names = list(filter(not_empty, names))
 		xnames = list(filter(not_empty, xnames))
 
@@ -201,7 +199,6 @@ class Normalizer:
 		# this could be vastly improved, maybe some ner?
 		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
 
-
 		email_regex = r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
 		addresses = re.findall(email_regex, name)
 
@@ -212,12 +209,12 @@ class Normalizer:
 			person_name = Normalizer._extract_person_name(xname)
 		else:
 			if len(addresses) > 0:
-				name_before_mail = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+).*)", "", name, re.IGNORECASE)
+				name_before_mail = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+).*)", "", name,
+				                          re.IGNORECASE)
 				person_name = Normalizer._extract_person_name(name_before_mail)
 
 			if person_name == '':
 				person_name = Normalizer._extract_person_name(name)
-
 
 		person_email = addresses[0] if len(addresses) > 0 else ""
 		person_email = person_email.lstrip('\'')
@@ -230,16 +227,18 @@ class Normalizer:
 
 	@staticmethod
 	def _extract_person_name(name):
-		person_name = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+))", "", name, re.IGNORECASE)
+		person_name = re.sub(r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", "", name, flags=re.IGNORECASE)
 		person_name = re.sub("""(<.*>)""", '', person_name, flags=re.IGNORECASE)
-		person_name = re.sub("""(/.*)""", '', person_name, flags=re.IGNORECASE)
 		person_name = re.sub("""(\[.*\])""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(/.*)""", '', person_name, flags=re.IGNORECASE)
 		person_name = re.sub("""(@.*)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(mailto:?)""", '', person_name, flags=re.IGNORECASE)
 
 		person_name = Normalizer._cleanup_whitespace(person_name)
 
-		for character in ["<", ">", "[", "]", "<", ">", "/", "\\", "\""]:
+		for character in ["<", ">", "[", "]", "<", ">", "/", "\\", "\"", "?"]:
 			person_name = person_name.replace(character, "")
+
 		person_name = person_name.lstrip('\'')
 		person_name = person_name.rstrip('\'')
 
