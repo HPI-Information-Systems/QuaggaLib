@@ -51,9 +51,9 @@ class Normalizer:
 	# @profile
 	@staticmethod
 	def normalize(block):
-		block['from'] = Normalizer.normalize_name(block['from'])
-		block['to'] = Normalizer.normalize_names(block['to'])
-		block['cc'] = Normalizer.normalize_names(block['cc'])
+		block['from'] = Normalizer.normalize_name(block['from'], block['raw_xfrom'])
+		block['to'] = Normalizer.normalize_names(block['to'], block['raw_xto'])
+		block['cc'] = Normalizer.normalize_names(block['cc'], block['raw_xcc'])
 		block['sent'] = Normalizer.normalize_sent(block['sent'])
 
 	@staticmethod
@@ -115,7 +115,7 @@ class Normalizer:
 		return time
 
 	@staticmethod
-	def normalize_names(string):
+	def normalize_names(string, xstring):
 		# Buy, Rick
 
 		# Rick Buy, Andrew Miller
@@ -132,6 +132,7 @@ class Normalizer:
 			return []
 
 		names = []
+		xnames = []
 
 		not_empty_regex = """[^ ]*"""
 		def not_empty(name):
@@ -156,24 +157,47 @@ class Normalizer:
 					if re.search(Normalizer.EMAIL_REGEX, name) is None:
 						# single word and no email@domain
 						# don't split since there are no semicolons
-						return [Normalizer.normalize_name(string)]
+						return [Normalizer.normalize_name(string, xstring)]
+
+		if not ';' in xstring and not ',' in xstring:
+			xnames = [xstring]
+		elif ';' in xstring:
+			xnames = xstring.split(';')
+		elif ',' in xstring:
+			commas_outside_of_quotations_regex = """(.*?),(?=(?:[^"]*(")[^(")]*")*[^"]*$)"""
+			xnames = re.split(commas_outside_of_quotations_regex, xstring + ',')
+
+			xnames = list(filter(not_empty, xnames))
+
+
 
 
 		names = list(filter(not_empty, names))
-		names = [Normalizer.normalize_name(name) for name in names]
+		xnames = list(filter(not_empty, xnames))
 
-		return names
+		res = []
+		for name, xname in zip(names, xnames):
+			res.append(Normalizer.normalize_name(name, xname))
+
+		return res
 
 	@staticmethod
-	def normalize_name(name):
+	def normalize_name(name, xname):
 		if name is None or name == '':
 			return Normalizer.construct_name('', '', name)
+
 		name = Normalizer._cleanup_whitespace(name)
-		name = Normalizer._extract_name_fields(name)
+		xname = Normalizer._cleanup_whitespace(xname)
+
+		if xname == '' or xname == name:
+			xname = ''
+
+		name = Normalizer._extract_name_fields(name, xname)
+
 		return name
 
 	@staticmethod
-	def _extract_name_fields(name):
+	def _extract_name_fields(name, xname=''):
 		# this could be vastly improved, maybe some ner?
 		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
 
@@ -184,12 +208,15 @@ class Normalizer:
 		# todo: test, there are cases where this fails (obviously)
 
 		person_name = ''
-		if len(addresses) > 0:
-			name_before_mail = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+).*)", "", name, re.IGNORECASE)
-			person_name = Normalizer._extract_person_name(name_before_mail)
+		if xname != '':
+			person_name = Normalizer._extract_person_name(xname)
+		else:
+			if len(addresses) > 0:
+				name_before_mail = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+).*)", "", name, re.IGNORECASE)
+				person_name = Normalizer._extract_person_name(name_before_mail)
 
-		if person_name == '':
-			person_name = Normalizer._extract_person_name(name)
+			if person_name == '':
+				person_name = Normalizer._extract_person_name(name)
 
 
 		person_email = addresses[0] if len(addresses) > 0 else ""
@@ -203,9 +230,10 @@ class Normalizer:
 
 	@staticmethod
 	def _extract_person_name(name):
-		person_name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
-		person_name = re.sub("""(\[.*\])""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+))", "", name, re.IGNORECASE)
 		person_name = re.sub("""(<.*>)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(/.*)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(\[.*\])""", '', person_name, flags=re.IGNORECASE)
 		person_name = re.sub("""(@.*)""", '', person_name, flags=re.IGNORECASE)
 
 		person_name = Normalizer._cleanup_whitespace(person_name)

@@ -12,20 +12,14 @@ class BlockParser:
 
 	def _add_header_info(self, root_message, email_raw_parser):
 
-		if email_raw_parser.sender.lower() not in email_raw_parser.xsender.lower():
-			root_message.set_raw_from(email_raw_parser.xsender + " <" + email_raw_parser.sender + ">")
-		else:
-			root_message.set_raw_from(email_raw_parser.xsender)
+		root_message.set_raw_from(email_raw_parser.sender)
+		root_message.set_raw_xfrom(email_raw_parser.xsender)
 
-		if email_raw_parser.to.lower() not in email_raw_parser.xto.lower():
-			root_message.set_raw_to(email_raw_parser.xto + " <" + email_raw_parser.to + ">")
-		else:
-			root_message.set_raw_to(email_raw_parser.xto)
+		root_message.set_raw_to(email_raw_parser.to)
+		root_message.set_raw_xto(email_raw_parser.xto)
 
-		if email_raw_parser.cc.lower() not in email_raw_parser.xcc.lower():
-			root_message.set_raw_cc(email_raw_parser.cc)
-		else:
-			root_message.set_raw_cc(email_raw_parser.xcc)
+		root_message.set_raw_cc(email_raw_parser.cc)
+		root_message.set_raw_xcc(email_raw_parser.xcc)
 
 		root_message.set_raw_sent(email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S") if (
 				email_raw_parser.sent is not None and email_raw_parser.sent != '') else '')
