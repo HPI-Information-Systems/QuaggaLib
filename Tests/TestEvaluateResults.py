@@ -80,6 +80,23 @@ class TestEvaluateResults(TestCase):
 	"""
 
 	@staticmethod
+	def clean_parsed_block(block):
+		block['raw_from'] = TestEvaluateResults.clean_string(block['raw_from'])
+		block['raw_to'] = TestEvaluateResults.clean_list(block['raw_to'])
+		block['raw_cc'] = TestEvaluateResults.clean_list(block['raw_cc'])
+		block['sent'] = TestEvaluateResults.clean_string(block['sent'])
+		block['raw_sent'] = TestEvaluateResults.clean_string((block['raw_sent']))
+		block['subject'] = TestEvaluateResults.clean_string(block['subject'])
+		block['raw_header'] = TestEvaluateResults.clean_list(block['raw_header'])
+		block['text'] = TestEvaluateResults.clean_list(block['text'])
+
+		if block['type'] == 'forward':
+			block['type'] = 'reply'  # annotated doesnt have forward
+			block['raw_to'] = ''  # dont include to and cc from previous block then since we dont have it in annotations
+			block['raw_subject'] = ''
+			block['subject'] = ''
+
+	@staticmethod
 	def clean_block(block):
 		block['from'] = TestEvaluateResults.clean_string(block['from'])
 		block['raw_from'] = TestEvaluateResults.clean_string(block['raw_from'])
@@ -100,7 +117,6 @@ class TestEvaluateResults(TestCase):
 			block['subject'] = ''
 
 	def test_evaluate(self):
-		return
 		overall_accuracy = {}
 
 		mail_count = 0
@@ -118,7 +134,7 @@ class TestEvaluateResults(TestCase):
 				# since some annotations are not consistent (some have day before date)
 				# we normalize the parsed and the annotated stuff, only the outcome matters anyway
 				annotated_block['sent'] = Normalizer.normalize_sent(annotated_block['sent'])
-				self.clean_block(parsed_block)
+				self.clean_parsed_block(parsed_block)
 				self.clean_block(annotated_block)
 
 				block_accuracy = {'from': 1,
@@ -132,9 +148,9 @@ class TestEvaluateResults(TestCase):
 				if i == 0 and parsed_block['type'] == 'root' and annotated_block['type'] == 'root':
 					block_accuracy['text'] = seqratio(parsed_block['text'], annotated_block['text'])
 				else:
-					block_accuracy['from'] = ratio(parsed_block['from'], annotated_block['from'])
+					block_accuracy['from'] = ratio(parsed_block['raw_from'], annotated_block['from'])
 					block_accuracy['to'] = setratio(parsed_block['raw_to'], annotated_block['to'])
-					block_accuracy['cc'] = setratio(parsed_block['cc'], annotated_block['cc'])
+					block_accuracy['cc'] = setratio(parsed_block['raw_cc'], annotated_block['cc'])
 					block_accuracy['sent'] = ratio(parsed_block['sent'], annotated_block['sent'])
 					block_accuracy['subject'] = ratio(parsed_block['subject'], annotated_block['subject'])
 					block_accuracy['raw_header'] = seqratio(parsed_block['raw_header'], annotated_block['raw_header'])
