@@ -11,11 +11,25 @@ class BlockParser:
 		return sorted(predictions.items(), key=lambda x: x[1], reverse=True)[0][0]
 
 	def _add_header_info(self, root_message, email_raw_parser):
-		root_message.set_raw_from(email_raw_parser.sender)
-		root_message.set_raw_to(email_raw_parser.to)
-		root_message.set_raw_cc(email_raw_parser.cc)
+
+		if email_raw_parser.sender.lower() not in email_raw_parser.xsender.lower():
+			root_message.set_raw_from(email_raw_parser.xsender + " <" + email_raw_parser.sender + ">")
+		else:
+			root_message.set_raw_from(email_raw_parser.xsender)
+
+		if email_raw_parser.to.lower() not in email_raw_parser.xto.lower():
+			root_message.set_raw_to(email_raw_parser.xto + " <" + email_raw_parser.to + ">")
+		else:
+			root_message.set_raw_to(email_raw_parser.xto)
+
+		if email_raw_parser.cc.lower() not in email_raw_parser.xcc.lower():
+			root_message.set_raw_cc(email_raw_parser.cc)
+		else:
+			root_message.set_raw_cc(email_raw_parser.xcc)
+
 		root_message.set_raw_sent(email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S") if (
 				email_raw_parser.sent is not None and email_raw_parser.sent != '') else '')
+
 		root_message.set_raw_subject(email_raw_parser.subject)
 
 	def mode_0(self, curr_block, line_low, blocks):

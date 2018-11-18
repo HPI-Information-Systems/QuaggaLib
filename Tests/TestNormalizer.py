@@ -46,57 +46,11 @@ class TestNormalizer(TestCase):
 		eq(mail_parsed, expected)
 
 	def test_normalize_name_on_after_name(self):
-		mail_parsed = {'blocks': [{'from': 'jeff.dasovich@enron.com', 'raw_from': 'jeff.dasovich@enron.com',
-		                           'to': 'ifsg230@mail.bus.utexas.edu', 'raw_to': 'ifsg230@mail.bus.utexas.edu',
-		                           'cc': '',
-		                           'raw_cc': '', 'sent': '2000-09-18 12:28:00', 'raw_sent': '2000-09-18 12:28:00',
-		                           'subject': 'Re: John Waters', 'raw_subject': 'Re: John Waters', 'type': 'root',
-		                           'raw_header': [],
-		                           'text': ['Holy moly and hee haw, how the heck are ya, and what are you up to?', '',
-		                                    '',
-		                                    '', '']}, {'from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ',
-		                                               'raw_from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ',
-		                                               'to': '  <Jeff_Dasovich@enron.com>',
-		                                               'raw_to': '  <Jeff_Dasovich@enron.com>', 'cc': '   ',
-		                                               'raw_cc': '   ', 'sent': ' 09/18/2000 12:21:11 pm',
-		                                               'raw_sent': ' 09/18/2000 12:21:11 pm',
-		                                               'subject': '  John Waters',
-		                                               'raw_subject': '  John Waters', 'type': 'reply', 'raw_header': [
-				'"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM',
-				'To: <Jeff_Dasovich@enron.com>', 'cc:  ', 'Subject: John Waters'], 'text': ['', '',
-		                                                                                    'Your boy had the quote of the day in the NY Times.',
-		                                                                                    '',
-		                                                                                    '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you',
-		                                                                                    "a failure.  All the future CEO's of this country are sneaking into",
-		                                                                                    'R-rated movies."', '',
-		                                                                                    'Happy Monday,', ' - jdw',
-		                                                                                    '', '']}]}
+		mail_parsed = {'blocks': [{'from': 'Jeff Dasovich <jeff.dasovich@enron.com>', 'raw_from': 'Jeff Dasovich <jeff.dasovich@enron.com>', 'to': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> @ ENRON', 'raw_to': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> @ ENRON', 'cc': '', 'raw_cc': '', 'sent': '2000-09-18 12:28:00', 'raw_sent': '2000-09-18 12:28:00', 'subject': 'Re: John Waters', 'raw_subject': 'Re: John Waters', 'type': 'root', 'raw_header': [], 'text': ['Holy moly and hee haw, how the heck are ya, and what are you up to?', '', '', '', '']}, {'from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ', 'raw_from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ', 'to': '  <Jeff_Dasovich@enron.com>', 'raw_to': '  <Jeff_Dasovich@enron.com>', 'cc': '   ', 'raw_cc': '   ', 'sent': ' 09/18/2000 12:21:11 pm', 'raw_sent': ' 09/18/2000 12:21:11 pm', 'subject': '  John Waters', 'raw_subject': '  John Waters', 'type': 'reply', 'raw_header': ['"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM', 'To: <Jeff_Dasovich@enron.com>', 'cc:  ', 'Subject: John Waters'], 'text': ['', '', 'Your boy had the quote of the day in the NY Times.', '', '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you', "a failure.  All the future CEO's of this country are sneaking into", 'R-rated movies."', '', 'Happy Monday,', ' - jdw', '', '']}]}
+
 		for block in mail_parsed['blocks']:
 			self.normalizer.normalize(block)
-		expected = {'blocks': [{'from': {'name': 'jeff.dasovich', 'email': 'jeff.dasovich@enron.com',
-		                                 'raw_name': 'jeff.dasovich@enron.com'}, 'raw_from': 'jeff.dasovich@enron.com',
-		                        'to': [{'name': 'ifsg230', 'email': 'ifsg230@mail.bus.utexas.edu',
-		                                'raw_name': 'ifsg230@mail.bus.utexas.edu'}],
-		                        'raw_to': 'ifsg230@mail.bus.utexas.edu', 'cc': [], 'raw_cc': '',
-		                        'sent': '2000-09-18 05:28:00 PDT', 'raw_sent': '2000-09-18 12:28:00',
-		                        'subject': 'Re: John Waters', 'raw_subject': 'Re: John Waters', 'type': 'root',
-		                        'raw_header': [],
-		                        'text': ['Holy moly and hee haw, how the heck are ya, and what are you up to?', '', '',
-		                                 '', '']}, {
-			                       'from': {'name': 'Joan Wagner', 'email': 'IFSG230@mail.bus.utexas.edu',
-			                                'raw_name': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on'},
-			                       'raw_from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ', 'to': [
-				{'name': '', 'email': 'Jeff_Dasovich@enron.com', 'raw_name': '<Jeff_Dasovich@enron.com>'}],
-			                       'raw_to': '  <Jeff_Dasovich@enron.com>',
-			                       'cc': [{'name': '', 'email': '', 'raw_name': ''}], 'raw_cc': '   ',
-			                       'sent': '2000-09-18 05:21:11 PDT', 'raw_sent': ' 09/18/2000 12:21:11 pm',
-			                       'subject': '  John Waters', 'raw_subject': '  John Waters', 'type': 'reply',
-			                       'raw_header': [
-				                       '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM',
-				                       'To: <Jeff_Dasovich@enron.com>', 'cc:  ', 'Subject: John Waters'],
-			                       'text': ['', '', 'Your boy had the quote of the day in the NY Times.', '',
-			                                '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you',
-			                                "a failure.  All the future CEO's of this country are sneaking into",
-			                                'R-rated movies."', '', 'Happy Monday,', ' - jdw', '', '']}]}
+		expected = {'blocks': [{'from': {'name': 'Jeff Dasovich', 'email': 'jeff.dasovich@enron.com', 'raw_name': 'Jeff Dasovich <jeff.dasovich@enron.com>'}, 'raw_from': 'Jeff Dasovich <jeff.dasovich@enron.com>', 'to': [{'name': 'Joan Wagner', 'email': 'IFSG230@mail.bus.utexas.edu', 'raw_name': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> @ ENRON'}], 'raw_to': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> @ ENRON', 'cc': [], 'raw_cc': '', 'sent': '2000-09-18 05:28:00 PDT', 'raw_sent': '2000-09-18 12:28:00', 'subject': 'Re: John Waters', 'raw_subject': 'Re: John Waters', 'type': 'root', 'raw_header': [], 'text': ['Holy moly and hee haw, how the heck are ya, and what are you up to?', '', '', '', '']}, {'from': {'name': 'Joan Wagner', 'email': 'IFSG230@mail.bus.utexas.edu', 'raw_name': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on'}, 'raw_from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ', 'to': [{'name': '', 'email': 'Jeff_Dasovich@enron.com', 'raw_name': '<Jeff_Dasovich@enron.com>'}], 'raw_to': '  <Jeff_Dasovich@enron.com>', 'cc': [{'name': '', 'email': '', 'raw_name': ''}], 'raw_cc': '   ', 'sent': '2000-09-18 05:21:11 PDT', 'raw_sent': ' 09/18/2000 12:21:11 pm', 'subject': '  John Waters', 'raw_subject': '  John Waters', 'type': 'reply', 'raw_header': ['"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM', 'To: <Jeff_Dasovich@enron.com>', 'cc:  ', 'Subject: John Waters'], 'text': ['', '', 'Your boy had the quote of the day in the NY Times.', '', '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you', "a failure.  All the future CEO's of this country are sneaking into", 'R-rated movies."', '', 'Happy Monday,', ' - jdw', '', '']}]}
+
 
 		eq(mail_parsed, expected)

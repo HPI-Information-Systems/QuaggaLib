@@ -1370,28 +1370,7 @@ Happy Monday,
 		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}},
 		             {'text': '', 'predictions': {'Body': 1.0, 'Header': 0.0}}]
 
-		expected = {'blocks': [{'from': 'jeff.dasovich@enron.com', 'raw_from': 'jeff.dasovich@enron.com',
-		                        'to': 'ifsg230@mail.bus.utexas.edu', 'raw_to': 'ifsg230@mail.bus.utexas.edu', 'cc': '',
-		                        'raw_cc': '', 'sent': '2000-09-18 12:28:00', 'raw_sent': '2000-09-18 12:28:00',
-		                        'subject': 'Re: John Waters', 'raw_subject': 'Re: John Waters', 'type': 'root',
-		                        'raw_header': [],
-		                        'text': ['Holy moly and hee haw, how the heck are ya, and what are you up to?', '', '',
-		                                 '', '']}, {'from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ',
-		                                            'raw_from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ',
-		                                            'to': '  <Jeff_Dasovich@enron.com>',
-		                                            'raw_to': '  <Jeff_Dasovich@enron.com>', 'cc': '   ',
-		                                            'raw_cc': '   ', 'sent': ' 09/18/2000 12:21:11 pm',
-		                                            'raw_sent': ' 09/18/2000 12:21:11 pm', 'subject': '  John Waters',
-		                                            'raw_subject': '  John Waters', 'type': 'reply', 'raw_header': [
-				'"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM',
-				'To: <Jeff_Dasovich@enron.com>', 'cc:  ', 'Subject: John Waters'], 'text': ['', '',
-		                                                                                    'Your boy had the quote of the day in the NY Times.',
-		                                                                                    '',
-		                                                                                    '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you',
-		                                                                                    "a failure.  All the future CEO's of this country are sneaking into",
-		                                                                                    'R-rated movies."', '',
-		                                                                                    'Happy Monday,', ' - jdw',
-		                                                                                    '', '']}]}
+		expected = {'blocks': [{'from': 'Jeff Dasovich <jeff.dasovich@enron.com>', 'raw_from': 'Jeff Dasovich <jeff.dasovich@enron.com>', 'to': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> @ ENRON', 'raw_to': '"Joan Wagner" <IFSG230@mail.bus.utexas.edu> @ ENRON', 'cc': '', 'raw_cc': '', 'sent': '2000-09-18 12:28:00', 'raw_sent': '2000-09-18 12:28:00', 'subject': 'Re: John Waters', 'raw_subject': 'Re: John Waters', 'type': 'root', 'raw_header': [], 'text': ['Holy moly and hee haw, how the heck are ya, and what are you up to?', '', '', '', '']}, {'from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ', 'raw_from': ' "Joan Wagner" <IFSG230@mail.bus.utexas.edu> on  ', 'to': '  <Jeff_Dasovich@enron.com>', 'raw_to': '  <Jeff_Dasovich@enron.com>', 'cc': '   ', 'raw_cc': '   ', 'sent': ' 09/18/2000 12:21:11 pm', 'raw_sent': ' 09/18/2000 12:21:11 pm', 'subject': '  John Waters', 'raw_subject': '  John Waters', 'type': 'reply', 'raw_header': ['"Joan Wagner" <IFSG230@mail.bus.utexas.edu> on 09/18/2000 12:21:11 PM', 'To: <Jeff_Dasovich@enron.com>', 'cc:  ', 'Subject: John Waters'], 'text': ['', '', 'Your boy had the quote of the day in the NY Times.', '', '"Show me a kid who\'s not sneaking into R-rated movies and I\'ll show you', "a failure.  All the future CEO's of this country are sneaking into", 'R-rated movies."', '', 'Happy Monday,', ' - jdw', '', '']}]}
 
 		parsed = self.block_parser.parse_predictions(predicted, email_input)
 		eq(parsed, expected)
