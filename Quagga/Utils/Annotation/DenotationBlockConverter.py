@@ -51,7 +51,7 @@ class DenotationBlockConverter:
 						subject = subject + detail_denotation['text']
 
 				current_block.set_raw_cc(cc)
-				current_block.set_raw_sender(sender)
+				current_block.set_raw_from(sender)
 				current_block.set_raw_to(to)
 				current_block.set_raw_sent(sent)
 				current_block.raw_header = denotation['block']['text']

@@ -227,26 +227,4 @@ class Quagga:
 
 
 if __name__ == '__main__':
-	input_dir = "../Tests/testData/enron_tiny"
-	output_dir = "../Tests/testData/output"
-
-	quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)
-
-	"""print("========================= input ")
-	for input in quagga.emails_input:
-		pprint(input)
-
-	print("========================= bodies ")
-	for body in quagga.emails_body:
-		pprint(body)
-
-	print("========================= predictions ")
-	for prediction in quagga.emails_predicted(
-			input_reader=TempQuaggaReader('quagga.input', output_dir, output_func=lambda input: input['clean_body'])):
-		pprint(prediction)
-
-	print("========================= parsed ")
-	for parsed in quagga.emails_parsed(prediction_reader=TempQuaggaReader('quagga.predicted', output_dir)):
-		pprint(parsed)"""
-
-	quagga.store_all(output_dir)
+	pass

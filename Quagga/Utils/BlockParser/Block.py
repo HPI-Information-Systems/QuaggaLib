@@ -8,12 +8,15 @@ class Block:
 
 		self.sender = sender
 		self.raw_sender = sender
+		self.raw_xsender = sender
 
 		self.to = to
 		self.raw_to = to
+		self.raw_xto = to
 
 		self.cc = cc
 		self.raw_cc = cc
+		self.raw_xcc = cc
 
 		self.sent = sent
 		self.raw_sent = sent
@@ -27,17 +30,29 @@ class Block:
 
 		self.text = text
 
-	def set_raw_sender(self, sender):
+	def set_raw_from(self, sender):
 		self.raw_sender = sender
+		self.raw_xsender = sender
 		self.sender = sender
+
+	def set_raw_xfrom(self, sender):
+		self.raw_xsender = sender
 
 	def set_raw_to(self, to):
 		self.raw_to = to
+		self.raw_xto = to
 		self.to = to
 
 	def set_raw_cc(self, cc):
 		self.raw_cc = cc
+		self.raw_xcc = cc
 		self.cc = cc
+
+	def set_raw_xto(self, xto):
+		self.raw_xto = xto
+
+	def set_raw_xcc(self, xcc):
+		self.raw_xcc = xcc
 
 	def set_raw_sent(self, sent):
 		self.raw_sent = sent
@@ -63,10 +78,13 @@ class Block:
 		return {
 			'from': self.sender,
 			'raw_from': self.raw_sender,
+			'raw_xfrom': self.raw_xsender,
 			'to': self.to,
 			'raw_to': self.raw_to,
+			'raw_xto': self.raw_xto,
 			'cc': self.cc,
 			'raw_cc': self.raw_cc,
+			'raw_xcc': self.raw_xcc,
 			'sent': self.sent,
 			'raw_sent': self.raw_sent,
 			'subject': self.subject,
