@@ -233,6 +233,14 @@ class Normalizer:
 		person_name = re.sub("""(/.*)""", '', person_name, flags=re.IGNORECASE)
 		person_name = re.sub("""(@.*)""", '', person_name, flags=re.IGNORECASE)
 		person_name = re.sub("""(mailto:?)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""((Please)? respond to:?)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""( on:?)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(\(?e-mail\)?)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(\(?email\)?)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(.*-{1,} *forwarded (by)?:?)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(.*sent by:?)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(-{3,})""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(http:/?.*)""", '', person_name, flags=re.IGNORECASE)
 
 		person_name = Normalizer._cleanup_whitespace(person_name)
 
@@ -241,6 +249,9 @@ class Normalizer:
 
 		person_name = person_name.lstrip('\'')
 		person_name = person_name.rstrip('\'')
+
+		if len(person_name) > 40:
+			return ''
 
 		return person_name
 
