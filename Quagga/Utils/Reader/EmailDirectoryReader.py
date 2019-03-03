@@ -85,8 +85,9 @@ class DirectoryReader:
 
 
 """
-reads previously by quagga created results
+reads previously by quagga created results from tempdir
 assumes that they are non-hierachic in the tempdir folder
+maildir is the original input dir
 traverses the original email files and converts their names to the ones we assume in tempdir
 so don't alter the names
 """
