@@ -74,68 +74,75 @@ def get_relative_filename(file):
 	filename = os.path.join(dirname, file)
 	return filename
 
+def run():
 
-input_dir = get_relative_filename("testData")
-output_dir = input_dir + "/output"
+	input_dir = get_relative_filename("testData")
+	output_dir = input_dir + "/output"
 
-"""
-Quagga requires an Iterator over Quagga.Utils.Email.EmailMessage as input
-Quagga requires an output directory where prediction results are stored (api reasons, maybe tmp files)
-"""
+	"""
+	Quagga requires an Iterator over Quagga.Utils.Email.EmailMessage as input
+	Quagga requires an output directory where prediction results are stored (api reasons, maybe tmp files)
+	"""
 
-""""# read email bodies from text
-quagga = Quagga(ListReaderExtractedBodies([example_email_body]), output_dir) # you obviously can't store these mails on disk, they don't have a filename
+	""""# read email bodies from text
+	quagga = Quagga(ListReaderExtractedBodies([example_email_body]), output_dir) # you obviously can't store these 
+	mails on disk, they don't have a filename
 
-# read emails from raw text
-quagga = Quagga(ListReaderRawEmailTexts([example_email_raw]), output_dir)"""
+	# read emails from raw text
+	quagga = Quagga(ListReaderRawEmailTexts([example_email_raw]), output_dir)"""
 
-# read all emails from a directory
-quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)
+	# read all emails from a directory
+	quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)
 
-"""
-Quagga can be configured with your own model, model_builder or block_parser.
-"""
-quagga = Quagga(EmailDirectoryReader(input_dir), output_dir, model_builder=ModelBuilder(), model=None,
-                block_parser=BlockParser())
+	"""
+	Quagga can be configured with your own model, model_builder or block_parser.
+	"""
+	quagga = Quagga(EmailDirectoryReader(input_dir), output_dir, model_builder=ModelBuilder(), model=None,
+					block_parser=BlockParser())
 
-print("========================= input ")
-"""Quagga.Utils.Email.EmailMessage. Contains raw email and parsed metadata."""
-for input in quagga.emails_input:
-	pprint(input)
+	print("========================= input ")
+	"""Quagga.Utils.Email.EmailMessage. Contains raw email and parsed metadata."""
+	for input in quagga.emails_input:
+		pprint(input)
 
-print("========================= bodies ")
-"""String. Contains body from Quagga.Utils.Email.EmailMessage."""
-for body in quagga.emails_body:
-	pprint(body)
+	print("========================= bodies ")
+	"""String. Contains body from Quagga.Utils.Email.EmailMessage."""
+	for body in quagga.emails_body:
+		pprint(body)
 
-print("========================= predictions ")
-"""Dictionary. Contains predictions line by line."""
-for prediction in quagga.emails_predicted():
-	pprint(prediction)
+	print("========================= predictions ")
+	"""Dictionary. Contains predictions line by line."""
+	for prediction in quagga.emails_predicted():
+		pprint(prediction)
 
-print("========================= parsed ")
-"""Dictionary. Contains semi-structured data extracted from email."""
-for parsed in quagga.emails_parsed():
-	pprint(parsed)
+	print("========================= parsed ")
+	"""Dictionary. Contains semi-structured data extracted from email."""
+	for parsed in quagga.emails_parsed():
+		pprint(parsed)
 
-"""
-Store stuff for each email on disk.
-"""
-quagga.store_input(output_dir)
-quagga.store_predicted(output_dir)
-quagga.store_parsed(output_dir)
+	"""
+	Store stuff for each email on disk.
+	"""
+	quagga.store_input(output_dir)
+	quagga.store_predicted(output_dir)
+	quagga.store_parsed(output_dir)
 
-quagga.store_all(output_dir)
+	"""Store everything, creating subdirs for each stage."""
+	quagga.store_all(output_dir)
 
-"""
-Reuse already done work, don't predict everything again but read from files
-You have to make sure that .input. and .predicted. files are up-to-date.
-"""
-print("========================= predictions ")
-for prediction in quagga.emails_predicted(
-		input_reader=TempQuaggaReader('quagga.input', output_dir, output_func=lambda input: input['clean_body'])):
-	pprint(prediction)
+	"""
+	Reuse already done work, don't predict everything again but read from files
+	You have to make sure that .input. and .predicted. files are up-to-date.
+	"""
+	print("========================= predictions ")
+	for prediction in quagga.emails_predicted(
+			input_reader=TempQuaggaReader('quagga.input', input_dir, output_dir + "/input",
+										  output_func=lambda input: input['clean_body'])):
+		pprint(prediction)
 
-print("========================= parsed ")
-for parsed in quagga.emails_parsed(prediction_reader=TempQuaggaReader('quagga.predicted', output_dir)):
-	pprint(parsed)
+	print("========================= parsed ")
+	for parsed in quagga.emails_parsed(prediction_reader=TempQuaggaReader('quagga.predicted', input_dir, output_dir + "/predicted")):
+		pprint(parsed)
+
+if __name__ == "__main__":
+	run()

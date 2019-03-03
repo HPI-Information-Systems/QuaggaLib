@@ -26,13 +26,19 @@ def profile_test(quagga, output_dir):
 """
 """
 
-input_dir = get_relative_filename("Tests/testData/enron_small")
-#input_dir = get_relative_filename("/san2/data/websci/email_datasets/enron_original")
-output_dir = get_relative_filename("Tests/testData/output")
-#output_dir = get_relative_filename("/san2/data/websci/email_datasets/enron_quagga")
+if __name__ == "__main__":
+	input_dir = get_relative_filename("Tests/testData/enron_small")
+	#input_dir = get_relative_filename("/san2/data/websci/email_datasets/enron_original")
+	output_dir = get_relative_filename("Tests/testData/output")
+	#output_dir = get_relative_filename("/san2/data/websci/email_datasets/enron_quagga")
 
-quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)
+	temp_dir = get_relative_filename("Tests/testData/output/predicted")
 
-# profile_test(quagga, output_dir)
 
-quagga.store_parsed(output_dir)
+	quagga = Quagga(EmailDirectoryReader(input_dir), output_dir)
+
+	# profile_test(quagga, output_dir)
+
+	quagga.store_all(output_dir)
+	#quagga.store_parsed(output_dir + "/parsed", TempQuaggaReader(Quagga.PREDICTED_NAME, input_dir, temp_dir))
+	#quagga.store_parsed(output_dir + "/parsed")

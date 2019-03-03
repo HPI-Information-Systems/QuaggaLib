@@ -50,11 +50,19 @@ class Normalizer:
 
 	# @profile
 	@staticmethod
-	def normalize(block):  # todo save them in new fields
-		block['from'] = Normalizer.normalize_name(block['from'])
-		block['to'] = Normalizer.normalize_names(block['to'])  # todo name, email,
-		block['cc'] = Normalizer.normalize_names(block['cc'])
+	def normalize(block):
+		block['from'] = Normalizer.normalize_name(block['from'], block['raw_xfrom'])
+		block['to'] = Normalizer.normalize_names(block['to'], block['raw_xto'])
+		block['cc'] = Normalizer.normalize_names(block['cc'], block['raw_xcc'])
 		block['sent'] = Normalizer.normalize_sent(block['sent'])
+
+	@staticmethod
+	def construct_name(name, email, raw):
+		return {
+			'name': name,
+			'email': email,
+			'raw_name': raw
+		}
 
 	# @profile
 	@staticmethod
@@ -64,7 +72,6 @@ class Normalizer:
 		if sent is None or sent == '':
 			return sent
 
-		time = None
 		sent = re.sub(r".*(-+)$", "", sent)  # often there is a - at the end
 
 		try:
@@ -82,15 +89,15 @@ class Normalizer:
 
 				try:
 					time = dateutil.parser.parse(sent, fuzzy=True)
+					if time == '':
+						time = Normalizer._parse_time_dateparser(sent)
 				except ValueError:
-					time = dateparser.parse(sent, languages=['en'])
-				if time == '':
-					time = dateparser.parse(sent, languages=['en'])
+					time = Normalizer._parse_time_dateparser(sent)
 
 		if time is not None and time is not '':
 			if time.tzinfo is None:
 				time = pytz.utc.localize(time, is_dst=None)
-			string = time.astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
+			string = time.astimezone(pytz.timezone('US/Pacific')).strftime('%Y-%m-%d %H:%M:%S %Z')
 			if string.endswith('+00:00'):
 				string = string[:-6]
 			return string
@@ -98,8 +105,17 @@ class Normalizer:
 			return ''
 
 	@staticmethod
-	def normalize_names(string):
-		# todo pointy brackets, use email when its there?? no, both
+	def _parse_time_dateparser(time):
+		try:
+			time = dateparser.parse(time, languages=['en'])
+		except RecursionError as r:
+			# something went wrong in the blockparser and or time is too long (multiple aggregated)
+			print('An exception occurred: {}'.format(r))
+			time = ''
+		return time
+
+	@staticmethod
+	def normalize_names(string, xstring):
 		# Buy, Rick
 
 		# Rick Buy, Andrew Miller
@@ -108,10 +124,25 @@ class Normalizer:
 		# Branom/Corp/Enron@ENRON, Jason Sharp/ENRON_DEVELOPMENT@ENRON_DEVELOPMENt,
 		# James Hollman/Corp/Enron@ENRON, Robert B Cothran/Corp/Enron@ENRON, "Meredith"
 		# <meredith@friersoncpa.com>, "Zogheib, Lisa A" <Lisa_Zogheib@AIMFUNDS.COM>,
-		if string is None or string == '':
+
+		if string is None:
+			# if its none this is intended
 			return string
+		if string is '':
+			return []
 
 		names = []
+		xnames = []
+
+		not_empty_regex = """[^ ]*"""
+
+		def not_empty(name):
+			if name is None:
+				return False
+			if not re.match(not_empty_regex, name) or name == '':
+				return False
+			return True
+
 		if not ';' in string and not ',' in string:
 			names = [string]
 		elif ';' in string:
@@ -120,15 +151,6 @@ class Normalizer:
 			commas_outside_of_quotations_regex = """(.*?),(?=(?:[^"]*(")[^(")]*")*[^"]*$)"""
 			names = re.split(commas_outside_of_quotations_regex, string + ',')
 
-			not_empty_regex = """[^ ]*"""
-
-			def not_empty(name):
-				if name is None:
-					return False
-				if not re.match(not_empty_regex, name) or name == '':
-					return False
-				return True
-
 			names = list(filter(not_empty, names))
 			for name in names:
 				whitespace_between_words_regex = """.*\S+ +\S+.*"""
@@ -136,37 +158,94 @@ class Normalizer:
 					if re.search(Normalizer.EMAIL_REGEX, name) is None:
 						# single word and no email@domain
 						# don't split since there are no semicolons
-						names = [string]
-						return names
+						return [Normalizer.normalize_name(string, xstring)]
 
-		names = [Normalizer.normalize_name(name) for name in names]
+		if not ';' in xstring and not ',' in xstring:
+			xnames = [xstring]
+		elif ';' in xstring:
+			xnames = xstring.split(';')
+		elif ',' in xstring:
+			commas_outside_of_quotations_regex = """(.*?),(?=(?:[^"]*(")[^(")]*")*[^"]*$)"""
+			xnames = re.split(commas_outside_of_quotations_regex, xstring + ',')
 
-		return names
+			xnames = list(filter(not_empty, xnames))
+
+		names = list(filter(not_empty, names))
+		xnames = list(filter(not_empty, xnames))
+
+		res = []
+		for name, xname in zip(names, xnames):
+			res.append(Normalizer.normalize_name(name, xname))
+
+		return res
 
 	@staticmethod
-	def normalize_name(name):
+	def normalize_name(name, xname):
 		if name is None or name == '':
-			return ''
-		name = Normalizer.cleanup_whitespace(name)
-		name = Normalizer.filter_organization(name)
-		name = Normalizer.cleanup_whitespace(name)
+			return Normalizer.construct_name('', '', name)
+
+		name = Normalizer._cleanup_whitespace(name)
+		xname = Normalizer._cleanup_whitespace(xname)
+
+		if xname == '' or xname == name:
+			xname = ''
+
+		name = Normalizer._extract_name_fields(name, xname)
+
 		return name
 
 	@staticmethod
-	def filter_organization(name):
+	def _extract_name_fields(name, xname=''):
+		# this could be vastly improved, maybe some ner?
 		# for now we assume that names don't contain slashes and everything after the slash doesnt matter
-		name = re.sub("""(/.*)""", '', name, flags=re.IGNORECASE)
+
 		email_regex = r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
 		addresses = re.findall(email_regex, name)
-		if len(addresses) == 0:
-			name = re.sub("""(@.*)""", '', name, flags=re.IGNORECASE)
-			name = re.sub(r"(enron)", "", name, flags=re.IGNORECASE)
-		elif len(addresses) == 1:
-			name = addresses[0]
-		return name
+
+		# todo: test, there are cases where this fails (obviously)
+
+		person_name = ''
+		if xname != '':
+			person_name = Normalizer._extract_person_name(xname)
+		else:
+			if len(addresses) > 0:
+				name_before_mail = re.sub(r"(([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+).*)", "", name,
+				                          re.IGNORECASE)
+				person_name = Normalizer._extract_person_name(name_before_mail)
+
+			if person_name == '':
+				person_name = Normalizer._extract_person_name(name)
+
+		person_email = addresses[0] if len(addresses) > 0 else ""
+		person_email = person_email.lstrip('\'')
+		person_email = person_email.rstrip('\'')
+
+		person_email = Normalizer._cleanup_whitespace(person_email)
+		person_name = Normalizer._cleanup_whitespace(person_name)
+
+		return Normalizer.construct_name(person_name, person_email, name)
 
 	@staticmethod
-	def cleanup_whitespace(string):
+	def _extract_person_name(name):
+		person_name = re.sub(r"([a-zA-Z0-9'_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", "", name, flags=re.IGNORECASE)
+		person_name = re.sub("""(<.*>)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(\[.*\])""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(/.*)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(@.*)""", '', person_name, flags=re.IGNORECASE)
+		person_name = re.sub("""(mailto:?)""", '', person_name, flags=re.IGNORECASE)
+
+		person_name = Normalizer._cleanup_whitespace(person_name)
+
+		for character in ["<", ">", "[", "]", "<", ">", "/", "\\", "\"", "?"]:
+			person_name = person_name.replace(character, "")
+
+		person_name = person_name.lstrip('\'')
+		person_name = person_name.rstrip('\'')
+
+		return person_name
+
+	@staticmethod
+	def _cleanup_whitespace(string):
 		string = string.lstrip()
 		string = string.rstrip()
 		return string

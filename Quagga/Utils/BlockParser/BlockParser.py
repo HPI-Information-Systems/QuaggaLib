@@ -11,11 +11,19 @@ class BlockParser:
 		return sorted(predictions.items(), key=lambda x: x[1], reverse=True)[0][0]
 
 	def _add_header_info(self, root_message, email_raw_parser):
-		root_message.set_raw_sender(email_raw_parser.sender)
+
+		root_message.set_raw_from(email_raw_parser.sender)
+		root_message.set_raw_xfrom(email_raw_parser.xsender)
+
 		root_message.set_raw_to(email_raw_parser.to)
+		root_message.set_raw_xto(email_raw_parser.xto)
+
 		root_message.set_raw_cc(email_raw_parser.cc)
+		root_message.set_raw_xcc(email_raw_parser.xcc)
+
 		root_message.set_raw_sent(email_raw_parser.sent.strftime("%Y-%m-%d %H:%M:%S") if (
 				email_raw_parser.sent is not None and email_raw_parser.sent != '') else '')
+
 		root_message.set_raw_subject(email_raw_parser.subject)
 
 	def mode_0(self, curr_block, line_low, blocks):
@@ -51,13 +59,11 @@ class BlockParser:
 			                 flags=re.IGNORECASE)
 			# FIXME: this is not save to use, exceptions expected!
 			try:
-				curr_block.set_raw_sender(grps.group(1))
+				curr_block.set_raw_from(grps.group(1))
 				curr_block.set_raw_sent(grps.group(2))
 			except AttributeError:
 				print(
 					"exception in blockparser curr_block['from'], curr_block['sent'] in " + email_input.filename_with_path)
-				f = grps.group(1)
-				s = grps.group(2)
 
 			# take info from previous block
 			curr_block.set_raw_to(blocks[-1].to)
@@ -85,7 +91,7 @@ class BlockParser:
 			curr_block.set_raw_to(blocks[-1].to)
 			curr_block.set_raw_cc(blocks[-1].cc)
 			grps = grps.group(1).split(' on ')
-			curr_block.set_raw_sender(grps[0])
+			curr_block.set_raw_from(grps[0])
 			# sometimes part of the date is already here...
 			if len(grps) > 1 and grps[1] != '':
 				curr_block.set_raw_sent(grps[1])
@@ -128,7 +134,7 @@ class BlockParser:
 
 		original_regex_1 = r"( *-{2,} *original)"
 		forward_regex = r"( *-{2,} *forward)"
-		email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+		email_regex = r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
 		original_regex_2 = r"( *message *-{2,})"
 		date_regex = r"((?:[a-z]+ \d{1,2}, ?\d{2,4})|(?:\d{1,2}/\d{1,2}/\d{2,4}))"
 		time_regex = r"(\d{1,2}:\d\d(?::\d\d)?(?: ?(?:pm|am|PM|AM))?)"
@@ -189,7 +195,7 @@ class BlockParser:
 				if on_match:
 					curr_block.set_raw_sent(on_match.group(1))
 					curr_block.type = 'unknown'  # this kind of header exists in both cases (or does it?)
-					curr_block.set_raw_sender(on_match.group(2))
+					curr_block.set_raw_from(on_match.group(2))
 					curr_block.set_raw_to(blocks[-1].sender)
 					curr_block.set_raw_subject(blocks[-1].subject)
 					mode = 3
@@ -242,7 +248,7 @@ class BlockParser:
 						line_text = re.sub(original_regex_2, "", line_text, flags=re.IGNORECASE)
 
 					if mode == 3:
-						curr_block.set_raw_sender(
+						curr_block.set_raw_from(
 							('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
 					elif mode == 4:
 						curr_block.set_raw_to(
@@ -259,16 +265,13 @@ class BlockParser:
 					continue
 
 				# last resort: might just be a leading from field with no prefix
-				addresses = re.findall(email_regex, line_text)
-				if len(addresses) == 1:
-					curr_block.set_raw_sender(addresses[0])
-				else:
-					line_text = re.sub(time_regex, "", line_text)  # stored this already
-					line_text = re.sub(date_regex, "", line_text)
-					line_text = re.sub(original_regex_1, "", line_text, flags=re.IGNORECASE)
-					line_text = re.sub(original_regex_2, "", line_text, flags=re.IGNORECASE)
-					curr_block.set_raw_sender(
-						('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
+
+				line_text = re.sub(time_regex, "", line_text)  # stored this already
+				line_text = re.sub(date_regex, "", line_text)
+				line_text = re.sub(original_regex_1, "", line_text, flags=re.IGNORECASE)
+				line_text = re.sub(original_regex_2, "", line_text, flags=re.IGNORECASE)
+				curr_block.set_raw_from(
+					('' if curr_block.sender is None else curr_block.sender) + ' ' + line_text)
 
 			# curr_block['from'] = ('' if curr_block['from'] is None else curr_block['from']) + ' ' + line_text
 
