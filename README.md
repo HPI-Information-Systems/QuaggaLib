@@ -80,13 +80,13 @@ QuaggaLib can read email files from disk and even store (or retrieve) partly pro
 This is especially helpful if you are developing your own parser modules, as parts of the potentially complex processing steps can be skipped.
 
 ### Extending QuaggaLib
-_coming soon._
+... is possible.
 
 ## Reference
 
 > Repke, Tim and Krestel R. *Bringing Back Structure to Free Text Email Conversations with Recurrent Neural Networks.* ECIR 2018
 
-For more details, please check out our website at: https://hpi.de/naumann/projects/web-science/business-communication-analysis/email-structure.html
+For more details, please check out our website at: https://hpi.de/naumann/projects/web-science/mimir-corpus-exploration-and-knowledge-management/email-structure.html
 
 ### Abstract
 Email communication plays an integral part of everybody’s
