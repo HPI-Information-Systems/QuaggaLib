@@ -5,7 +5,7 @@ with open("README.md", 'r') as f:
 
 setup(
 	name='Quagga',
-	version='1.0',
+	version='1.0.1',
 	description='An email segmentation system',
 	license="GPL",
 	long_description=long_description,
